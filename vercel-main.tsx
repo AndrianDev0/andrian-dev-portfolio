@@ -2,13 +2,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Header, Hero } from "./components";
 import { LanguageProvider } from "./i18n";
+import { AppIntro } from "./intro";
 import { getProject } from "./projects";
 import { AboutSection, BenefitsSection, ContactSection, Footer, Marquee, ProcessSection, ProjectsSection, ServicesSection, TechnologiesSection } from "./sections";
 import { ProjectCaseClient } from "./app/projects/[slug]/case-client";
 import "./app/globals.css";
 
 function HomePage() {
-  return <><Header /><main><Hero /><ProjectsSection /><ServicesSection /><BenefitsSection /><ProcessSection /><TechnologiesSection /><Marquee /><AboutSection /><ContactSection /></main><Footer /></>;
+  return <><AppIntro /><Header /><main><Hero /><ProjectsSection /><ServicesSection /><BenefitsSection /><ProcessSection /><TechnologiesSection /><Marquee /><AboutSection /><ContactSection /></main><Footer /></>;
 }
 
 function VercelApp() {

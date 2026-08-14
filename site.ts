@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Andrian.Dev",
   fullName: "ANDRIAN.DEV",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://andrian-dev-portfolio.vercel.app",
   title: "Andrian.Dev — Websites, Telegram Bots & Automation",
   description: "Modern websites, Telegram bots, web apps, and automations. Современные сайты, Telegram-боты, веб-приложения и автоматизация.",
   telegram: "g1reshnik",

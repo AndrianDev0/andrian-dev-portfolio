@@ -3,7 +3,9 @@
 /.vinext
 /.wrangler
 /dist
-/.openai
+/dist-vercel
 /*.log
 *.tsbuildinfo
 test.tmp
+
+.vercel

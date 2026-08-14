@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "./i18n";
 
@@ -95,7 +96,7 @@ export function AppIntro() {
           </div>
           <div className="intro-progress"><i /></div>
           <button className="intro-skip" type="button" onClick={skip}>
-            {language === "ru" ? "Пропустить" : "Skip"}<span>↗</span>
+            {language === "ru" ? "Пропустить" : "Skip"}<ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.7} />
           </button>
         </motion.div>
       ) : null}

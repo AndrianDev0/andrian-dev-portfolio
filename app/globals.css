@@ -709,7 +709,7 @@ html.intro-lock body{overflow:hidden;overscroll-behavior:none}
 .intro-progress{position:absolute;z-index:30;left:32px;right:32px;bottom:28px;height:1px;background:rgba(255,255,255,.08)}
 .intro-progress i{display:block;width:0;height:1px;background:linear-gradient(90deg,#647dff,#a374ff);box-shadow:0 0 12px rgba(107,126,255,.7);animation:intro-progress 5.6s linear both}
 .intro-skip{position:absolute;z-index:40;right:32px;bottom:47px;padding:9px 0 9px 18px;display:flex;align-items:center;gap:12px;border:0;color:#8b93a0;background:transparent;font-size:10px;letter-spacing:.08em;cursor:pointer;transition:color .25s,transform .25s}
-.intro-skip span{font-size:13px;color:#a6b1c4;transition:transform .25s}.intro-skip:hover{color:#fff;transform:translateY(-1px)}.intro-skip:hover span{transform:translate(2px,-2px)}
+.intro-skip svg{color:#a6b1c4;transition:transform .25s,color .25s}.intro-skip:hover{color:#fff;transform:translateY(-1px)}.intro-skip:hover svg{color:#fff;transform:translate(2px,-2px)}
 
 @keyframes intro-atmosphere{0%{opacity:0;transform:scale(.7)}18%,68%{opacity:1;transform:scale(1)}100%{opacity:.35;transform:scale(2.2)}}
 @keyframes intro-grid{0%,12%{opacity:0;transform:scale(1.08)}26%,68%{opacity:.23;transform:scale(1)}100%{opacity:0;transform:scale(2.4)}}

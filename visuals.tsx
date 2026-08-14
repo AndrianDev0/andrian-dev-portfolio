@@ -1,0 +1,162 @@
+import { ArrowRight, Gift, Send, Sparkles } from "lucide-react";
+import type { Project, ProjectKind } from "./projects";
+
+export function ProjectVisual({ project }: { project: Project }) {
+  if (project.kind === "bot") return <NeboProjectVisual />;
+  if (project.kind === "app") return <NeboMiniAppVisual />;
+  return <NeboBotFlowVisual />;
+}
+
+function WindowBar({ address = "preview.dev" }: { address?: string }) {
+  return <div className="mock-window-bar"><span className="traffic"><i /><i /><i /></span><span className="address">{address}</span><span className="window-more">•••</span></div>;
+}
+
+function NeboWheel({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className={`nebo-wheel${compact ? " is-compact" : ""}`} aria-label="Колесо призов Nebo Bistro">
+      <span className="nebo-wheel-pointer" />
+      <div className="nebo-wheel-face">
+        <span className="nebo-sector-label sector-one">5%</span>
+        <span className="nebo-sector-label sector-two">10%</span>
+        <span className="nebo-sector-label sector-three">15%</span>
+        <span className="nebo-sector-label sector-four">20%</span>
+        <span className="nebo-sector-label sector-five">25%</span>
+        <span className="nebo-sector-label sector-six">10%</span>
+        <span className="nebo-sector-label sector-seven">15%</span>
+        <span className="nebo-sector-label sector-eight">20%</span>
+        <span className="nebo-wheel-hub"><Sparkles size={compact ? 12 : 15} /><b>NEBO</b></span>
+      </div>
+    </div>
+  );
+}
+
+function BotDevice() {
+  return (
+    <div className="nebo-device nebo-device-bot">
+      <span className="nebo-device-speaker" />
+      <div className="nebo-telegram-head">
+        <ArrowRight className="nebo-phone-back" size={15} />
+        <span className="nebo-telegram-avatar">N</span>
+        <span><b>Nebo Bistro</b><small>бот</small></span>
+        <i>•••</i>
+      </div>
+      <div className="nebo-bot-chat">
+        <span className="nebo-chat-date">СЕГОДНЯ</span>
+        <div className="nebo-welcome-art" role="img" aria-label="Приветственный экран Nebo Bistro" />
+        <div className="nebo-bot-message">
+          <b>Добро пожаловать!</b>
+          <span>Ваш подарок уже ждёт — откройте Mini App и испытайте удачу.</span>
+        </div>
+        <div className="nebo-bot-action"><Gift size={12} /> Забрать свой приз</div>
+        <span className="nebo-bot-handle">@NeboBistroBot</span>
+      </div>
+      <div className="nebo-phone-input"><span>Сообщение</span><Send size={12} /></div>
+    </div>
+  );
+}
+
+function MiniAppDevice() {
+  return (
+    <div className="nebo-device nebo-device-app">
+      <span className="nebo-device-speaker" />
+      <div className="nebo-miniapp-head"><span>MINI APP</span><b>NEBO BISTRO</b><i>×</i></div>
+      <div className="nebo-miniapp-body">
+        <span className="nebo-miniapp-kicker">ВАШ ПОДАРОК</span>
+        <strong>Испытайте<br />удачу</strong>
+        <NeboWheel compact />
+        <span className="nebo-spin-button">КРУТИТЬ</span>
+      </div>
+    </div>
+  );
+}
+
+export function NeboProjectVisual() {
+  return (
+    <div className="bot-showcase nebo-showcase nebo-showcase-main" aria-hidden="true">
+      <div className="nebo-stage-grid" />
+      <div className="nebo-showcase-head">
+        <span><i /> LIVE PRODUCT</span>
+        <b>TELEGRAM EXPERIENCE / 2026</b>
+      </div>
+      <div className="nebo-route" aria-hidden="true">
+        <span>/START</span><i /><span>BOT</span><i /><span>MINI APP</span><i /><span>PRIZE</span>
+      </div>
+      <BotDevice />
+      <MiniAppDevice />
+      <div className="nebo-prize-card">
+        <span><Gift size={12} /> ПРИЗ ПОЛУЧЕН</span>
+        <strong>Покажите экран<br />официанту</strong>
+        <i>REDEEM IN VENUE</i>
+      </div>
+      <span className="nebo-detail-label detail-one">START → BOT</span>
+      <span className="nebo-detail-label detail-two">WHEEL → PRIZE</span>
+    </div>
+  );
+}
+
+export function NeboMiniAppVisual() {
+  return (
+    <div className="project-browser nebo-layer-browser" aria-hidden="true">
+      <WindowBar address="nebo-bistro-wheel.app" />
+      <div className="nebo-layer nebo-miniapp-layer">
+        <div className="nebo-layer-copy">
+          <span>MINI APP / PRODUCT LAYER</span>
+          <h3>Один спин.<br /><em>Один подарок.</em></h3>
+          <p>Mobile reward experience inside Telegram.</p>
+          <div className="nebo-layer-tags"><span>TELEGRAM WEBAPP</span><span>ПРИЗЫ / СКИДКИ</span></div>
+        </div>
+        <div className="nebo-wheel-plinth">
+          <span className="nebo-plinth-glow" />
+          <NeboWheel />
+          <span className="nebo-layer-spin">КРУТИТЬ <ArrowRight size={12} /></span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function NeboBotFlowVisual() {
+  return (
+    <div className="project-browser nebo-layer-browser" aria-hidden="true">
+      <WindowBar address="t.me/NeboBistroBot" />
+      <div className="nebo-layer nebo-flow-layer">
+        <div className="nebo-flow-top">
+          <span><i /> TELEGRAM BOT / GUEST ENTRY</span>
+          <b>@NeboBistroBot</b>
+        </div>
+        <div className="nebo-flow-canvas">
+          <div className="nebo-welcome-tile" role="img" aria-label="Приветственный креатив Nebo Bistro"><span>PERSONAL WELCOME</span></div>
+          <div className="nebo-flow-line"><i /><i /><i /></div>
+          <div className="nebo-flow-message">
+            <span className="nebo-telegram-avatar">N</span>
+            <div><small>NEBO BISTRO</small><strong>Ваш подарок<br />уже ждёт</strong><span><Gift size={11} /> Забрать свой приз</span></div>
+          </div>
+        </div>
+        <div className="nebo-flow-steps">
+          <span><b>01</b> Telegram /start</span><i />
+          <span><b>02</b> Приветствие</span><i />
+          <span><b>03</b> Mini App</span><i />
+          <span><b>04</b> Экран приза</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Backwards-compatible exports for existing project and case rendering. */
+export function BotProjectVisual() { return <NeboProjectVisual />; }
+export function WebsiteProjectVisual() { return <NeboBotFlowVisual />; }
+export function DashboardProjectVisual() { return <NeboMiniAppVisual />; }
+
+export function ServiceVisual({ type }: { type: string }) {
+  if (type === "chat") return <div className="service-chat"><div><span>Hi! What are you looking to build?</span></div><p>Telegram bot for sales</p><div><span>Great — let’s map the flow.</span></div><i /><i /><i /></div>;
+  if (type === "dashboard") return <div className="service-dashboard"><span><b>12.8k</b><small>ACTIVE USERS</small></span><div className="service-bars"><i /><i /><i /><i /><i /><i /></div><p><i />Live data<em>+18.4%</em></p></div>;
+  if (type === "nodes") return <div className="service-nodes"><span>API</span><i /><span>CRM</span><i /><span>BOT</span><i /><span>SALE</span></div>;
+  return <div className="service-browser"><WindowBar address="yourproduct.com" /><div><span>Clear digital<br />experiences.</span><i /><b>START в†’</b></div></div>;
+}
+
+export function CaseStudyVisual({ kind }: { kind: ProjectKind }) {
+  if (kind === "bot") return <NeboProjectVisual />;
+  if (kind === "app") return <NeboMiniAppVisual />;
+  return <NeboBotFlowVisual />;
+}

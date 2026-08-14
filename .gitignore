@@ -1,0 +1,9 @@
+/node_modules
+/.next
+/.vinext
+/.wrangler
+/dist
+/.openai
+/*.log
+*.tsbuildinfo
+test.tmp

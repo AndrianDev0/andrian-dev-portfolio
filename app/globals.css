@@ -737,3 +737,13 @@ html.intro-lock body{overflow:hidden;overscroll-behavior:none}
   @keyframes intro-camera{0%{opacity:0;transform:translate3d(0,5vh,-180px) scale(.68) rotateX(-5deg)}11%{opacity:1}18%,65%{opacity:1;transform:translate3d(0,0,0) scale(1)}72%{transform:translate3d(-1vw,0,60px) scale(1.13)}100%{opacity:0;transform:translate3d(-10vw,1vh,1000px) scale(9.2)}}
 }
 @media(prefers-reduced-motion:reduce){.intro-cinematic{display:none}}
+
+/* React Bits — restrained integrations adapted to Andrian.Dev */
+.rb-decrypted{display:inline-block;white-space:pre-wrap}.hero-label-encrypted{color:#7286d9;text-shadow:0 0 9px rgba(111,140,255,.32)}
+.rb-spotlight{--rb-mouse-x:50%;--rb-mouse-y:50%;--rb-spotlight:rgba(111,140,255,.14);isolation:isolate}
+.rb-spotlight::before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;opacity:0;background:radial-gradient(360px circle at var(--rb-mouse-x) var(--rb-mouse-y),var(--rb-spotlight),transparent 72%);transition:opacity .45s var(--ease)}
+.rb-spotlight:hover::before,.rb-spotlight:focus-within::before{opacity:1}
+.rb-spotlight>*{z-index:1}.rb-spotlight>.service-number{position:relative}
+.rb-shiny{display:inline-block;color:transparent;background:linear-gradient(112deg,var(--rb-shine-color) 0%,var(--rb-shine-color) 38%,var(--rb-shine-highlight) 50%,var(--rb-shine-color) 62%,var(--rb-shine-color) 100%);background-size:220% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rb-shine var(--rb-shine-speed) linear infinite}
+@keyframes rb-shine{from{background-position:125% 50%}to{background-position:-125% 50%}}
+@media(prefers-reduced-motion:reduce){.rb-shiny{animation:none;background-position:50%}.rb-spotlight::before{display:none}.hero-label-encrypted{color:inherit;text-shadow:none}}

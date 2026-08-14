@@ -9,6 +9,7 @@ import { projectFacets, projects } from "./projects";
 import { ContactForm, MagneticButton, Reveal, SectionHeading } from "./components";
 import { projectRussian, useLanguage } from "./i18n";
 import { NeboBotFlowVisual, NeboMiniAppVisual, ProjectVisual, ServiceVisual } from "./visuals";
+import { ShinyText, SpotlightCard } from "./react-bits";
 
 export function ProjectsSection() {
   const { language, t } = useLanguage();
@@ -64,7 +65,7 @@ export function ServicesSection() {
       <div className="container">
         <SectionHeading eyebrow={t.services.eyebrow} title={<>{t.services.titleTop}<br /><span className="soft">{t.services.titleBottom}</span></>} copy={t.services.copy} />
         <div className="services-grid">
-          {services.map((service, index) => <Reveal key={service.id} delay={index * 0.04} className={`service-item service-${index + 1}`}><article><div className="service-number">{service.id}</div><div className="service-text"><h3>{t.services.items[index][0]}</h3><p>{t.services.items[index][1]}</p><span>{t.services.explore} <ArrowRight size={14} /></span></div><div className="service-visual"><ServiceVisual type={service.visual} /></div></article></Reveal>)}
+          {services.map((service, index) => <Reveal key={service.id} delay={index * 0.04} className={`service-item service-${index + 1}`}><SpotlightCard spotlightColor={index % 2 === 0 ? "rgba(111, 140, 255, 0.15)" : "rgba(157, 124, 255, 0.13)"}><div className="service-number">{service.id}</div><div className="service-text"><h3>{t.services.items[index][0]}</h3><p>{t.services.items[index][1]}</p><span>{t.services.explore} <ArrowRight size={14} /></span></div><div className="service-visual"><ServiceVisual type={service.visual} /></div></SpotlightCard></Reveal>)}
         </div>
       </div>
     </section>
@@ -105,7 +106,7 @@ export function TechnologiesSection() {
   const first = technologies.slice(0, 6);
   const second = technologies.slice(6);
   return (
-    <section className="technologies section-pad-sm"><div className="container"><div className="tech-heading"><p className="eyebrow"><span />{t.technologies.eyebrow}</p><p>{t.technologies.copyTop}<br />{t.technologies.copyBottom}</p></div><div className="tech-rows"><div>{first.map((tech) => <span key={tech}>{tech}</span>)}</div><div>{second.map((tech) => <span key={tech}>{tech}</span>)}</div></div></div></section>
+    <section className="technologies section-pad-sm"><div className="container"><div className="tech-heading"><p className="eyebrow"><span />{t.technologies.eyebrow}</p><p>{t.technologies.copyTop}<br /><ShinyText text={t.technologies.copyBottom} /></p></div><div className="tech-rows"><div>{first.map((tech) => <span key={tech}>{tech}</span>)}</div><div>{second.map((tech) => <span key={tech}>{tech}</span>)}</div></div></div></section>
   );
 }
 

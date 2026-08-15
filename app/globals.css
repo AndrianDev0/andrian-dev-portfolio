@@ -747,3 +747,9 @@ html.intro-lock body{overflow:hidden;overscroll-behavior:none}
 .rb-shiny{display:inline-block;color:transparent;background:linear-gradient(112deg,var(--rb-shine-color) 0%,var(--rb-shine-color) 38%,var(--rb-shine-highlight) 50%,var(--rb-shine-color) 62%,var(--rb-shine-color) 100%);background-size:220% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rb-shine var(--rb-shine-speed) linear infinite}
 @keyframes rb-shine{from{background-position:125% 50%}to{background-position:-125% 50%}}
 @media(prefers-reduced-motion:reduce){.rb-shiny{animation:none;background-position:50%}.rb-spotlight::before{display:none}.hero-label-encrypted{color:inherit;text-shadow:none}}
+
+/* Service cards — functional detail link */
+.service-more{display:flex;width:max-content;align-items:center;gap:8px;color:#7e8ee6;font-size:7px;letter-spacing:.15em;transition:color .25s,transform .25s var(--ease)}
+.service-more svg{transition:transform .25s var(--ease)}
+.service-more:hover,.service-more:focus-visible{color:#aab5ff;transform:translateX(2px)}
+.service-more:hover svg,.service-more:focus-visible svg{transform:translateX(3px)}

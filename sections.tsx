@@ -65,7 +65,7 @@ export function ServicesSection() {
       <div className="container">
         <SectionHeading eyebrow={t.services.eyebrow} title={<>{t.services.titleTop}<br /><span className="soft">{t.services.titleBottom}</span></>} copy={t.services.copy} />
         <div className="services-grid">
-          {services.map((service, index) => <Reveal key={service.id} delay={index * 0.04} className={`service-item service-${index + 1}`}><SpotlightCard spotlightColor={index % 2 === 0 ? "rgba(111, 140, 255, 0.15)" : "rgba(157, 124, 255, 0.13)"}><div className="service-number">{service.id}</div><div className="service-text"><h3>{t.services.items[index][0]}</h3><p>{t.services.items[index][1]}</p><span>{t.services.explore} <ArrowRight size={14} /></span></div><div className="service-visual"><ServiceVisual type={service.visual} /></div></SpotlightCard></Reveal>)}
+          {services.map((service, index) => <Reveal key={service.id} delay={index * 0.04} className={`service-item service-${index + 1}`}><SpotlightCard spotlightColor={index % 2 === 0 ? "rgba(111, 140, 255, 0.15)" : "rgba(157, 124, 255, 0.13)"}><div className="service-number">{service.id}</div><div className="service-text"><h3>{t.services.items[index][0]}</h3><p>{t.services.items[index][1]}</p><a className="service-more" href="#contact">{t.services.explore} <ArrowRight size={14} /></a></div><div className="service-visual"><ServiceVisual type={service.visual} /></div></SpotlightCard></Reveal>)}
         </div>
       </div>
     </section>

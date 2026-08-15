@@ -24,10 +24,12 @@ export function AppIntro() {
       return;
     }
 
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.documentElement.classList.add("intro-lock");
     setArmed(true);
     const timer = window.setTimeout(() => {
       sessionStorage.setItem(INTRO_KEY, "seen");
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       document.documentElement.classList.remove("intro-lock");
       setVisible(false);
     }, INTRO_DURATION);
@@ -40,6 +42,7 @@ export function AppIntro() {
 
   const skip = () => {
     sessionStorage.setItem(INTRO_KEY, "seen");
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.documentElement.classList.remove("intro-lock");
     setVisible(false);
   };

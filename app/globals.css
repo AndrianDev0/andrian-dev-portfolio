@@ -756,3 +756,12 @@ html.intro-lock body{overflow:hidden;overscroll-behavior:none}
 .service-more svg{transition:transform .25s var(--ease)}
 .service-more:hover,.service-more:focus-visible{color:#aab5ff;transform:translateX(2px)}
 .service-more:hover svg,.service-more:focus-visible svg{transform:translateX(3px)}
+
+/* Mobile header — prevent hero controls from showing through the fixed glass bar */
+@media(max-width:900px){
+  .site-header{padding-top:max(12px,env(safe-area-inset-top))}
+  .nav-shell{background:rgba(8,10,15,.96);border-color:rgba(255,255,255,.11);box-shadow:0 14px 38px rgba(0,0,0,.46);backdrop-filter:blur(20px) saturate(135%);-webkit-backdrop-filter:blur(20px) saturate(135%)}
+}
+@media(max-width:600px){
+  .hero{padding-top:132px}
+}

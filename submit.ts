@@ -12,18 +12,28 @@ export async function submitProjectRequest(payload: ProjectRequest) {
     throw new Error("MISSING_FIELDS");
   }
 
-  const subject = `Заявка с Andrian.Dev — ${payload.name.trim()}`;
-  const body = [
-    `Имя: ${payload.name.trim()}`,
-    `Контакт: ${payload.contact.trim()}`,
-    `Бюджет: ${payload.budget.trim() || "не указан"}`,
-    "",
-    "Описание проекта:",
-    payload.projectDescription.trim(),
-  ].join("\n");
+  const name = payload.name.trim();
+  const contact = payload.contact.trim();
+  const response = await fetch(`https://formsubmit.co/ajax/${siteConfig.email}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      "Имя": name,
+      "Telegram / Email": contact,
+      "Примерный бюджет": payload.budget.trim() || "не указан",
+      "Описание проекта": payload.projectDescription.trim(),
+      _subject: `Новая заявка с Andrian.Dev — ${name.slice(0, 80)}`,
+      _template: "table",
+      _honey: "",
+    }),
+  });
 
-  return {
-    ok: true,
-    mailto: `mailto:${siteConfig.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
-  };
+  if (!response.ok) throw new Error("SUBMISSION_FAILED");
+  const result = await response.json() as { success?: boolean | string };
+  if (result.success === false || result.success === "false") throw new Error("SUBMISSION_FAILED");
+
+  return { ok: true };
 }

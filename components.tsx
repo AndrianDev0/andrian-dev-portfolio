@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, ArrowRight, ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent, type MouseEvent as ReactMouseEvent } from "react";
 import { useLanguage } from "./i18n";
 import { siteConfig } from "./site";
@@ -178,13 +178,14 @@ export function Hero() {
 
 export function ContactForm() {
   const { t } = useLanguage();
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formElement = event.currentTarget;
     setStatus("loading");
     setMessage("");
-    const form = new FormData(event.currentTarget);
+    const form = new FormData(formElement);
     try {
       const result = await submitProjectRequest({
         name: String(form.get("name") ?? ""),
@@ -192,8 +193,9 @@ export function ContactForm() {
         projectDescription: String(form.get("projectDescription") ?? ""),
         budget: String(form.get("budget") ?? ""),
       });
-      window.location.href = result.mailto;
-      setStatus("idle");
+      if (!result.ok) throw new Error("SUBMISSION_FAILED");
+      formElement.reset();
+      setStatus("success");
     } catch (error) {
       setMessage(error instanceof Error && error.message === "MISSING_FIELDS" ? t.form.incomplete : t.form.error);
       setStatus("error");
@@ -201,13 +203,13 @@ export function ContactForm() {
   };
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
-      <div className="field-row"><label><span>{t.form.name} *</span><input name="name" autoComplete="name" required placeholder={t.form.namePlaceholder} /></label><label><span>{t.form.contact} *</span><input name="contact" autoComplete="email" required placeholder={t.form.contactPlaceholder} /></label></div>
-      <label><span>{t.form.need} *</span><textarea name="projectDescription" required rows={5} placeholder={t.form.needPlaceholder} /></label>
+      <div className="field-row"><label><span>{t.form.name} *</span><input name="name" autoComplete="name" required maxLength={100} placeholder={t.form.namePlaceholder} /></label><label><span>{t.form.contact} *</span><input name="contact" autoComplete="email" required maxLength={150} placeholder={t.form.contactPlaceholder} /></label></div>
+      <label><span>{t.form.need} *</span><textarea name="projectDescription" required maxLength={3000} rows={5} placeholder={t.form.needPlaceholder} /></label>
       <label><span>{t.form.budget}</span><select name="budget" defaultValue=""><option value="">{t.form.budgetPlaceholder}</option>{siteConfig.budgets.map((budget) => <option key={budget} value={budget}>{budget}</option>)}</select></label>
       <button className="submit-button" type="submit" disabled={status === "loading"}>
         {status === "loading" ? <><span className="spinner" /> {t.form.sending}</> : <>{t.form.send} <ArrowUpRight size={19} /></>}
       </button>
-      <div className="form-feedback" aria-live="polite">{status === "error" ? <span className="error-message">{message}</span> : null}</div>
+      <div className="form-feedback" aria-live="polite">{status === "success" ? <span className="success-message"><i><Check aria-hidden="true" size={16} /></i><span><b>{t.form.sent}</b>{t.form.followUp}</span></span> : status === "error" ? <span className="error-message">{message}</span> : null}</div>
     </form>
   );
 }

@@ -159,7 +159,7 @@ export function Hero() {
       <div className="hero-noise" />
       <div className="container hero-layout">
         <div className="hero-copy">
-          <motion.p className="hero-label" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08 }}><span /><DecryptedText text={t.hero.label} encryptedClassName="hero-label-encrypted" /></motion.p>
+          <motion.p className="hero-label" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08 }}><span className="hero-label-dot" /><DecryptedText text={t.hero.label} encryptedClassName="hero-label-encrypted" /></motion.p>
           <h1>
             <span className="hero-line-mask"><motion.span className="hero-line" initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}>{language === "ru" ? <>Создаю <em>цифровые</em></> : <>I build <em>digital</em></>}</motion.span></span>
             <span className="hero-line-mask"><motion.span className="hero-line" initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}>{language === "ru" ? <><em>продукты</em> для</> : <><em>products</em> that move</>}</motion.span></span>

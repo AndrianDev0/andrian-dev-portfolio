@@ -12,7 +12,6 @@ const INTRO_KEY = "andrian-dev-intro-v2";
 export function AppIntro() {
   const { language } = useLanguage();
   const [visible, setVisible] = useState(true);
-  const [armed, setArmed] = useState(false);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -26,7 +25,6 @@ export function AppIntro() {
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.documentElement.classList.add("intro-lock");
-    setArmed(true);
     const timer = window.setTimeout(() => {
       sessionStorage.setItem(INTRO_KEY, "seen");
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -49,7 +47,7 @@ export function AppIntro() {
 
   return (
     <AnimatePresence>
-      {visible && armed ? (
+      {visible ? (
         <motion.div
           className="intro-cinematic"
           initial={{ opacity: 1 }}

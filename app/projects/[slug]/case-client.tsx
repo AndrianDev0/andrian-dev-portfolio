@@ -6,6 +6,7 @@ import { projectRussian, useLanguage } from "../../../i18n";
 import type { Project } from "../../../projects";
 import { siteConfig } from "../../../site";
 import { CaseStudyVisual } from "../../../visuals";
+import { ThemeToggle } from "../../../theme";
 
 export function ProjectCaseClient({ project }: { project: Project }) {
   const { language, setLanguage, t } = useLanguage();
@@ -18,7 +19,7 @@ export function ProjectCaseClient({ project }: { project: Project }) {
 
   return (
     <main className="case-page" style={{ "--project-accent": project.accent } as React.CSSProperties}>
-      <nav className="case-nav"><a className="brand" href="/"><span className="brand-mark"><i /></span><span className="brand-word">{siteConfig.name}</span></a><div className="case-nav-actions"><div className="language-switcher" role="group" aria-label="Language / Язык"><button type="button" className={language === "en" ? "is-active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button><button type="button" className={language === "ru" ? "is-active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button></div><a href="/#work"><ArrowLeft size={16} /> {t.case.allWork}</a></div></nav>
+      <nav className="case-nav"><a className="brand" href="/"><span className="brand-mark"><i /></span><span className="brand-word">{siteConfig.name}</span></a><div className="case-nav-actions"><div className="language-switcher" role="group" aria-label="Language / Язык"><button type="button" className={language === "en" ? "is-active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button><button type="button" className={language === "ru" ? "is-active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button></div><ThemeToggle className="theme-toggle-case" /><a href="/#work"><ArrowLeft size={16} /> {t.case.allWork}</a></div></nav>
       <section className="case-hero container">
         <div className="case-head-meta"><span>{project.id} / {t.case.featured}</span><span>{category.toUpperCase()}</span><span className="demo-label live-label"><i />{t.case.real}</span></div>
         <h1>{project.title}</h1>

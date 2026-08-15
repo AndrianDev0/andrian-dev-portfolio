@@ -7,6 +7,7 @@ import { getProject } from "./projects";
 import { AboutSection, BenefitsSection, ContactSection, Footer, Marquee, ProcessSection, ProjectsSection, ServicesSection, TechnologiesSection } from "./sections";
 import { ProjectCaseClient } from "./app/projects/[slug]/case-client";
 import "./app/globals.css";
+import { ThemeProvider } from "./theme";
 
 function HomePage() {
   return <><AppIntro /><Header /><main><Hero /><ProjectsSection /><ServicesSection /><BenefitsSection /><ProcessSection /><TechnologiesSection /><Marquee /><AboutSection /><ContactSection /></main><Footer /></>;
@@ -26,5 +27,5 @@ document.documentElement.style.setProperty("--font-geist-mono", '"Manrope"');
 document.documentElement.style.setProperty("--font-cyrillic", '"Manrope"');
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode><LanguageProvider><VercelApp /></LanguageProvider></StrictMode>,
+  <StrictMode><ThemeProvider><LanguageProvider><VercelApp /></LanguageProvider></ThemeProvider></StrictMode>,
 );

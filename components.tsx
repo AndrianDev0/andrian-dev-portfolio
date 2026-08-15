@@ -7,6 +7,7 @@ import { useLanguage } from "./i18n";
 import { siteConfig } from "./site";
 import { submitProjectRequest } from "./submit";
 import { DecryptedText } from "./react-bits";
+import { ThemeToggle } from "./theme";
 
 export function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   return (
@@ -76,6 +77,7 @@ export function Header() {
             <button type="button" className={language === "en" ? "is-active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button>
             <button type="button" className={language === "ru" ? "is-active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button>
           </div>
+          <ThemeToggle />
           <a className="nav-cta" href="#contact">{t.startProject} <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.9} /></a>
         </div>
         <button type="button" className="menu-button" aria-label={open ? t.closeMenu : t.openMenu} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen((value) => !value)}>

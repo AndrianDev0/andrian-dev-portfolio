@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import { siteConfig } from "../site";
 import { LanguageProvider } from "../i18n";
+import { ThemeProvider } from "../theme";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
@@ -28,7 +29,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geist.variable} ${geistMono.variable} ${manrope.variable}`}><LanguageProvider>{children}</LanguageProvider></body>
+      <head><script dangerouslySetInnerHTML={{ __html: `try{const t=localStorage.getItem("andrian-dev-theme")||"light";document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}catch{document.documentElement.dataset.theme="light"}` }} /></head>
+      <body className={`${geist.variable} ${geistMono.variable} ${manrope.variable}`}><ThemeProvider><LanguageProvider>{children}</LanguageProvider></ThemeProvider></body>
     </html>
   );
 }

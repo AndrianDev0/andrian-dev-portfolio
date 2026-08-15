@@ -53,7 +53,7 @@ void main() {
   float strength = first * 0.58 + second * 0.36;
   float vignette = smoothstep(0.0, 0.22, gl_FragCoord.y / uResolution.y) *
     smoothstep(0.0, 0.18, 1.0 - gl_FragCoord.y / uResolution.y);
-  gl_FragColor = vec4(uColor * strength, strength * vignette);
+  gl_FragColor = vec4(uColor * strength * 1.45, clamp(strength * vignette * 1.3, 0.0, 1.0));
 }`;
 
 function toRgb(hex: string): [number, number, number] {

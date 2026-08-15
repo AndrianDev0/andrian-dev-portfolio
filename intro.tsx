@@ -7,7 +7,7 @@ import { useLanguage } from "./i18n";
 import { LightRays } from "./light-rays";
 
 const INTRO_DURATION = 5600;
-const INTRO_KEY = "andrian-dev-intro-v1";
+const INTRO_KEY = "andrian-dev-intro-v2";
 
 export function AppIntro() {
   const { language } = useLanguage();
@@ -55,7 +55,7 @@ export function AppIntro() {
           aria-label={language === "ru" ? "Заставка Andrian.Dev" : "Andrian.Dev intro"}
         >
           <div className="intro-atmosphere" aria-hidden="true" />
-          <LightRays className="intro-light-rays" />
+          <LightRays className="intro-light-rays" color="#9a83ff" speed={0.8} spread={1.35} mouseInfluence={0.12} />
           <div className="intro-grid" aria-hidden="true" />
 
           <div className="intro-world" aria-hidden="true">

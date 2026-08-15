@@ -648,6 +648,7 @@ section[id] { scroll-margin-top: 88px; }
 @media(max-width:900px){
   .project-list-single{gap:44px}
   .project-flagship{grid-template-columns:1fr}
+  .project-flagship::after{width:100%;background:transparent}
   .project-layers{grid-template-columns:1fr;gap:54px}
   .project-layer-copy{min-height:132px;grid-template-columns:.8fr 1.2fr;gap:30px}
   .case-project-actions{margin-top:-46px}

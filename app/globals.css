@@ -757,6 +757,9 @@ html.intro-lock body{overflow:hidden;overscroll-behavior:none}
 .service-more:hover,.service-more:focus-visible{color:#aab5ff;transform:translateX(2px)}
 .service-more:hover svg,.service-more:focus-visible svg{transform:translateX(3px)}
 
+/* Telegram hero card — consistent vector icon instead of platform emoji */
+.avatar svg{width:13px;height:13px;stroke-width:1.9}
+
 /* Mobile header — prevent hero controls from showing through the fixed glass bar */
 @media(max-width:900px){
   .site-header{padding-top:max(12px,env(safe-area-inset-top))}

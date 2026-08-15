@@ -134,7 +134,7 @@ export function HeroVisual() {
           <div className="mini-web"><span className="mini-logo">WEB / INTERFACE</span><strong>{language === "ru" ? <>Сложное —<br />понятно.</> : <>Make complexity<br />feel clear.</>}</strong><div className="mini-web-lines"><i /><i /></div><b>{language === "ru" ? "ОТКРЫТЬ" : "EXPLORE"} →</b></div>
         </div>
         <div className="float-card bot-card" aria-hidden="true">
-          <div className="bot-head"><span className="avatar">↗</span><span><b>Telegram Flow</b><small>TELEGRAM BOT · {language === "ru" ? "В СЕТИ" : "ONLINE"}</small></span><i /></div>
+          <div className="bot-head"><span className="avatar"><ArrowUpRight aria-hidden="true" /></span><span><b>Telegram Flow</b><small>TELEGRAM BOT · {language === "ru" ? "В СЕТИ" : "ONLINE"}</small></span><i /></div>
           <div className="bot-message user">{language === "ru" ? "Хочу заказать сайт" : "I want to order a website"}</div><div className="bot-message bot">{language === "ru" ? "Отлично. Какой формат нужен?" : "Great. What type do you need?"}</div>
           <div className="bot-options"><span>{language === "ru" ? "Лендинг" : "Landing"}</span><span>{language === "ru" ? "Бизнес" : "Business"}</span><span>{language === "ru" ? "Веб-сервис" : "Web App"}</span></div>
         </div>

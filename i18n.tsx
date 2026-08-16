@@ -267,13 +267,13 @@ const LanguageContext = createContext<{
   t: Copy;
 } | null>(null);
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("en");
+function readLanguage(): Language {
+  if (typeof document === "undefined") return "en";
+  return document.documentElement.dataset.language === "ru" ? "ru" : "en";
+}
 
-  useEffect(() => {
-    const saved = window.localStorage.getItem("portfolio-language");
-    if (saved === "ru" || saved === "en") setLanguageState(saved);
-  }, []);
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const [language, setLanguageState] = useState<Language>(readLanguage);
 
   useEffect(() => {
     document.documentElement.lang = language;
@@ -282,7 +282,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLanguage = (next: Language) => {
     setLanguageState(next);
-    window.localStorage.setItem("portfolio-language", next);
+    try { window.localStorage.setItem("portfolio-language", next); } catch { /* Storage may be unavailable. */ }
   };
 
   const value = useMemo(() => ({ language, setLanguage, t: copy[language] }), [language]);

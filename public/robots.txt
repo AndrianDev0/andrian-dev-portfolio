@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://andrian-dev-portfolio.vercel.app/sitemap.xml

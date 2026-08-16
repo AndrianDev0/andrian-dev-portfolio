@@ -10,7 +10,7 @@ import "./app/globals.css";
 import { ThemeProvider } from "./theme";
 
 function HomePage() {
-  return <><AppIntro /><Header /><main><Hero /><ProjectsSection /><ServicesSection /><BenefitsSection /><ProcessSection /><TechnologiesSection /><Marquee /><AboutSection /><ContactSection /></main><Footer /></>;
+  return <><AppIntro /><Header /><main id="main-content" tabIndex={-1}><Hero /><ProjectsSection /><ServicesSection /><BenefitsSection /><ProcessSection /><TechnologiesSection /><Marquee /><AboutSection /><ContactSection /></main><Footer /></>;
 }
 
 function VercelApp() {

@@ -69,6 +69,7 @@ export function Header() {
 
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
+      <a className="skip-link" href="#main-content">{language === "ru" ? "Перейти к содержимому" : "Skip to content"}</a>
       <nav className="nav-shell" aria-label={t.navigation}>
         <a className="brand" href="#top" aria-label={`${siteConfig.name} home`}><span className="brand-mark"><i /></span><span className="brand-word">{siteConfig.name}</span></a>
         <div className="nav-links">{siteConfig.nav.map((item, index) => <a key={item.href} href={item.href}>{t.nav[index]}</a>)}</div>
@@ -194,6 +195,7 @@ export function ContactForm() {
         contact: String(form.get("contact") ?? ""),
         projectDescription: String(form.get("projectDescription") ?? ""),
         budget: String(form.get("budget") ?? ""),
+        website: String(form.get("website") ?? ""),
       });
       if (!result.ok) throw new Error("SUBMISSION_FAILED");
       formElement.reset();
@@ -204,7 +206,8 @@ export function ContactForm() {
     }
   };
   return (
-    <form className="contact-form" onSubmit={handleSubmit}>
+    <form className="contact-form" onSubmit={handleSubmit} aria-busy={status === "loading"}>
+      <label className="form-honeypot" aria-hidden="true">Website<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
       <div className="field-row"><label><span>{t.form.name} *</span><input name="name" autoComplete="name" required maxLength={100} placeholder={t.form.namePlaceholder} /></label><label><span>{t.form.contact} *</span><input name="contact" autoComplete="email" required maxLength={150} placeholder={t.form.contactPlaceholder} /></label></div>
       <label><span>{t.form.need} *</span><textarea name="projectDescription" required maxLength={3000} rows={5} placeholder={t.form.needPlaceholder} /></label>
       <label><span>{t.form.budget}</span><select name="budget" defaultValue=""><option value="">{t.form.budgetPlaceholder}</option>{siteConfig.budgets.map((budget) => <option key={budget} value={budget}>{budget}</option>)}</select></label>

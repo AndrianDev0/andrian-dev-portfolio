@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { useEffect } from "react";
 import { MagneticButton } from "../../../components";
 import { projectRussian, useLanguage } from "../../../i18n";
 import type { Project } from "../../../projects";
@@ -16,6 +17,15 @@ export function ProjectCaseClient({ project }: { project: Project }) {
   const challenge = language === "ru" ? localized.challenge : project.challenge;
   const solution = language === "ru" ? localized.solution : project.solution;
   const result = language === "ru" ? localized.result : project.result;
+
+  useEffect(() => {
+    const title = `${project.title} — ${siteConfig.name}`;
+    document.title = title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", `${siteConfig.url}/projects/${project.slug}`);
+  }, [description, project.slug, project.title]);
 
   return (
     <main className="case-page" style={{ "--project-accent": project.accent } as React.CSSProperties}>

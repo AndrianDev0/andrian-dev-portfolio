@@ -927,6 +927,9 @@ html.intro-lock body{overflow:hidden;overscroll-behavior:none}
 .service-text h3{line-height:1.05}
 .service-text p{width:100%;margin:11px 0 12px}
 .service-text .service-more{margin-top:auto}
+.form-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.skip-link{position:fixed;z-index:1001;top:10px;left:12px;padding:11px 14px;border-radius:9px;color:#fff;background:#171a21;font-size:11px;transform:translateY(-160%);transition:transform .2s var(--ease);pointer-events:auto}
+.skip-link:focus{transform:translateY(0)}
 
 @media(max-width:900px){
   .services-grid{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(4,390px)}

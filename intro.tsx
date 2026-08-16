@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useLanguage } from "./i18n";
+import "./styles/intro.css";
 
 const LightRays = lazy(() => import("./light-rays").then((module) => ({ default: module.LightRays })));
 
@@ -17,10 +18,11 @@ export function AppIntro() {
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const forced = new URLSearchParams(window.location.search).get("intro") === "1";
+    const introMode = new URLSearchParams(window.location.search).get("intro");
+    const forced = introMode === "1";
     const alreadySeen = sessionStorage.getItem(INTRO_KEY) === "seen";
 
-    if (reduceMotion || (alreadySeen && !forced)) {
+    if (reduceMotion || introMode === "0" || (alreadySeen && !forced)) {
       setVisible(false);
       return;
     }

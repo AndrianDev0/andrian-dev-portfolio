@@ -1,0 +1,24 @@
+/* Services — one alignment system across desktop, tablet and mobile */
+.services-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,420px);
+}
+.service-item article{padding:28px;border-radius:18px!important}
+.service-number{position:relative;z-index:3}
+.service-visual{top:28px;right:28px;width:52%;height:215px}
+.service-text{left:28px;right:28px;bottom:25px;max-width:none;height:128px;display:flex;flex-direction:column;align-items:flex-start}
+.service-text h3{line-height:1.05}
+.service-text p{width:100%;margin:11px 0 12px}
+.service-text .service-more{margin-top:auto}
+.form-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.skip-link{position:fixed;z-index:1001;top:10px;left:12px;padding:11px 14px;border-radius:9px;color:#fff;background:#171a21;font-size:11px;transform:translateY(-160%);transition:transform .2s var(--ease);pointer-events:auto}
+.skip-link:focus{transform:translateY(0)}
+
+@media(max-width:900px){
+  .services-grid{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(4,390px)}
+  .service-item article{padding:20px}
+  .service-visual{left:20px;right:20px;top:42px;width:auto;height:162px}
+  .service-text{left:20px;right:20px;bottom:21px;height:142px}
+  .service-text h3{font-size:24px}
+  .service-text p{margin:10px 0 12px;font-size:11px;line-height:1.5}
+}

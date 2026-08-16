@@ -7,7 +7,10 @@
     "dev": "vite --config vite.config.ts",
     "build": "vite build --config vite.config.ts",
     "vercel-build": "vite build --config vite.vercel.config.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test:responsive": "playwright test",
+    "test:lighthouse": "lhci autorun",
+    "quality": "pnpm typecheck && pnpm vercel-build && pnpm test:responsive && pnpm test:lighthouse"
   },
   "dependencies": {
     "framer-motion": "^12.23.12",
@@ -18,6 +21,8 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
+    "@lhci/cli": "0.15.1",
+    "@playwright/test": "1.55.0",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",

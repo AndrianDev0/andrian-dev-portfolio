@@ -7,5 +7,8 @@
 /*.log
 *.tsbuildinfo
 test.tmp
+/test-results
+/playwright-report
+/.lighthouseci
 
 .vercel

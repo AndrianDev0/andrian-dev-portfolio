@@ -10,6 +10,7 @@ import { ContactForm, MagneticButton, Reveal, SectionHeading } from "./component
 import { projectRussian, useLanguage } from "./i18n";
 import { NeboBotFlowVisual, NeboMiniAppVisual, ProjectVisual, ServiceVisual } from "./visuals";
 import { ShinyText, SpotlightCard } from "./react-bits";
+import "./styles/services.css";
 
 export function ProjectsSection() {
   const { language, t } = useLanguage();

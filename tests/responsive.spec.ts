@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const viewports = [
   { name: "mobile", width: 390, height: 844 },
+  { name: "compact-desktop", width: 1024, height: 768 },
   { name: "desktop", width: 1440, height: 900 },
   { name: "wide", width: 1920, height: 1080 },
 ] as const;
@@ -39,4 +40,21 @@ test("project case is reachable and has its own content", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "NEBO BISTRO" })).toBeVisible();
   await expect(page.locator(".case-visual")).toBeVisible();
   await expect(page).toHaveTitle(/NEBO BISTRO/);
+});
+
+test("Russian hero lines fit inside the copy column", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await page.goto("/?intro=0", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "RU" }).click();
+
+  const lines = await page.locator(".hero-line").evaluateAll((elements) =>
+    elements.map((element) => ({
+      visibleWidth: element.clientWidth,
+      contentWidth: element.scrollWidth,
+    })),
+  );
+
+  for (const line of lines) {
+    expect(line.contentWidth).toBeLessThanOrEqual(line.visibleWidth + 1);
+  }
 });

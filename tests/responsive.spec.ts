@@ -30,6 +30,17 @@ for (const viewport of viewports) {
       expect(card.right).toBeLessThanOrEqual(layout.viewport + 1);
       expect(card.height).toBeGreaterThan(300);
     }
+
+    await page.getByRole("button", { name: "RU" }).click();
+    const heroLines = await page.locator(".hero-line").evaluateAll((elements) =>
+      elements.map((element) => ({
+        visibleWidth: element.clientWidth,
+        contentWidth: element.scrollWidth,
+      })),
+    );
+    for (const line of heroLines) {
+      expect(line.contentWidth).toBeLessThanOrEqual(line.visibleWidth + 1);
+    }
   });
 }
 
@@ -40,21 +51,4 @@ test("project case is reachable and has its own content", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "NEBO BISTRO" })).toBeVisible();
   await expect(page.locator(".case-visual")).toBeVisible();
   await expect(page).toHaveTitle(/NEBO BISTRO/);
-});
-
-test("Russian hero lines fit inside the copy column", async ({ page }) => {
-  await page.setViewportSize({ width: 1024, height: 768 });
-  await page.goto("/?intro=0", { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "RU" }).click();
-
-  const lines = await page.locator(".hero-line").evaluateAll((elements) =>
-    elements.map((element) => ({
-      visibleWidth: element.clientWidth,
-      contentWidth: element.scrollWidth,
-    })),
-  );
-
-  for (const line of lines) {
-    expect(line.contentWidth).toBeLessThanOrEqual(line.visibleWidth + 1);
-  }
 });

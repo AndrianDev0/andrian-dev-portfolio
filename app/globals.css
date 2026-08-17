@@ -87,7 +87,7 @@ section[id] { scroll-margin-top: 88px; }
 .hero-label { display: flex; align-items: center; gap: 11px; margin: 0 0 31px; color: #aeb4bf; font-size: 10.5px; font-weight: 620; letter-spacing: .16em; }
 .hero-label-dot { flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--cyan); box-shadow: 0 0 10px rgba(70,201,231,.6); }
 .hero h1 { margin: 0; font-size: clamp(60px, 5.55vw, 97px); line-height: .93; letter-spacing: -.073em; font-weight: 525; }
-[data-language="ru"] .hero h1 { font-size: clamp(57px, 5.2vw, 92px); letter-spacing: -.064em; }
+[data-language="ru"] .hero h1 { font-size: clamp(54px, 4.65vw, 82px); letter-spacing: -.068em; }
 .hero-line-mask { display: block; overflow: hidden; padding-bottom: .105em; margin-bottom: -.105em; }
 .hero-line { display: block; white-space: nowrap; will-change: transform; }
 .hero h1 em { font-style: normal; color: transparent; background: linear-gradient(110deg, #b3c2ff 0%, #718dff 42%, #b185ff 90%); -webkit-background-clip: text; background-clip: text; }

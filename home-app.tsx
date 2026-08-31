@@ -1,5 +1,4 @@
 import { Header, Hero } from "./components";
-import { AppIntro } from "./intro";
 import {
   AboutSection,
   BenefitsSection,
@@ -15,7 +14,6 @@ import {
 export default function HomeApp() {
   return (
     <>
-      <AppIntro />
       <Header />
       <main id="main-content" tabIndex={-1}>
         <Hero />

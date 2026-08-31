@@ -10,7 +10,7 @@ const viewports = [
 for (const viewport of viewports) {
   test(`${viewport.name}: home stays aligned without horizontal overflow`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/?intro=0", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "networkidle" });
 
     await expect(page.locator("h1")).toBeVisible();
     await expect(page.locator(".service-item")).toHaveCount(4);

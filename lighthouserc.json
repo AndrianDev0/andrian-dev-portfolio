@@ -4,7 +4,7 @@
       "startServerCommand": "pnpm vite preview --config vite.vercel.config.ts --host 127.0.0.1 --port 4173",
       "startServerReadyPattern": "Local",
       "url": [
-        "http://127.0.0.1:4173/?intro=0",
+        "http://127.0.0.1:4173/",
         "http://127.0.0.1:4173/projects/nebo-bistro"
       ],
       "numberOfRuns": 1

@@ -2,7 +2,9 @@
   "name": "dev-premium-portfolio",
   "version": "1.0.0",
   "private": true,
-  "engines": { "node": ">=22.13.0" },
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "dev": "vite --config vite.config.ts",
     "build": "vite build --config vite.config.ts",
@@ -15,7 +17,6 @@
   "dependencies": {
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.468.0",
-    "ogl": "1.0.11",
     "react": "19.2.6",
     "react-dom": "19.2.6"
   },

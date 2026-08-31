@@ -71,3 +71,12 @@ test("unknown pages and missing assets return real 404 responses", async ({ requ
   expect(html).not.toContain('type="application/ld+json"');
   expect((await request.get("/assets/does-not-exist.js")).status()).toBe(404);
 });
+
+test("search engine ownership files stay published", async ({ request }) => {
+  const home = await request.get("/");
+  expect(await home.text()).toContain('<meta name="google-site-verification" content="BnAG3PijlF1RMPKWmJuEJmdRd4BQuqG9kUcDcfj6Ds0"');
+
+  const yandex = await request.get("/yandex_5372d8cf48efc93e.html");
+  expect(yandex.status()).toBe(200);
+  expect(await yandex.text()).toContain("Verification: 5372d8cf48efc93e");
+});

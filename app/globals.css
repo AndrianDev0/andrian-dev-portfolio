@@ -1,3 +1,5 @@
+@import "../styles/seo-pages.css";
+
 :root {
   --bg: #060708;
   --bg-elevated: #0b0d11;
@@ -14,6 +16,7 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --container: 1400px;
 }
+
 
 *, *::before, *::after { box-sizing: border-box; }
 html { width: 100%; scroll-behavior: smooth; background: var(--bg); overflow-x: clip; }

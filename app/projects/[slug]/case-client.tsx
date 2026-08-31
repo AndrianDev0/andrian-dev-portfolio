@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
-import { useEffect } from "react";
 import { MagneticButton } from "../../../magnetic-button";
 import { projectRussian, useLanguage } from "../../../i18n";
 import type { Project } from "../../../projects";
@@ -11,6 +10,7 @@ import { ThemeToggle } from "../../../theme";
 
 export function ProjectCaseClient({ project }: { project: Project }) {
   const { language, setLanguage, t } = useLanguage();
+  const homePath = language === "en" ? "/en" : "/";
   const localized = projectRussian[project.slug];
   const category = language === "ru" ? localized.category : project.category;
   const description = language === "ru" ? localized.description : project.description;
@@ -18,18 +18,9 @@ export function ProjectCaseClient({ project }: { project: Project }) {
   const solution = language === "ru" ? localized.solution : project.solution;
   const result = language === "ru" ? localized.result : project.result;
 
-  useEffect(() => {
-    const title = `${project.title} — ${siteConfig.name}`;
-    document.title = title;
-    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
-    document.querySelector('meta[property="og:title"]')?.setAttribute("content", title);
-    document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
-    document.querySelector('link[rel="canonical"]')?.setAttribute("href", `${siteConfig.url}/projects/${project.slug}`);
-  }, [description, project.slug, project.title]);
-
   return (
     <main className="case-page" style={{ "--project-accent": project.accent } as React.CSSProperties}>
-      <nav className="case-nav"><a className="brand" href="/"><span className="brand-mark"><i /></span><span className="brand-word">{siteConfig.name}</span></a><div className="case-nav-actions"><div className="language-switcher" role="group" aria-label="Language / Язык"><button type="button" className={language === "en" ? "is-active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button><button type="button" className={language === "ru" ? "is-active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button></div><ThemeToggle className="theme-toggle-case" /><a href="/#work"><ArrowLeft size={16} /> {t.case.allWork}</a></div></nav>
+      <nav className="case-nav"><a className="brand" href={homePath}><span className="brand-mark"><i /></span><span className="brand-word">{siteConfig.name}</span></a><div className="case-nav-actions"><div className="language-switcher" role="group" aria-label="Language / Язык"><button type="button" className={language === "en" ? "is-active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button><button type="button" className={language === "ru" ? "is-active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button></div><ThemeToggle className="theme-toggle-case" /><a href={`${homePath}#work`}><ArrowLeft size={16} /> {t.case.allWork}</a></div></nav>
       <section className="case-hero container">
         <div className="case-head-meta"><span>{project.id} / {t.case.featured}</span><span>{category.toUpperCase()}</span><span className="demo-label live-label"><i />{t.case.real}</span></div>
         <h1>{project.title}</h1>
@@ -45,8 +36,8 @@ export function ProjectCaseClient({ project }: { project: Project }) {
           <article><span>03 / {t.case.resultLabel}</span><h2>{t.case.resultTitle}</h2><p>{result}</p></article>
         </div>
       </section>
-      <section className="case-next"><div className="container"><span>{t.case.similar}</span><h2>{t.case.nextTop}<br />{t.case.nextBottom}</h2><MagneticButton href="/#contact">{t.case.talk} <ArrowRight size={17} /></MagneticButton></div></section>
-      <footer className="case-footer"><div className="container"><span>© {new Date().getFullYear()} {siteConfig.name}</span><a href={`https://t.me/${siteConfig.telegram}`} target="_blank" rel="noreferrer">Telegram <ArrowUpRight size={14} /></a></div></footer>
+      <section className="case-next"><div className="container"><span>{t.case.similar}</span><h2>{t.case.nextTop}<br />{t.case.nextBottom}</h2><MagneticButton href={`${homePath}#contact`}>{t.case.talk} <ArrowRight size={17} /></MagneticButton></div></section>
+      <footer className="case-footer"><div className="container"><span>© {new Date().getFullYear()} {siteConfig.name}</span><a href={language === "ru" ? "/telegram-boty" : `${homePath}#services`}>{language === "ru" ? "Разработка Telegram-ботов" : "Telegram bot development"}</a><a href={`https://t.me/${siteConfig.telegram}`} target="_blank" rel="noreferrer">Telegram <ArrowUpRight size={14} /></a></div></footer>
     </main>
   );
 }

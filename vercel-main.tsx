@@ -6,12 +6,15 @@ import { ThemeProvider } from "./theme";
 
 const HomeApp = lazy(() => import("./home-app"));
 const CaseApp = lazy(() => import("./case-app"));
+const ServicePageApp = lazy(() => import("./service-page-app"));
 
 function VercelApp() {
-  const projectMatch = window.location.pathname.match(/^\/projects\/([^/]+)\/?$/);
+  const localizedPath = window.location.pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+  const projectMatch = localizedPath.match(/^\/projects\/([^/]+)\/?$/);
+  const isHome = localizedPath === "/";
   return (
     <Suspense fallback={<div className="route-loader" aria-label="Loading" />}>
-      {projectMatch ? <CaseApp slug={projectMatch[1]} /> : <HomeApp />}
+      {projectMatch ? <CaseApp slug={projectMatch[1]} /> : isHome ? <HomeApp /> : <ServicePageApp slug={localizedPath.slice(1)} />}
     </Suspense>
   );
 }

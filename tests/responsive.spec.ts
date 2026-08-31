@@ -50,5 +50,34 @@ test("project case is reachable and has its own content", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "NEBO BISTRO" })).toBeVisible();
   await expect(page.locator(".case-visual")).toBeVisible();
-  await expect(page).toHaveTitle(/NEBO BISTRO/);
+  await expect(page).toHaveTitle(/Nebo Bistro/i);
 });
+
+for (const viewport of [
+  { name: "mobile", width: 390, height: 844 },
+  { name: "desktop", width: 1440, height: 900 },
+] as const) {
+  test(`${viewport.name}: SEO service pages stay readable and aligned`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/razrabotka-sajtov", { waitUntil: "networkidle" });
+
+    await expect(page.getByRole("heading", { level: 1, name: /Разработка сайтов под ключ/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Обсудить задачу/ }).first()).toBeVisible();
+    await expect(page.locator(".seo-feature-grid article")).toHaveCount(4);
+
+    const layout = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+      sections: [...document.querySelectorAll<HTMLElement>(".seo-feature-grid article")].map((section) => {
+        const rect = section.getBoundingClientRect();
+        return { left: rect.left, right: rect.right };
+      }),
+    }));
+
+    expect(layout.document).toBeLessThanOrEqual(layout.viewport + 1);
+    for (const section of layout.sections) {
+      expect(section.left).toBeGreaterThanOrEqual(-1);
+      expect(section.right).toBeLessThanOrEqual(layout.viewport + 1);
+    }
+  });
+}

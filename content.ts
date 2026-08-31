@@ -1,8 +1,8 @@
 export const services = [
-  { id: "01", visual: "browser" },
-  { id: "02", visual: "chat" },
-  { id: "03", visual: "dashboard" },
-  { id: "04", visual: "nodes" },
+  { id: "01", visual: "browser", href: "/razrabotka-sajtov" },
+  { id: "02", visual: "chat", href: "/telegram-boty" },
+  { id: "03", visual: "dashboard", href: "/veb-prilozheniya" },
+  { id: "04", visual: "nodes", href: "/avtomatizatsiya" },
 ] as const;
 
 export const benefits = [

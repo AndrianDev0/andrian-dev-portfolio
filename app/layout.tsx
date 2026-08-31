@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: { default: siteConfig.title, template: `%s — ${siteConfig.name}` },
   description: siteConfig.description,
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", languages: { ru: "/", en: "/en", "x-default": "/" } },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
   openGraph: {
     type: "website",
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{ __html: `try{const t=localStorage.getItem("andrian-dev-theme")||"light";const l=localStorage.getItem("portfolio-language")||(navigator.language.toLowerCase().startsWith("ru")?"ru":"en");document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;document.documentElement.dataset.language=l;document.documentElement.lang=l}catch{document.documentElement.dataset.theme="light"}` }} /></head>
+    <html lang="ru" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: `try{const t=localStorage.getItem("andrian-dev-theme")||"light";const p=location.pathname.replace(/\\/+$/,"")||"/";const l=p==="/en"||p.startsWith("/en/")?"en":"ru";document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;document.documentElement.dataset.language=l;document.documentElement.lang=l}catch{document.documentElement.dataset.theme="light";document.documentElement.dataset.language="ru"}` }} /></head>
       <body className={`${geist.variable} ${geistMono.variable} ${manrope.variable}`}><ThemeProvider><LanguageProvider>{children}</LanguageProvider></ThemeProvider></body>
     </html>
   );

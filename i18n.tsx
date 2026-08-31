@@ -283,6 +283,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const setLanguage = (next: Language) => {
     setLanguageState(next);
     try { window.localStorage.setItem("portfolio-language", next); } catch { /* Storage may be unavailable. */ }
+    const path = window.location.pathname;
+    const hash = window.location.hash;
+    const isProject = path.replace(/^\/en(?=\/|$)/, "").startsWith("/projects/");
+    const target = next === "en"
+      ? (isProject ? `/en${path.replace(/^\/en/, "")}` : "/en")
+      : (isProject ? path.replace(/^\/en/, "") : "/");
+    if (target !== path) window.location.assign(`${target}${hash}`);
   };
 
   const value = useMemo(() => ({ language, setLanguage, t: copy[language] }), [language]);

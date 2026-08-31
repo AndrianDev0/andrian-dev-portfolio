@@ -50,6 +50,17 @@ test("project case is reachable and has its own content", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "NEBO BISTRO" })).toBeVisible();
   await expect(page.locator(".case-visual")).toBeVisible();
+  await expect(page.locator(".case-gallery-card")).toHaveCount(4);
+  await expect(page.locator(".case-gallery-card img").first()).toHaveAttribute("loading", "lazy");
+
+  const gallery = await page.locator(".case-gallery-grid").evaluate((element) => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+    documentWidth: document.documentElement.scrollWidth,
+    viewportWidth: document.documentElement.clientWidth,
+  }));
+  expect(gallery.scrollWidth).toBeGreaterThan(gallery.clientWidth);
+  expect(gallery.documentWidth).toBeLessThanOrEqual(gallery.viewportWidth + 1);
   await expect(page).toHaveTitle(/Nebo Bistro/i);
 });
 

@@ -1,47 +1,44 @@
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { projects } from "../projects";
 import { siteConfig } from "../site";
+import { absoluteAlternates, absoluteSiteUrl, indexableRoutes, productionOrigin, seoServices } from "../site-registry";
 
-const seoContent = JSON.parse(readFileSync(new URL("../seo-pages.json", import.meta.url), "utf8")) as {
-  services: Array<{ slug: string; title: string; h1: string }>;
-};
-const serviceRoutes = seoContent.services.map((service) => [`/${service.slug}`, service.title, service.h1] as const);
-const indexableRoutes: readonly (readonly [string, string, string])[] = [
-  ["/", "Разработка сайтов и Telegram-ботов — Andrian.Dev", "Создаю"],
-  ["/en", "Websites, Telegram Bots &amp; Automation — Andrian.Dev", "I build"],
-  ...serviceRoutes,
-  ["/projects/nebo-bistro", "Telegram-бот и Mini App Nebo Bistro", "Telegram-бот и Mini App для Nebo Bistro"],
-  ["/en/projects/nebo-bistro", "Nebo Bistro Telegram Bot &amp; Mini App Case", "Telegram bot and Mini App for Nebo Bistro"],
-];
+function escapeHtml(value: string) {
+  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+}
+
+function textContent(value: string) {
+  return value.replace(/<[^>]+>/g, "").replaceAll("&amp;", "&").replaceAll("&#39;", "'").trim();
+}
 
 test("every indexable route returns unique crawlable HTML", async ({ request }) => {
   const titles = new Set<string>();
   const canonicals = new Set<string>();
 
-  for (const [route, title, h1] of indexableRoutes) {
-    const response = await request.get(route);
-    expect(response.status(), route).toBe(200);
-    expect(response.headers()["content-type"], route).toContain("text/html");
+  for (const route of indexableRoutes) {
+    const response = await request.get(route.path);
+    expect(response.status(), route.path).toBe(200);
+    expect(response.headers()["content-type"], route.path).toContain("text/html");
     const html = await response.text();
-    expect(html, `${route} title`).toContain(`<title>${title}`);
-    expect(html, `${route} h1`).toContain(`<h1>${h1}`);
-    const canonical = route === "/" ? `${siteConfig.url}/` : `${siteConfig.url}${route}`;
-    expect(html, `${route} canonical`).toContain(`<link rel="canonical" href="${canonical}"`);
+    expect(html, `${route.path} build placeholders`).not.toMatch(/SEO_(?:TITLE|DESCRIPTION)_PLACEHOLDER|seo\.invalid/);
+    expect(html, `${route.path} title`).toContain(`<title>${escapeHtml(route.metadata.title)}`);
+    const renderedH1 = html.match(/<h1>([\s\S]*?)<\/h1>/)?.[1] ?? "";
+    expect(textContent(renderedH1), `${route.path} h1`).toBe(route.metadata.h1);
+    const canonical = absoluteSiteUrl(route.path);
+    expect(html, `${route.path} canonical`).toContain(`<link rel="canonical" href="${canonical}"`);
     titles.add(html.match(/<title>(.*?)<\/title>/)?.[1] ?? "");
     canonicals.add(canonical);
 
-    if (route === "/" || route === "/en") {
-      expect(html, `${route} Russian alternate`).toContain(`hreflang="ru" href="${siteConfig.url}/"`);
-      expect(html, `${route} English alternate`).toContain(`hreflang="en" href="${siteConfig.url}/en"`);
-      expect(html, `${route} default alternate`).toContain(`hreflang="x-default" href="${siteConfig.url}/"`);
-    }
-    if (route.endsWith("/projects/nebo-bistro")) {
-      expect(html, `${route} case Russian alternate`).toContain(`hreflang="ru" href="${siteConfig.url}/projects/nebo-bistro"`);
-      expect(html, `${route} case English alternate`).toContain(`hreflang="en" href="${siteConfig.url}/en/projects/nebo-bistro"`);
+    const alternates = absoluteAlternates(route.alternates);
+    if (alternates) {
+      expect(html, `${route.path} Russian alternate`).toContain(`hreflang="ru" href="${alternates.ru}"`);
+      expect(html, `${route.path} English alternate`).toContain(`hreflang="en" href="${alternates.en}"`);
+      expect(html, `${route.path} default alternate`).toContain(`hreflang="x-default" href="${alternates.xDefault}"`);
     }
 
     const jsonLd = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
-    expect(jsonLd.length, `${route} structured data`).toBeGreaterThan(0);
+    expect(jsonLd.length, `${route.path} structured data`).toBeGreaterThan(0);
     for (const match of jsonLd) expect(() => JSON.parse(match[1])).not.toThrow();
   }
 
@@ -53,9 +50,9 @@ test("sitemap contains only the published canonical routes", async ({ request })
   const response = await request.get("/sitemap.xml");
   expect(response.status()).toBe(200);
   const sitemap = await response.text();
-  const expectedCanonicals = indexableRoutes.map(([route]) => route === "/" ? `${siteConfig.url}/` : `${siteConfig.url}${route}`);
-  for (const [route] of indexableRoutes) {
-    const canonical = route === "/" ? `${siteConfig.url}/` : `${siteConfig.url}${route}`;
+  const expectedCanonicals = indexableRoutes.map((route) => absoluteSiteUrl(route.path));
+  for (const route of indexableRoutes) {
+    const canonical = absoluteSiteUrl(route.path);
     expect(sitemap).toContain(`<loc>${canonical}</loc>`);
   }
   const actualCanonicals = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
@@ -79,4 +76,11 @@ test("search engine ownership files stay published", async ({ request }) => {
   const yandex = await request.get("/yandex_5372d8cf48efc93e.html");
   expect(yandex.status()).toBe(200);
   expect(await yandex.text()).toContain("Verification: 5372d8cf48efc93e");
+});
+
+test("production origin has one normalized registry value", () => {
+  expect(productionOrigin).toBe(new URL(siteConfig.url).origin);
+  expect(new Set(indexableRoutes.map((route) => route.path)).size).toBe(indexableRoutes.length);
+  expect(indexableRoutes.filter((route) => route.kind === "service")).toHaveLength(seoServices.length);
+  expect(indexableRoutes.filter((route) => route.kind === "project")).toHaveLength(projects.length * 2);
 });

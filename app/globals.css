@@ -1,6 +1,27 @@
 @import "../styles/seo-pages.css";
 
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/manrope-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/manrope-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
+  --font-geist: "Manrope";
+  --font-geist-mono: "Manrope";
+  --font-cyrillic: "Manrope";
   --bg: #060708;
   --bg-elevated: #0b0d11;
   --surface: #101319;
@@ -328,7 +349,7 @@ section[id] { scroll-margin-top: 88px; }
   border-radius: 10px;
   background:
     linear-gradient(180deg, transparent 45%, rgba(7,8,10,.58)),
-    url('/nebo/welcome-premium.jpg') center 48% / cover no-repeat,
+    url('/nebo/welcome-premium.webp') center 48% / cover no-repeat,
     linear-gradient(145deg, #31261c, #121316);
   box-shadow: inset 0 1px rgba(255,255,255,.06);
 }
@@ -575,7 +596,7 @@ section[id] { scroll-margin-top: 88px; }
   color: rgba(247,229,193,.72);
   background:
     linear-gradient(180deg, transparent 45%, rgba(6,7,9,.8)),
-    url('/nebo/welcome-premium.jpg') center / cover no-repeat,
+    url('/nebo/welcome-premium.webp') center / cover no-repeat,
     linear-gradient(145deg,#33271c,#121316);
   box-shadow: inset 0 1px rgba(255,255,255,.06), 0 20px 38px rgba(0,0,0,.3);
   font: 600 5.5px var(--font-geist-mono),monospace;
@@ -840,14 +861,13 @@ section[id] { scroll-margin-top: 88px; }
 
 
 /* React Bits — restrained integrations adapted to Andrian.Dev */
-.rb-decrypted{display:inline-block;white-space:pre-wrap}.hero-label-encrypted{color:#7286d9;text-shadow:0 0 9px rgba(111,140,255,.32)}
 .rb-spotlight{--rb-mouse-x:50%;--rb-mouse-y:50%;--rb-spotlight:rgba(111,140,255,.14);isolation:isolate}
 .rb-spotlight::before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;opacity:0;background:radial-gradient(360px circle at var(--rb-mouse-x) var(--rb-mouse-y),var(--rb-spotlight),transparent 72%);transition:opacity .45s var(--ease)}
 .rb-spotlight:hover::before,.rb-spotlight:focus-within::before{opacity:1}
 .rb-spotlight>*{z-index:1}.rb-spotlight>.service-number{position:relative}
 .rb-shiny{display:inline-block;color:transparent;background:linear-gradient(112deg,var(--rb-shine-color) 0%,var(--rb-shine-color) 38%,var(--rb-shine-highlight) 50%,var(--rb-shine-color) 62%,var(--rb-shine-color) 100%);background-size:220% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rb-shine var(--rb-shine-speed) linear infinite}
 @keyframes rb-shine{from{background-position:125% 50%}to{background-position:-125% 50%}}
-@media(prefers-reduced-motion:reduce){.rb-shiny{animation:none;background-position:50%}.rb-spotlight::before{display:none}.hero-label-encrypted{color:inherit;text-shadow:none}}
+@media(prefers-reduced-motion:reduce){.rb-shiny{animation:none;background-position:50%}.rb-spotlight::before{display:none}}
 
 /* Service cards — functional detail link */
 .service-more{display:flex;width:max-content;align-items:center;gap:8px;color:#7e8ee6;font-size:7px;letter-spacing:.15em;transition:color .25s,transform .25s var(--ease)}
@@ -865,4 +885,71 @@ section[id] { scroll-margin-top: 88px; }
 }
 @media(max-width:600px){
   .hero{padding-top:132px}
+}
+
+/* Case gallery — real Nebo Bistro product screens */
+.case-gallery{padding-bottom:170px}
+.case-gallery-heading{display:grid;grid-template-columns:.72fr 1.08fr .8fr;gap:48px;align-items:start;margin-bottom:58px;padding-top:34px;border-top:1px solid var(--line)}
+.case-gallery-heading>span{color:#747c89;font-size:8px;letter-spacing:.17em}
+.case-gallery-heading h2{margin:0;font-size:clamp(38px,4.3vw,64px);line-height:1;letter-spacing:-.055em;font-weight:520}
+.case-gallery-heading p{max-width:430px;margin:3px 0 0;color:#929aa6;font-size:14px;line-height:1.65}
+.case-gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.case-gallery-card{min-width:0;margin:0}
+.case-gallery-card img{display:block;width:100%;height:auto;aspect-ratio:900/1956;object-fit:cover;object-position:top;border:1px solid var(--line);border-radius:20px;background:#090b0f;box-shadow:0 22px 55px rgba(0,0,0,.22)}
+.case-gallery-card figcaption{display:flex;gap:12px;align-items:flex-start;margin-top:15px;color:#858e9b;font-size:10px;line-height:1.5}
+.case-gallery-card figcaption span{flex:0 0 auto;color:var(--project-accent);font:8px var(--font-geist-mono),monospace;letter-spacing:.1em}
+[data-theme="light"] .case-gallery-heading p,[data-theme="light"] .case-gallery-card figcaption{color:#5e6774}
+[data-theme="light"] .case-gallery-card img{border-color:rgba(25,31,43,.12);box-shadow:0 24px 60px rgba(39,49,72,.12)}
+
+/* Render heavy below-the-fold sections only when they approach the viewport. */
+.projects{content-visibility:auto;contain-intrinsic-size:auto 1750px}
+.services{content-visibility:auto;contain-intrinsic-size:auto 1050px}
+.benefits{content-visibility:auto;contain-intrinsic-size:auto 900px}
+.process{content-visibility:auto;contain-intrinsic-size:auto 1200px}
+.technologies{content-visibility:auto;contain-intrinsic-size:auto 560px}
+.marquee{content-visibility:auto;contain-intrinsic-size:auto 140px}
+.about{content-visibility:auto;contain-intrinsic-size:auto 900px}
+.contact{content-visibility:auto;contain-intrinsic-size:auto 1100px}
+
+/* Accessibility polish */
+.timeline-step,.timeline-step.is-visible{opacity:1}
+.footer-bottom{font-size:10px}
+.contact-form input:focus-visible,.contact-form textarea:focus-visible,.contact-form select:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-color:var(--blue);box-shadow:0 0 0 5px rgba(111,140,255,.12)}
+.service-more{min-height:44px;font-size:9px}
+.case-project-actions a{min-height:44px}
+[data-theme="light"] .timeline-index{color:#59616e}
+[data-theme="light"] .timeline-phase{color:#626b78}
+[data-theme="light"] .footer-bottom{color:#59616e}
+[data-theme="light"] .language-switcher button{color:#606977}
+[data-theme="light"] .case-body aside p{color:#616976}
+[data-theme="light"] .case-gallery-heading>span{color:#626b78}
+[data-theme="light"] .case-gallery-card figcaption span{color:#4059c7}
+[data-theme="light"] .case-footer>div{color:#59616e}
+.case-next .magnetic-button>span{color:inherit}
+
+@media(max-width:900px){
+  .case-gallery{padding-bottom:110px}
+  .case-gallery-heading{grid-template-columns:1fr 2fr;gap:24px 40px;margin-bottom:42px}
+  .case-gallery-heading p{grid-column:2}
+  .case-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:600px){
+  .nav-shell{min-height:64px}
+  .nav-actions{gap:8px}
+  .language-switcher{height:44px;padding:4px}
+  .language-switcher button{width:36px;height:36px}
+  .theme-toggle,.menu-button{width:44px;height:44px;min-width:44px}
+  .case-gallery-heading{display:block;margin-bottom:32px}
+  .case-gallery-heading h2{margin-top:22px;font-size:38px}
+  .case-gallery-heading p{margin-top:20px;font-size:13px}
+  .case-gallery-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;gap:12px;overflow-x:auto;padding:0 16px 14px;margin-inline:-16px;scroll-snap-type:x mandatory;scroll-padding-inline:16px;overscroll-behavior-inline:contain;scrollbar-width:thin}
+  .case-gallery-card{scroll-snap-align:start}
+  .case-gallery-card img{border-radius:16px}
+  .case-gallery-card figcaption{font-size:10px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .magnetic-button,.service-more,.case-project-actions a{transition:none}
+  .magnetic-button:hover,.service-more:hover,.case-project-actions a:hover{transform:none}
 }

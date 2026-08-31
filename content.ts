@@ -1,9 +1,16 @@
-export const services = [
-  { id: "01", visual: "browser", href: "/razrabotka-sajtov" },
-  { id: "02", visual: "chat", href: "/telegram-boty" },
-  { id: "03", visual: "dashboard", href: "/veb-prilozheniya" },
-  { id: "04", visual: "nodes", href: "/avtomatizatsiya" },
-] as const;
+import { seoServices, serviceRoutePath } from "./site-registry";
+
+const serviceVisuals = ["browser", "chat", "dashboard", "nodes"] as const;
+
+if (seoServices.length !== serviceVisuals.length) {
+  throw new Error("Every SEO service needs a home-page visual");
+}
+
+export const services = seoServices.map((service, index) => ({
+  id: String(index + 1).padStart(2, "0"),
+  visual: serviceVisuals[index]!,
+  href: serviceRoutePath(service.slug),
+}));
 
 export const benefits = [
   { id: "01" },

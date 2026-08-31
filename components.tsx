@@ -5,7 +5,6 @@ import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 
 import { useLanguage } from "./i18n";
 import { siteConfig } from "./site";
 import { submitProjectRequest } from "./submit";
-import { DecryptedText } from "./react-bits";
 import { ThemeToggle } from "./theme";
 
 export function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -208,7 +207,7 @@ export function Hero() {
       <div className="hero-noise" />
       <div className="container hero-layout">
         <div className="hero-copy">
-          <p className="hero-label hero-enter hero-enter-label"><span className="hero-label-dot" /><DecryptedText text={t.hero.label} encryptedClassName="hero-label-encrypted" /></p>
+          <p className="hero-label hero-enter hero-enter-label"><span className="hero-label-dot" />{t.hero.label}</p>
           <h1>
             <span className="hero-line-mask"><span className="hero-line hero-line-one">{language === "ru" ? <>Создаю <em>цифровые</em></> : <>I build <em>digital</em></>}</span></span>
             <span className="hero-line-mask"><span className="hero-line hero-line-two">{language === "ru" ? <><em>продукты</em> для</> : <><em>products</em> that move</>}</span></span>

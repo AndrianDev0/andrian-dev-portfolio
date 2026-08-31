@@ -2,16 +2,11 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { fileURLToPath } from "node:url";
 import { generateSeoPages } from "./scripts/prerender-seo";
-import seoContent from "./seo-pages.json";
-import { projects } from "./projects";
+import { cleanRoutePaths } from "./site-registry";
 
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
 const outDir = `${projectRoot}/dist-vercel`;
-const cleanRoutes = new Set([
-  "/en",
-  ...seoContent.services.map((service) => `/${service.slug}`),
-  ...projects.flatMap((project) => [`/projects/${project.slug}`, `/en/projects/${project.slug}`]),
-]);
+const cleanRoutes = new Set(cleanRoutePaths);
 
 export default defineConfig({
   appType: "mpa",

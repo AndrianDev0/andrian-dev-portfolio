@@ -1,23 +1,19 @@
 import { ArrowRight, ArrowUpRight, Check, ExternalLink } from "lucide-react";
 import { useEffect } from "react";
-import seoContent from "./seo-pages.json";
 import { siteConfig } from "./site";
+import { absoluteSiteUrl, getServiceBySlug, seoServices, serviceRoutePath } from "./site-registry";
 import { ThemeToggle } from "./theme";
 
-export type SeoServicePage = (typeof seoContent.services)[number];
-
-export function getSeoService(slug: string) {
-  return seoContent.services.find((service) => service.slug === slug);
-}
+export type SeoServicePage = (typeof seoServices)[number];
 
 export default function ServicePageApp({ slug }: { slug: string }) {
-  const service = getSeoService(slug);
+  const service = getServiceBySlug(slug);
 
   useEffect(() => {
     if (!service) return;
     document.title = service.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", service.description);
-    document.querySelector('link[rel="canonical"]')?.setAttribute("href", `${siteConfig.url}/${service.slug}`);
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", absoluteSiteUrl(serviceRoutePath(service.slug)));
   }, [service]);
 
   if (!service) {
@@ -183,7 +179,7 @@ export default function ServicePageApp({ slug }: { slug: string }) {
         <div className="container">
           <a className="footer-brand" href="/"><span />{siteConfig.name}</a>
           <div className="seo-footer-links">
-            {seoContent.services.map((item) => <a key={item.slug} href={`/${item.slug}`}>{item.h1}</a>)}
+            {seoServices.map((item) => <a key={item.slug} href={serviceRoutePath(item.slug)}>{item.h1}</a>)}
           </div>
           <div><a href={telegramUrl} target="_blank" rel="noreferrer">Telegram <ArrowUpRight aria-hidden="true" size={14} /></a><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></div>
         </div>

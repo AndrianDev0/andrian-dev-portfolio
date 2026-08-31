@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProject, projects } from "../../../projects";
+import { absoluteAlternates, findIndexableRoute, projectRoutePath } from "../../../site-registry";
 import { ProjectCaseClient } from "./case-client";
 
 export function generateStaticParams() {
@@ -9,12 +10,16 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
-  if (!project) return {};
+  const route = findIndexableRoute(projectRoutePath(slug, "ru"));
+  if (!route || route.kind !== "project") return {};
+  const alternates = absoluteAlternates(route.alternates);
   return {
-    title: `${project.title} — ${project.category}`,
-    description: project.description,
-    alternates: { canonical: `/projects/${project.slug}` },
+    title: { absolute: route.metadata.title },
+    description: route.metadata.description,
+    alternates: {
+      canonical: route.path,
+      languages: alternates ? { ru: alternates.ru, en: alternates.en, "x-default": alternates.xDefault } : undefined,
+    },
   };
 }
 

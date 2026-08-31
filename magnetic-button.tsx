@@ -34,7 +34,10 @@ export function MagneticButton({
   };
 
   const move = (event: ReactPointerEvent<HTMLAnchorElement>) => {
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+      || window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) return;
     const rect = rectRef.current ?? event.currentTarget.getBoundingClientRect();
     rectRef.current = rect;
     positionRef.current = {

@@ -1,86 +1,8 @@
 "use client";
 
-// Adapted from React Bits components: DecryptedText, SpotlightCard and ShinyText.
+// Adapted from React Bits components: SpotlightCard and ShinyText.
 // Source: https://reactbits.dev/ — customized for Andrian.Dev and existing dependencies.
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
-
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/#_*+";
-
-export function DecryptedText({
-  text,
-  className = "",
-  encryptedClassName = "",
-  speed = 34,
-}: {
-  text: string;
-  className?: string;
-  encryptedClassName?: string;
-  speed?: number;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [displayText, setDisplayText] = useState(text);
-  const [revealed, setRevealed] = useState(text.length);
-
-  const stop = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = null;
-  }, []);
-
-  const run = useCallback(() => {
-    stop();
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setDisplayText(text);
-      setRevealed(text.length);
-      return;
-    }
-
-    let cursor = 0;
-    setRevealed(0);
-    timerRef.current = setInterval(() => {
-      cursor += 1;
-      setRevealed(cursor);
-      setDisplayText(
-        text.split("").map((character, index) => {
-          if (character === " " || index < cursor) return character;
-          return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-        }).join(""),
-      );
-      if (cursor >= text.length) {
-        stop();
-        setDisplayText(text);
-      }
-    }, speed);
-  }, [speed, stop, text]);
-
-  useEffect(() => {
-    setDisplayText(text);
-    setRevealed(text.length);
-    const element = ref.current;
-    if (!element) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        run();
-        observer.disconnect();
-      }
-    }, { threshold: 0.35 });
-    observer.observe(element);
-    return () => {
-      observer.disconnect();
-      stop();
-    };
-  }, [run, stop, text]);
-
-  return (
-    <span ref={ref} className={`rb-decrypted ${className}`} aria-label={text}>
-      <span aria-hidden="true">
-        {displayText.split("").map((character, index) => (
-          <span className={index < revealed ? "" : encryptedClassName} key={index}>{character}</span>
-        ))}
-      </span>
-    </span>
-  );
-}
+import { useEffect, useRef, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 
 export function SpotlightCard({
   children,
@@ -103,7 +25,11 @@ export function SpotlightCard({
 
   const move = (event: ReactPointerEvent<HTMLElement>) => {
     finePointerRef.current ??= window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!ref.current || !finePointerRef.current) return;
+    if (
+      !ref.current
+      || !finePointerRef.current
+      || window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) return;
     const rect = rectRef.current ?? event.currentTarget.getBoundingClientRect();
     rectRef.current = rect;
     pointerRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top };

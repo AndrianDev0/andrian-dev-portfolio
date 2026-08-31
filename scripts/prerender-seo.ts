@@ -1,19 +1,31 @@
+import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import seoContent from "../seo-pages.json";
-import { siteConfig } from "../site";
+import { fileURLToPath } from "node:url";
+import { getProject, type Project } from "../projects";
+import {
+  absoluteAlternates,
+  absoluteSiteUrl,
+  getServiceBySlug,
+  indexableRoutes,
+  notFoundMetadata,
+  productionOrigin,
+  seoServices,
+  type RouteMetadata,
+  type SiteLanguage,
+} from "../site-registry";
 
-const ORIGIN = siteConfig.url;
-const LAST_MODIFIED = "2026-08-31";
-type Service = (typeof seoContent.services)[number];
+const repositoryRoot = fileURLToPath(new URL("..", import.meta.url));
+const ORIGIN = productionOrigin;
+type Service = (typeof seoServices)[number];
 
 type PageMeta = {
   lang: "ru" | "en";
   title: string;
   description: string;
-  canonical: string;
+  canonical?: string;
   locale: string;
-  schema: unknown;
+  schema?: unknown;
   alternates?: { ru: string; en: string; xDefault: string };
   useSocialImage?: boolean;
 };
@@ -65,7 +77,8 @@ function applyMeta(template: string, meta: PageMeta) {
   html = replaceMeta(html, "name", "description", meta.description);
   html = replaceMeta(html, "property", "og:title", meta.title);
   html = replaceMeta(html, "property", "og:description", meta.description);
-  html = replaceMeta(html, "property", "og:url", meta.canonical);
+  if (meta.canonical) html = replaceMeta(html, "property", "og:url", meta.canonical);
+  else html = html.replace(/\s*<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, "");
   html = replaceMeta(html, "property", "og:locale", meta.locale);
   html = replaceMeta(
     html,
@@ -77,13 +90,19 @@ function applyMeta(template: string, meta: PageMeta) {
   );
   html = replaceMeta(html, "name", "twitter:title", meta.title);
   html = replaceMeta(html, "name", "twitter:description", meta.description);
-  html = replaceCanonical(html, meta.canonical);
+  if (meta.canonical) html = replaceCanonical(html, meta.canonical);
+  else html = html.replace(/\s*<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, "");
   html = replaceAlternates(html, meta.alternates);
-  html = replaceStructuredData(html, meta.schema);
+  if (meta.schema) html = replaceStructuredData(html, meta.schema);
+  else html = html.replace(/\s*<!-- seo:structured-data:start -->[\s\S]*?<!-- seo:structured-data:end -->/i, "");
   if (meta.useSocialImage === false) {
     html = html.replace(/\s*<meta\s+property="og:image(?::[^"]+)?"\s+content="[^"]*"\s*\/?>/gi, "");
     html = html.replace(/\s*<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/gi, "");
     html = html.replace(/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, '<meta name="twitter:card" content="summary" />');
+  } else {
+    const socialImage = absoluteSiteUrl("/og-v2.jpg");
+    html = replaceMeta(html, "property", "og:image", socialImage);
+    html = replaceMeta(html, "name", "twitter:image", socialImage);
   }
   return html;
 }
@@ -96,7 +115,7 @@ function injectRoot(template: string, content: string) {
   return template.replace('<div id="root"></div>', wrapRoot(content));
 }
 
-const serviceCards = seoContent.services.map((service) => `
+const serviceCards = seoServices.map((service) => `
   <article>
     <h3>${escapeHtml(service.h1)}</h3>
     <p>${escapeHtml(service.description)}</p>
@@ -119,7 +138,7 @@ function homeFallback(language: "ru" | "en") {
         <p>${ru ? "Создаю сайты, Telegram-ботов, веб-приложения и автоматизацию для бизнеса — от структуры и интерфейса до интеграций, тестирования и запуска." : "I build modern websites, Telegram bots, web apps, and automations — from structure and interface to integrations, testing, and launch."}</p>
         <div class="seo-static-actions"><a href="#contact">${ru ? "Обсудить проект" : "Start a project"}</a><a href="#work">${ru ? "Смотреть работы" : "View my work"}</a></div>
       </section>
-      <section class="seo-static-case" id="work"><h2>${ru ? "Реальный кейс: Telegram-бот и Mini App для Nebo Bistro" : "Real case: Telegram bot and Mini App for Nebo Bistro"}</h2><p>${ru ? "Работающий ресторанный сценарий: знакомство в Telegram, встроенное колесо призов и понятная выдача выигрыша в заведении." : "A live restaurant journey with Telegram onboarding, an embedded prize wheel, and a clear in-venue reward handoff."}</p><a href="${prefix}/projects/nebo-bistro">${ru ? "Разобрать кейс" : "Explore the case"} →</a></section>
+      <section class="seo-static-case" id="work"><h2>${ru ? "Реальный кейс: Telegram-бот и Mini App для Nebo Bistro" : "Real case: Telegram bot and Mini App for Nebo Bistro"}</h2><p>${ru ? "Рабочая кампания для привлечения новых гостей, рекламы партнёров и понятной выдачи их подарков в заведении." : "A live acquisition campaign connecting Telegram onboarding, restaurant and sponsor rewards, and a clear in-venue handoff."}</p><a href="${prefix}/projects/nebo-bistro">${ru ? "Разобрать кейс" : "Explore the case"} →</a></section>
       <section class="seo-static-section" id="services"><h2>${ru ? "Услуги разработки для бизнеса" : "Development services for business"}</h2><div class="seo-static-grid">${ru ? serviceCards : `<article><h3>Web development</h3><p>Landing pages, corporate websites and custom builds.</p><a href="#contact">Discuss a website →</a></article><article><h3>Telegram bots</h3><p>Lead capture, sales, support, catalogs and integrations.</p><a href="#contact">Discuss a bot →</a></article><article><h3>Web apps</h3><p>Dashboards, accounts and internal tools.</p><a href="#contact">Discuss a web app →</a></article><article><h3>Automation</h3><p>API, CRM, Telegram and notification workflows.</p><a href="#contact">Discuss automation →</a></article>`}</div></section>
       <section class="seo-static-case" id="process"><h2>${ru ? "От идеи до запуска" : "From idea to launch"}</h2><p>${ru ? "Знакомство, анализ, дизайн, разработка, тестирование и запуск остаются частью одного понятного процесса." : "Discovery, analysis, design, development, testing and launch stay connected in one clear process."}</p></section>
       <section class="seo-static-section" id="contact"><h2>${ru ? "Обсудить проект" : "Start a project"}</h2><p>${ru ? "Расскажите, что вам нужно — предложу подходящий способ реализации." : "Tell me what you need and I will suggest the right way to build it."}</p><div class="seo-static-actions"><a href="https://t.me/g1reshnik">Telegram</a><a href="mailto:maa190186@gmail.com">maa190186@gmail.com</a></div></section>
@@ -133,7 +152,7 @@ function serviceFallback(service: Service) {
   const process = service.process.map((step, index) => `<li><span>ЭТАП 0${index + 1}</span><h3>${escapeHtml(step.title)}</h3><p>${escapeHtml(step.text)}</p></li>`).join("");
   const includes = service.includes.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   const faq = service.faq.map((item) => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join("");
-  const caseSection = service.slug === "telegram-boty" ? `<section class="seo-section seo-case-callout"><div class="container seo-case-card"><div><p class="eyebrow">РЕАЛЬНЫЙ КЕЙС</p><h2>Telegram-бот и Mini App для Nebo Bistro</h2></div><p>Работающий ресторанный сценарий с колесом призов и панелью управления.</p><a href="/projects/nebo-bistro">Посмотреть кейс →</a></div></section>` : "";
+  const caseSection = service.slug === "telegram-boty" ? `<section class="seo-section seo-case-callout"><div class="container seo-case-card"><div><p class="eyebrow">РЕАЛЬНЫЙ КЕЙС</p><h2>Telegram-бот и Mini App для Nebo Bistro</h2></div><p>Рабочая промокампания для привлечения гостей и рекламы партнёров ресторана.</p><a href="/projects/nebo-bistro">Посмотреть кейс →</a></div></section>` : "";
   return `<div class="seo-page">
     <header class="seo-header"><nav class="seo-nav container"><a class="brand" href="/"><span class="brand-mark"><i></i></span><span class="brand-word">Andrian.Dev</span></a><div class="seo-nav-links"><a href="/#work">Кейс</a><a href="/#services">Услуги</a><a href="/#process">Процесс</a><a href="/#contact">Контакты</a></div><div class="seo-nav-actions"><a class="nav-cta" href="/#contact">Обсудить проект</a></div></nav></header>
     <main>
@@ -147,14 +166,24 @@ function serviceFallback(service: Service) {
       <section class="seo-related"><div class="container"><span>СЛЕДУЮЩАЯ УСЛУГА</span><a href="/${service.relatedSlug}"><h2>${escapeHtml(service.relatedLabel)}</h2><span>↗</span></a></div></section>
       <section class="seo-cta"><div class="container"><p class="eyebrow">ОБСУДИТЬ ПРОЕКТ</p><h2>Расскажите, что нужно сделать.</h2><p>Предложу подходящий формат реализации и понятный следующий шаг.</p><a class="button button-primary" href="/#contact">Перейти к заявке →</a></div></section>
     </main>
-    <footer class="seo-footer"><div class="container"><a class="footer-brand" href="/">Andrian.Dev</a><div class="seo-footer-links">${seoContent.services.map((item) => `<a href="/${item.slug}">${escapeHtml(item.h1)}</a>`).join("")}</div><div><a href="https://t.me/g1reshnik">Telegram</a><a href="mailto:maa190186@gmail.com">maa190186@gmail.com</a></div></div></footer>
+    <footer class="seo-footer"><div class="container"><a class="footer-brand" href="/">Andrian.Dev</a><div class="seo-footer-links">${seoServices.map((item) => `<a href="/${item.slug}">${escapeHtml(item.h1)}</a>`).join("")}</div><div><a href="https://t.me/g1reshnik">Telegram</a><a href="mailto:maa190186@gmail.com">maa190186@gmail.com</a></div></div></footer>
   </div>`;
 }
 
-function caseFallback(language: "ru" | "en") {
+function caseFallback(project: Project, language: SiteLanguage, metadata: RouteMetadata) {
   const ru = language === "ru";
   const home = ru ? "/" : "/en";
-  return `<div class="seo-page"><header class="seo-header"><nav class="seo-nav container"><a class="brand" href="${home}"><span class="brand-mark"><i></i></span><span class="brand-word">Andrian.Dev</span></a><div class="seo-nav-actions"><a class="nav-cta" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a></div></nav></header><main><section class="seo-hero"><div class="container seo-hero-layout"><div class="seo-hero-copy"><nav class="seo-breadcrumbs"><a href="${home}">${ru ? "Главная" : "Home"}</a><span>/</span><span>${ru ? "Кейс" : "Case study"}</span></nav><p class="eyebrow">NEBO BISTRO / TELEGRAM</p><h1>${ru ? "Telegram-бот и Mini App для Nebo Bistro" : "Telegram bot and Mini App for Nebo Bistro"}</h1><p class="seo-lead">${ru ? "Реальный ресторанный Telegram-кейс: персональное приветствие, Mini App с колесом призов и защищённая панель управления." : "A live restaurant Telegram case: personalized onboarding, a Mini App prize wheel and a protected control panel."}</p><div class="seo-hero-actions"><a class="button button-primary" href="https://t.me/NeboBistroBot">${ru ? "Открыть бота" : "Open the bot"}</a><a class="button button-ghost" href="${home}#contact">${ru ? "Обсудить похожий проект" : "Discuss a similar project"}</a></div></div><aside class="seo-hero-panel"><span>LIVE PRODUCT / 01</span><strong>NEBO<br>BISTRO</strong><div><span>BOT</span><span>MINI APP</span><span>PRIZE FLOW</span><span>ADMIN</span></div></aside></div></section><section class="seo-section seo-overview"><div class="container"><div class="seo-section-heading"><p class="eyebrow">01 / ${ru ? "ЗАДАЧА" : "CHALLENGE"}</p><h2>${ru ? "Перенести промеханику ресторана в Telegram" : "Bring a restaurant promotion into Telegram"}</h2></div><div class="seo-feature-grid"><article><h3>${ru ? "Задача" : "Challenge"}</h3><p>${ru ? "Сделать короткий и понятный путь гостя от знакомства до приза." : "Create a short and clear guest journey from onboarding to reward."}</p></article><article><h3>${ru ? "Решение" : "Solution"}</h3><p>${ru ? "Объединить бота, Mini App и управление в одной системе." : "Connect the bot, Mini App and management tools in one system."}</p></article><article><h3>${ru ? "Результат" : "Result"}</h3><p>${ru ? "Работающий сценарий от приветствия до выдачи выигрыша в заведении." : "A working flow from greeting to in-venue reward handoff."}</p></article><article><h3>${ru ? "Технологии" : "Technology"}</h3><p>TypeScript, Telegram WebApp, Cloudflare D1.</p></article></div></div></section><section class="seo-cta"><div class="container"><h2>${ru ? "Нужен похожий продукт?" : "Need something similar?"}</h2><a class="button button-primary" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a><a class="button button-ghost" href="${ru ? "/telegram-boty" : `${home}#services`}">${ru ? "Разработка Telegram-ботов" : "Telegram bot development"}</a></div></section></main></div>`;
+  const titleLines = project.title.split(/\s+/).map(escapeHtml).join("<br>");
+  const challenge = ru
+    ? "Привлечь новых гостей, дать рекламным партнёрам заметное место в сценарии и выдержать нагрузку кампании после ограничений первоначального размещения на Vercel."
+    : project.challenge;
+  const solution = ru
+    ? "Объединить персональный Telegram-бот, Mini App с призами ресторана и партнёров, Cloudflare D1 и защищённое управление."
+    : project.solution;
+  const result = ru
+    ? "Запущенный путь от первого контакта до подарка партнёра и понятной выдачи приза в заведении."
+    : project.result;
+  return `<div class="seo-page"><header class="seo-header"><nav class="seo-nav container"><a class="brand" href="${home}"><span class="brand-mark"><i></i></span><span class="brand-word">Andrian.Dev</span></a><div class="seo-nav-actions"><a class="nav-cta" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a></div></nav></header><main><section class="seo-hero"><div class="container seo-hero-layout"><div class="seo-hero-copy"><nav class="seo-breadcrumbs"><a href="${home}">${ru ? "Главная" : "Home"}</a><span>/</span><span>${ru ? "Кейс" : "Case study"}</span></nav><p class="eyebrow">${escapeHtml(project.title)} / TELEGRAM</p><h1>${escapeHtml(metadata.h1)}</h1><p class="seo-lead">${escapeHtml(metadata.description)}</p><div class="seo-hero-actions"><a class="button button-primary" href="${escapeHtml(project.liveUrl)}">${ru ? "Открыть бота" : "Open the bot"}</a><a class="button button-ghost" href="${home}#contact">${ru ? "Обсудить похожий проект" : "Discuss a similar project"}</a></div></div><aside class="seo-hero-panel"><span>LIVE PRODUCT / ${escapeHtml(project.id)}</span><strong>${titleLines}</strong><div><span>BOT</span><span>MINI APP</span><span>PRIZE FLOW</span><span>ADMIN</span></div></aside></div></section><section class="seo-section seo-overview"><div class="container"><div class="seo-section-heading"><p class="eyebrow">01 / ${ru ? "ЗАДАЧА" : "CHALLENGE"}</p><h2>${ru ? "Привлечение гостей и реклама партнёров в Telegram" : "Guest acquisition and sponsor promotion in Telegram"}</h2></div><div class="seo-feature-grid"><article><h3>${ru ? "Задача" : "Challenge"}</h3><p>${escapeHtml(challenge)}</p></article><article><h3>${ru ? "Решение" : "Solution"}</h3><p>${escapeHtml(solution)}</p></article><article><h3>${ru ? "Результат" : "Result"}</h3><p>${escapeHtml(result)}</p></article><article><h3>${ru ? "Технологии" : "Technology"}</h3><p>TypeScript, Telegram WebApp, Cloudflare D1.</p></article></div></div></section><section class="seo-cta"><div class="container"><h2>${ru ? "Нужен похожий продукт?" : "Need something similar?"}</h2><a class="button button-primary" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a><a class="button button-ghost" href="${ru ? "/telegram-boty" : `${home}#services`}">${ru ? "Разработка Telegram-ботов" : "Telegram bot development"}</a></div></section></main></div>`;
 }
 
 function homeSchema(language: "ru" | "en") {
@@ -180,15 +209,15 @@ function serviceSchema(service: Service) {
   };
 }
 
-function caseSchema(language: "ru" | "en") {
+function caseSchema(pathname: string, project: Project, language: SiteLanguage, metadata: RouteMetadata) {
   const english = language === "en";
-  const url = english ? `${ORIGIN}/en/projects/nebo-bistro` : `${ORIGIN}/projects/nebo-bistro`;
-  const home = english ? `${ORIGIN}/en` : `${ORIGIN}/`;
+  const url = absoluteSiteUrl(pathname);
+  const home = absoluteSiteUrl(english ? "/en" : "/");
   return {
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "CreativeWork", "@id": `${url}#project`, name: english ? "Nebo Bistro Telegram Bot and Mini App" : "Telegram-бот и Mini App Nebo Bistro", description: english ? "A live restaurant Telegram product combining a bot, Mini App prize wheel and protected control panel." : "Реальный ресторанный Telegram-продукт: бот, Mini App с колесом призов и защищённая панель управления.", url, inLanguage: language, creator: { "@id": `${ORIGIN}/#person` } },
-      { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: english ? "Home" : "Главная", item: home }, { "@type": "ListItem", position: 2, name: "Nebo Bistro", item: url }] },
+      { "@type": "CreativeWork", "@id": `${url}#project`, name: metadata.h1, description: metadata.description, url, inLanguage: language, creator: { "@id": `${ORIGIN}/#person` } },
+      { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: english ? "Home" : "Главная", item: home }, { "@type": "ListItem", position: 2, name: project.title, item: url }] },
     ],
   };
 }
@@ -202,80 +231,48 @@ async function writePage(outDir: string, route: string, html: string) {
 export async function generateSeoPages(outDir: string) {
   const indexPath = path.join(outDir, "index.html");
   const template = await readFile(indexPath, "utf8");
-  const alternates = { ru: `${ORIGIN}/`, en: `${ORIGIN}/en`, xDefault: `${ORIGIN}/` };
 
-  const russianHome = injectRoot(applyMeta(template, {
-    lang: "ru",
-    title: "Разработка сайтов и Telegram-ботов — Andrian.Dev",
-    description: "Создаю сайты, Telegram-ботов, веб-приложения и автоматизацию для бизнеса: от структуры и интерфейса до интеграций, тестирования и запуска.",
-    canonical: `${ORIGIN}/`,
-    locale: "ru_RU",
-    schema: homeSchema("ru"),
-    alternates,
-  }), homeFallback("ru"));
-  await writeFile(indexPath, russianHome, "utf8");
+  for (const route of indexableRoutes) {
+    let fallback: string;
+    let schema: unknown;
 
-  const englishHome = injectRoot(applyMeta(template, {
-    lang: "en",
-    title: "Websites, Telegram Bots & Automation — Andrian.Dev",
-    description: "Modern websites, Telegram bots, web apps and automation — from structure and interface to integrations, testing and launch.",
-    canonical: `${ORIGIN}/en`,
-    locale: "en_US",
-    schema: homeSchema("en"),
-    alternates,
-  }), homeFallback("en"));
-  await writePage(outDir, "en", englishHome);
+    if (route.kind === "home") {
+      fallback = homeFallback(route.language);
+      schema = homeSchema(route.language);
+    } else if (route.kind === "service") {
+      const service = getServiceBySlug(route.serviceSlug!);
+      if (!service) throw new Error(`Missing content for service route: ${route.path}`);
+      fallback = serviceFallback(service);
+      schema = serviceSchema(service);
+    } else {
+      const project = getProject(route.projectSlug!);
+      if (!project) throw new Error(`Missing project for route: ${route.path}`);
+      fallback = caseFallback(project, route.language, route.metadata);
+      schema = caseSchema(route.path, project, route.language, route.metadata);
+    }
 
-  for (const service of seoContent.services) {
-    const canonical = `${ORIGIN}/${service.slug}`;
     const html = injectRoot(applyMeta(template, {
-      lang: "ru",
-      title: service.title,
-      description: service.description,
-      canonical,
-      locale: "ru_RU",
-      schema: serviceSchema(service),
-    }), serviceFallback(service));
-    await writePage(outDir, service.slug, html);
+      lang: route.language,
+      title: route.metadata.title,
+      description: route.metadata.description,
+      canonical: absoluteSiteUrl(route.path),
+      locale: route.metadata.locale,
+      schema,
+      alternates: absoluteAlternates(route.alternates),
+      useSocialImage: route.metadata.useSocialImage,
+    }), fallback);
+
+    if (route.path === "/") await writeFile(indexPath, html, "utf8");
+    else await writePage(outDir, route.path, html);
   }
 
-  const caseAlternates = { ru: `${ORIGIN}/projects/nebo-bistro`, en: `${ORIGIN}/en/projects/nebo-bistro`, xDefault: `${ORIGIN}/projects/nebo-bistro` };
-  const russianCase = injectRoot(applyMeta(template, {
-    lang: "ru",
-    title: "Telegram-бот и Mini App Nebo Bistro — кейс | Andrian.Dev",
-    description: "Реальный ресторанный Telegram-кейс: персональное приветствие, Mini App с колесом призов и защищённая панель управления.",
-    canonical: `${ORIGIN}/projects/nebo-bistro`,
-    locale: "ru_RU",
-    schema: caseSchema("ru"),
-    alternates: caseAlternates,
-    useSocialImage: false,
-  }), caseFallback("ru"));
-  await writePage(outDir, "projects/nebo-bistro", russianCase);
-
-  const englishCase = injectRoot(applyMeta(template, {
-    lang: "en",
-    title: "Nebo Bistro Telegram Bot & Mini App Case — Andrian.Dev",
-    description: "A live restaurant Telegram case with personalized onboarding, a Mini App prize wheel and a protected control panel.",
-    canonical: `${ORIGIN}/en/projects/nebo-bistro`,
-    locale: "en_US",
-    schema: caseSchema("en"),
-    alternates: caseAlternates,
-    useSocialImage: false,
-  }), caseFallback("en"));
-  await writePage(outDir, "en/projects/nebo-bistro", englishCase);
-
   const notFound = replaceMeta(applyMeta(template, {
-    lang: "ru",
-    title: "Страница не найдена — Andrian.Dev",
-    description: "Запрошенная страница не найдена.",
-    canonical: `${ORIGIN}/404`,
-    locale: "ru_RU",
-    schema: { "@context": "https://schema.org", "@type": "WebPage", name: "Страница не найдена" },
+    lang: notFoundMetadata.language,
+    title: notFoundMetadata.title,
+    description: notFoundMetadata.description,
+    locale: notFoundMetadata.locale,
     useSocialImage: false,
   }), "name", "robots", "noindex, follow")
-    .replace(/\s*<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, "")
-    .replace(/\s*<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, "")
-    .replace(/\s*<!-- seo:structured-data:start -->[\s\S]*?<!-- seo:structured-data:end -->/i, "")
     .replace('<div id="root"></div>', '<div id="root"><main class="route-error"><p>404</p><h1>Страница не найдена</h1><a href="/">Вернуться на Andrian.Dev</a></main></div>')
     .replace(/\s*<script\s+type="module"[^>]*><\/script>/i, "");
   await writeFile(path.join(outDir, "404.html"), notFound, "utf8");
@@ -283,7 +280,66 @@ export async function generateSeoPages(outDir: string) {
   await writeFile(path.join(outDir, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${ORIGIN}/sitemap.xml\n`, "utf8");
 }
 
-export function createSitemap() {
-  const serviceUrls = seoContent.services.map((service) => `  <url><loc>${ORIGIN}/${service.slug}</loc><lastmod>${LAST_MODIFIED}</lastmod></url>`).join("\n");
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n  <url><loc>${ORIGIN}/</loc><lastmod>${LAST_MODIFIED}</lastmod><xhtml:link rel="alternate" hreflang="ru" href="${ORIGIN}/"/><xhtml:link rel="alternate" hreflang="en" href="${ORIGIN}/en"/><xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/"/></url>\n  <url><loc>${ORIGIN}/en</loc><lastmod>${LAST_MODIFIED}</lastmod><xhtml:link rel="alternate" hreflang="ru" href="${ORIGIN}/"/><xhtml:link rel="alternate" hreflang="en" href="${ORIGIN}/en"/><xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/"/></url>\n${serviceUrls}\n  <url><loc>${ORIGIN}/projects/nebo-bistro</loc><lastmod>${LAST_MODIFIED}</lastmod><xhtml:link rel="alternate" hreflang="ru" href="${ORIGIN}/projects/nebo-bistro"/><xhtml:link rel="alternate" hreflang="en" href="${ORIGIN}/en/projects/nebo-bistro"/></url>\n  <url><loc>${ORIGIN}/en/projects/nebo-bistro</loc><lastmod>${LAST_MODIFIED}</lastmod><xhtml:link rel="alternate" hreflang="ru" href="${ORIGIN}/projects/nebo-bistro"/><xhtml:link rel="alternate" hreflang="en" href="${ORIGIN}/en/projects/nebo-bistro"/></url>\n</urlset>\n`;
+function normalizeLastModified(value: string) {
+  const trimmed = value.trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return undefined;
+  const parsed = new Date(`${trimmed}T00:00:00.000Z`);
+  return Number.isNaN(parsed.valueOf()) || parsed.toISOString().slice(0, 10) !== trimmed ? undefined : trimmed;
+}
+
+/**
+ * Prefer an explicit release date, then the latest content commit. If neither is
+ * trustworthy, omit lastmod instead of publishing a made-up build date.
+ */
+export function resolveLastModified() {
+  const configuredDate = process.env.SITE_LAST_MODIFIED;
+  if (configuredDate) {
+    const normalized = normalizeLastModified(configuredDate);
+    if (!normalized) throw new Error("SITE_LAST_MODIFIED must use the YYYY-MM-DD format");
+    return normalized;
+  }
+
+  try {
+    const gitDate = execFileSync("git", [
+      "log",
+      "-1",
+      "--format=%cs",
+      "--",
+      "site-registry.ts",
+      "site.ts",
+      "seo-pages.json",
+      "projects.ts",
+      "scripts/prerender-seo.ts",
+    ], { cwd: repositoryRoot, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+    return normalizeLastModified(gitDate);
+  } catch {
+    return undefined;
+  }
+}
+
+function escapeXml(value: string) {
+  return value.replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&apos;",
+  })[character] ?? character);
+}
+
+export function createSitemap(lastModified = resolveLastModified()) {
+  const entries = indexableRoutes.map((route) => {
+    const alternates = absoluteAlternates(route.alternates);
+    const alternateLinks = alternates
+      ? [
+          ["ru", alternates.ru],
+          ["en", alternates.en],
+          ["x-default", alternates.xDefault],
+        ].map(([language, href]) => `<xhtml:link rel="alternate" hreflang="${language}" href="${escapeXml(href)}"/>`).join("")
+      : "";
+    const lastModifiedTag = lastModified ? `<lastmod>${lastModified}</lastmod>` : "";
+    return `  <url><loc>${escapeXml(absoluteSiteUrl(route.path))}</loc>${lastModifiedTag}${alternateLinks}</url>`;
+  });
+
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${entries.join("\n")}\n</urlset>\n`;
 }

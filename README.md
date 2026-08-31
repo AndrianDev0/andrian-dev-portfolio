@@ -24,14 +24,16 @@ pnpm build
 
 - Contact details, brand name, budgets, navigation, and metrics: `site.ts`
 - Project data: `projects.ts`
-- Services, benefits, process, and technologies: `content.ts`
+- Service-page content: `seo-pages.json`
+- Home-page service visuals, benefits, process, and technologies: `content.ts`
+- Production origin, route registry, localized SEO metadata, and canonical helpers: `site-registry.ts`
 - Contact form email adapter: `submit.ts`
 
 The portfolio currently features the real Nebo Bistro Telegram Bot + Mini App case.
 
 ## Add a project
 
-Add a new object to the `projects` array in `projects.ts`. Each project needs a unique `slug`; its detail page is generated automatically at `/projects/[slug]`.
+Add a new object to the `projects` array in `projects.ts` and its localized search metadata to `projectMetadata` in `site-registry.ts`. Each project needs a unique `slug`; Russian and English detail routes, prerender output, preview routing, and sitemap entries are then generated from the registry.
 
 Project fields:
 
@@ -62,3 +64,7 @@ The form prepares a prefilled email to the address in `submit.ts`. Replace it wi
 ```
 
 Keep secrets on the server and out of client-side code.
+
+## Sitemap dates
+
+The production build derives `<lastmod>` from the latest Git commit that changed SEO content. A release pipeline can override it with `SITE_LAST_MODIFIED=YYYY-MM-DD`. Invalid explicit dates fail the build; when neither a valid override nor Git history is available, `<lastmod>` is omitted instead of publishing an inaccurate date.

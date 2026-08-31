@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import { siteConfig } from "../site";
 import { LanguageProvider } from "../i18n";
 import { ThemeProvider } from "../theme";
 import "./globals.css";
-
-const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const manrope = Manrope({ variable: "--font-cyrillic", subsets: ["cyrillic", "latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -30,7 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ru" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: `try{const t=localStorage.getItem("andrian-dev-theme")||"light";const p=location.pathname.replace(/\\/+$/,"")||"/";const l=p==="/en"||p.startsWith("/en/")?"en":"ru";document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;document.documentElement.dataset.language=l;document.documentElement.lang=l}catch{document.documentElement.dataset.theme="light";document.documentElement.dataset.language="ru"}` }} /></head>
-      <body className={`${geist.variable} ${geistMono.variable} ${manrope.variable}`}><ThemeProvider><LanguageProvider>{children}</LanguageProvider></ThemeProvider></body>
+      <body><ThemeProvider><LanguageProvider>{children}</LanguageProvider></ThemeProvider></body>
     </html>
   );
 }

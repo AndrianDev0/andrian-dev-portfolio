@@ -2,7 +2,7 @@
 
 // Adapted from React Bits components: DecryptedText, SpotlightCard and ShinyText.
 // Source: https://reactbits.dev/ — customized for Andrian.Dev and existing dependencies.
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/#_*+";
 
@@ -75,7 +75,7 @@ export function DecryptedText({
     <span ref={ref} className={`rb-decrypted ${className}`} aria-label={text}>
       <span aria-hidden="true">
         {displayText.split("").map((character, index) => (
-          <span className={index < revealed ? "" : encryptedClassName} key={`${index}-${character}`}>{character}</span>
+          <span className={index < revealed ? "" : encryptedClassName} key={index}>{character}</span>
         ))}
       </span>
     </span>
@@ -92,14 +92,38 @@ export function SpotlightCard({
   spotlightColor?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
-  const move = (event: ReactMouseEvent<HTMLElement>) => {
-    if (!ref.current || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    const rect = ref.current.getBoundingClientRect();
-    ref.current.style.setProperty("--rb-mouse-x", `${event.clientX - rect.left}px`);
-    ref.current.style.setProperty("--rb-mouse-y", `${event.clientY - rect.top}px`);
-    ref.current.style.setProperty("--rb-spotlight", spotlightColor);
+  const rectRef = useRef<DOMRect | null>(null);
+  const frameRef = useRef(0);
+  const pointerRef = useRef({ x: 0, y: 0 });
+  const finePointerRef = useRef<boolean | null>(null);
+
+  const enter = (event: ReactPointerEvent<HTMLElement>) => {
+    rectRef.current = event.currentTarget.getBoundingClientRect();
   };
-  return <article ref={ref} onMouseMove={move} className={`rb-spotlight ${className}`}>{children}</article>;
+
+  const move = (event: ReactPointerEvent<HTMLElement>) => {
+    finePointerRef.current ??= window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!ref.current || !finePointerRef.current) return;
+    const rect = rectRef.current ?? event.currentTarget.getBoundingClientRect();
+    rectRef.current = rect;
+    pointerRef.current = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    if (frameRef.current) return;
+    frameRef.current = window.requestAnimationFrame(() => {
+      const node = ref.current;
+      if (node) {
+        node.style.setProperty("--rb-mouse-x", `${pointerRef.current.x}px`);
+        node.style.setProperty("--rb-mouse-y", `${pointerRef.current.y}px`);
+        node.style.setProperty("--rb-spotlight", spotlightColor);
+      }
+      frameRef.current = 0;
+    });
+  };
+
+  useEffect(() => () => {
+    if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+  }, []);
+
+  return <article ref={ref} onPointerEnter={enter} onPointerMove={move} onPointerLeave={() => { rectRef.current = null; }} className={`rb-spotlight ${className}`}>{children}</article>;
 }
 
 export function ShinyText({

@@ -1,8 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, Menu, X } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent, type MouseEvent as ReactMouseEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { useLanguage } from "./i18n";
 import { siteConfig } from "./site";
 import { submitProjectRequest } from "./submit";
@@ -10,16 +9,27 @@ import { DecryptedText } from "./react-bits";
 import { ThemeToggle } from "./theme";
 
 export function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      node.classList.add("is-visible");
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      node.classList.add("is-visible");
+      observer.disconnect();
+    }, { threshold: 0.14 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.14 }}
-      transition={{ duration: 0.72, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <div ref={ref} className={`reveal ${className}`.trim()} style={{ "--reveal-delay": `${delay}s` } as CSSProperties}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -33,32 +43,30 @@ export function SectionHeading({ eyebrow, title, copy }: { eyebrow: string; titl
   );
 }
 
-export function MagneticButton({ href, children, className = "", external = false }: { href: string; children: React.ReactNode; className?: string; external?: boolean }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const move = (event: ReactMouseEvent<HTMLAnchorElement>) => {
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - rect.left - rect.width / 2) * 0.12;
-    const y = (event.clientY - rect.top - rect.height / 2) * 0.12;
-    if (ref.current) ref.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-  };
-  const reset = () => { if (ref.current) ref.current.style.transform = "translate3d(0,0,0)"; };
-  return (
-    <a ref={ref} href={href} className={`magnetic-button ${className}`} onMouseMove={move} onMouseLeave={reset} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
-      <span>{children}</span><ArrowUpRight aria-hidden="true" size={19} />
-    </a>
-  );
-}
-
 export function Header() {
   const { language, setLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    onScroll();
+    let frame = 0;
+    let current = window.scrollY > 30;
+    setScrolled(current);
+    const paint = () => {
+      const next = window.scrollY > 30;
+      if (next !== current) {
+        current = next;
+        setScrolled(next);
+      }
+      frame = 0;
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
   useEffect(() => {
     if (!open) return;
@@ -85,14 +93,12 @@ export function Header() {
           {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
       </nav>
-      <AnimatePresence>
-        {open ? (
-          <motion.div id="mobile-navigation" className="mobile-menu" initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}>
+      {open ? (
+          <div id="mobile-navigation" className="mobile-menu">
             {siteConfig.nav.map((item, index) => <a key={item.href} href={item.href} onClick={() => setOpen(false)}><span>0{index + 1}</span>{t.nav[index]}</a>)}
             <a className="mobile-menu-cta" href="#contact" onClick={() => setOpen(false)}>{t.startProject} <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.9} /></a>
-          </motion.div>
+          </div>
         ) : null}
-      </AnimatePresence>
     </header>
   );
 }
@@ -108,18 +114,21 @@ export function HeroVisual() {
     let frame = 0;
     let nextX = 0;
     let nextY = 0;
+    let rect: DOMRect | null = null;
     const paint = () => { node.style.setProperty("--mx", nextX.toFixed(2)); node.style.setProperty("--my", nextY.toFixed(2)); frame = 0; };
+    const onEnter = () => { rect = node.getBoundingClientRect(); };
     const onMove = (event: PointerEvent) => {
       if (!finePointer.matches || reducedMotion.matches) return;
-      const rect = node.getBoundingClientRect();
+      rect ??= node.getBoundingClientRect();
       nextX = (event.clientX - rect.left) / rect.width - 0.5;
       nextY = (event.clientY - rect.top) / rect.height - 0.5;
       if (!frame) frame = requestAnimationFrame(paint);
     };
-    const reset = () => { nextX = 0; nextY = 0; if (!frame) frame = requestAnimationFrame(paint); };
+    const reset = () => { rect = null; nextX = 0; nextY = 0; if (!frame) frame = requestAnimationFrame(paint); };
+    node.addEventListener("pointerenter", onEnter);
     node.addEventListener("pointermove", onMove);
     node.addEventListener("pointerleave", reset);
-    return () => { node.removeEventListener("pointermove", onMove); node.removeEventListener("pointerleave", reset); if (frame) cancelAnimationFrame(frame); };
+    return () => { node.removeEventListener("pointerenter", onEnter); node.removeEventListener("pointermove", onMove); node.removeEventListener("pointerleave", reset); if (frame) cancelAnimationFrame(frame); };
   }, []);
 
   return (
@@ -152,29 +161,66 @@ export function HeroVisual() {
 export function Hero() {
   const { language, t } = useLanguage();
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const visualY = useTransform(scrollYProgress, [0, 1], [0, 110]);
-  const visualScale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
-  const visualOpacity = useTransform(scrollYProgress, [0.15, 0.85], [1, 0]);
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+  const visualRef = useRef<HTMLDivElement>(null);
+  const cueRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const section = ref.current;
+    const visual = visualRef.current;
+    const cue = cueRef.current;
+    if (!section || !visual || !cue) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    const paint = () => {
+      const bounds = section.getBoundingClientRect();
+      const travel = Math.max(bounds.height - window.innerHeight * 0.25, 1);
+      const progress = Math.min(1, Math.max(0, -bounds.top / travel));
+      if (window.innerWidth > 900 && !reducedMotion.matches) {
+        const opacity = progress <= 0.15 ? 1 : Math.max(0, 1 - (progress - 0.15) / 0.7);
+        visual.style.transform = `translate3d(0, ${progress * 110}px, 0) scale(${1 - progress * 0.06})`;
+        visual.style.opacity = String(opacity);
+        cue.style.opacity = String(Math.max(0, 1 - progress / 0.25));
+      } else {
+        visual.style.removeProperty("transform");
+        visual.style.removeProperty("opacity");
+        cue.style.removeProperty("opacity");
+      }
+      frame = 0;
+    };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    };
+    paint();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    reducedMotion.addEventListener("change", schedule);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      reducedMotion.removeEventListener("change", schedule);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <section id="top" className="hero" ref={ref}>
       <div className="hero-noise" />
       <div className="container hero-layout">
         <div className="hero-copy">
-          <motion.p className="hero-label" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.08 }}><span className="hero-label-dot" /><DecryptedText text={t.hero.label} encryptedClassName="hero-label-encrypted" /></motion.p>
+          <p className="hero-label hero-enter hero-enter-label"><span className="hero-label-dot" /><DecryptedText text={t.hero.label} encryptedClassName="hero-label-encrypted" /></p>
           <h1>
-            <span className="hero-line-mask"><motion.span className="hero-line" initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}>{language === "ru" ? <>Создаю <em>цифровые</em></> : <>I build <em>digital</em></>}</motion.span></span>
-            <span className="hero-line-mask"><motion.span className="hero-line" initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}>{language === "ru" ? <><em>продукты</em> для</> : <><em>products</em> that move</>}</motion.span></span>
-            <span className="hero-line-mask"><motion.span className="hero-line" initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}>{language === "ru" ? "роста бизнеса." : "businesses forward."}</motion.span></span>
+            <span className="hero-line-mask"><span className="hero-line hero-line-one">{language === "ru" ? <>Создаю <em>цифровые</em></> : <>I build <em>digital</em></>}</span></span>
+            <span className="hero-line-mask"><span className="hero-line hero-line-two">{language === "ru" ? <><em>продукты</em> для</> : <><em>products</em> that move</>}</span></span>
+            <span className="hero-line-mask"><span className="hero-line hero-line-three">{language === "ru" ? "роста бизнеса." : "businesses forward."}</span></span>
           </h1>
-          <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.42, duration: 0.7 }}>{t.hero.subtitle}</motion.p>
-          <motion.div className="hero-actions" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52, duration: 0.7 }}><a className="button button-primary" href="#contact">{t.startProject} <ArrowRight size={18} /></a><a className="button button-ghost" href="#work">{t.hero.viewWork} <span>↓</span></a></motion.div>
-          <motion.div className="hero-trust" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.68, duration: 0.7 }}><span>{t.hero.trust[0]}</span><i /><span>{t.hero.trust[1]}</span><i /><span>{t.hero.trust[2]}</span><i /><span>{t.hero.trust[3]}</span></motion.div>
+          <p className="hero-subtitle hero-enter hero-enter-subtitle">{t.hero.subtitle}</p>
+          <div className="hero-actions hero-enter hero-enter-actions"><a className="button button-primary" href="#contact">{t.startProject} <ArrowRight size={18} /></a><a className="button button-ghost" href="#work">{t.hero.viewWork} <span>↓</span></a></div>
+          <div className="hero-trust hero-enter hero-enter-trust"><span>{t.hero.trust[0]}</span><i /><span>{t.hero.trust[1]}</span><i /><span>{t.hero.trust[2]}</span><i /><span>{t.hero.trust[3]}</span></div>
         </div>
-        <motion.div className="hero-visual-wrap" style={{ y: visualY, scale: visualScale, opacity: visualOpacity }}><HeroVisual /></motion.div>
+        <div className="hero-visual-wrap" ref={visualRef}><HeroVisual /></div>
       </div>
-      <motion.a className="scroll-cue" href="#work" style={{ opacity: scrollOpacity }}><span>{t.hero.scroll}</span><ArrowDown aria-hidden="true" size={15} /></motion.a>
+      <a className="scroll-cue" href="#work" ref={cueRef}><span>{t.hero.scroll}</span><ArrowDown aria-hidden="true" size={15} /></a>
     </section>
   );
 }

@@ -12,10 +12,10 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test:responsive": "playwright test",
     "test:lighthouse": "lhci autorun",
-    "quality": "pnpm typecheck && pnpm vercel-build && pnpm test:responsive && pnpm test:lighthouse"
+    "check:bundle": "node scripts/check-bundle-size.mjs",
+    "quality": "pnpm typecheck && pnpm vercel-build && pnpm check:bundle && pnpm test:responsive && pnpm test:lighthouse"
   },
   "dependencies": {
-    "framer-motion": "^12.23.12",
     "lucide-react": "^0.468.0",
     "react": "19.2.6",
     "react-dom": "19.2.6"
@@ -24,14 +24,12 @@
     "@cloudflare/vite-plugin": "1.37.1",
     "@lhci/cli": "0.15.1",
     "@playwright/test": "1.55.0",
-    "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.26",
     "react-server-dom-webpack": "19.2.6",
-    "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vinext": "1.0.0-beta.2",
     "vite": "8.0.13",

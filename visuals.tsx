@@ -143,18 +143,6 @@ export function NeboBotFlowVisual() {
   );
 }
 
-/* Backwards-compatible exports for existing project and case rendering. */
-export function BotProjectVisual() { return <NeboProjectVisual />; }
-export function WebsiteProjectVisual() { return <NeboBotFlowVisual />; }
-export function DashboardProjectVisual() { return <NeboMiniAppVisual />; }
-
-export function ServiceVisual({ type }: { type: string }) {
-  if (type === "chat") return <div className="service-chat"><div><span>Hi! What are you looking to build?</span></div><p>Telegram bot for sales</p><div><span>Great — let’s map the flow.</span></div><i /><i /><i /></div>;
-  if (type === "dashboard") return <div className="service-dashboard"><span><b>12.8k</b><small>ACTIVE USERS</small></span><div className="service-bars"><i /><i /><i /><i /><i /><i /></div><p><i />Live data<em>+18.4%</em></p></div>;
-  if (type === "nodes") return <div className="service-nodes"><span>API</span><i /><span>CRM</span><i /><span>BOT</span><i /><span>SALE</span></div>;
-  return <div className="service-browser"><WindowBar address="yourproduct.com" /><div><span>Clear digital<br />experiences.</span><i /><b>START в†’</b></div></div>;
-}
-
 export function CaseStudyVisual({ kind }: { kind: ProjectKind }) {
   if (kind === "bot") return <NeboProjectVisual />;
   if (kind === "app") return <NeboMiniAppVisual />;

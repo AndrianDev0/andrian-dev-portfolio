@@ -1,14 +1,15 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "framer-motion";
 import { ArrowRight, ArrowUpRight, CircleDot, Code2, Layers3, MoveUpRight, Send, Sparkles } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { benefits, processSteps, services, technologies } from "./content";
 import { metrics, siteConfig } from "./site";
 import { projectFacets, projects } from "./projects";
-import { ContactForm, MagneticButton, Reveal, SectionHeading } from "./components";
+import { ContactForm, Reveal, SectionHeading } from "./components";
+import { MagneticButton } from "./magnetic-button";
 import { projectRussian, useLanguage } from "./i18n";
-import { NeboBotFlowVisual, NeboMiniAppVisual, ProjectVisual, ServiceVisual } from "./visuals";
+import { NeboBotFlowVisual, NeboMiniAppVisual, ProjectVisual } from "./visuals";
+import { ServiceVisual } from "./service-visual";
 import { ShinyText, SpotlightCard } from "./react-bits";
 import "./styles/services.css";
 
@@ -39,7 +40,7 @@ export function ProjectsSection() {
                   </div>
                 </div>
               </div>
-              <motion.div className="project-visual-shell" initial={{ scale: 0.94, y: 44 }} whileInView={{ scale: 1, y: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}><ProjectVisual project={project} /></motion.div>
+              <Reveal className="project-visual-shell project-visual-reveal"><ProjectVisual project={project} /></Reveal>
             </article>
           </Reveal>
           <div className="project-layers">
@@ -81,7 +82,7 @@ export function BenefitsSection() {
     <section className="benefits section-pad-sm">
       <div className="container benefits-layout">
         <div className="benefits-intro"><p className="eyebrow"><span />{t.benefits.eyebrow}</p><h2>{t.benefits.title} <em>{t.benefits.titleAccent}</em></h2><p>{t.benefits.copy}</p></div>
-        <div className="benefit-list">{benefits.map((benefit, index) => <Reveal key={benefit.title} delay={index * 0.035}><article><span className="benefit-icon">{benefitIcons[index]}</span><span className="benefit-number">0{index + 1}</span><div><h3>{t.benefits.items[index][0]}</h3><p>{t.benefits.items[index][1]}</p></div></article></Reveal>)}</div>
+        <div className="benefit-list">{benefits.map((benefit, index) => <Reveal key={benefit.id} delay={index * 0.035}><article><span className="benefit-icon">{benefitIcons[index]}</span><span className="benefit-number">0{index + 1}</span><div><h3>{t.benefits.items[index][0]}</h3><p>{t.benefits.items[index][1]}</p></div></article></Reveal>)}</div>
       </div>
     </section>
   );
@@ -90,13 +91,50 @@ export function BenefitsSection() {
 export function ProcessSection() {
   const { t } = useLanguage();
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start center", "end center"] });
-  const scaleY = useSpring(scrollYProgress, { stiffness: 80, damping: 24 });
+  useEffect(() => {
+    const timeline = ref.current;
+    if (!timeline) return;
+    const line = timeline.querySelector<HTMLElement>(".timeline-line i");
+    const steps = [...timeline.querySelectorAll<HTMLElement>(".timeline-step")];
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+
+    const paint = () => {
+      if (line) {
+        const bounds = timeline.getBoundingClientRect();
+        const progress = reducedMotion.matches ? 1 : Math.min(1, Math.max(0, (window.innerHeight * 0.5 - bounds.top) / Math.max(bounds.height, 1)));
+        line.style.transform = `scaleY(${progress})`;
+      }
+      frame = 0;
+    };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    };
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      }
+    }, { threshold: 0.55 });
+
+    if (reducedMotion.matches) steps.forEach((step) => step.classList.add("is-visible"));
+    else steps.forEach((step) => observer.observe(step));
+    paint();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    reducedMotion.addEventListener("change", schedule);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      reducedMotion.removeEventListener("change", schedule);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
   return (
     <section id="process" className="process section-pad">
       <div className="container">
         <SectionHeading eyebrow={t.process.eyebrow} title={<>{t.process.titleTop}<br /><span className="soft">{t.process.titleBottom}</span></>} copy={t.process.copy} />
-        <div className="timeline" ref={ref}><div className="timeline-line"><motion.i style={{ scaleY }} /></div>{processSteps.map((step, index) => <motion.article key={step.id} className="timeline-step" initial={{ opacity: 0.34 }} whileInView={{ opacity: 1 }} viewport={{ amount: 0.55 }} transition={{ duration: 0.45 }}><span className="timeline-index">{step.id}</span><span className="timeline-dot"><i /></span><div><h3>{t.process.items[index][0]}</h3><p>{t.process.items[index][1]}</p></div><span className="timeline-phase">{t.process.phase} {index + 1}</span></motion.article>)}</div>
+        <div className="timeline" ref={ref}><div className="timeline-line"><i /></div>{processSteps.map((step, index) => <article key={step.id} className="timeline-step"><span className="timeline-index">{step.id}</span><span className="timeline-dot"><i /></span><div><h3>{t.process.items[index][0]}</h3><p>{t.process.items[index][1]}</p></div><span className="timeline-phase">{t.process.phase} {index + 1}</span></article>)}</div>
       </div>
     </section>
   );
@@ -120,7 +158,7 @@ export function Marquee() {
 export function AboutSection() {
   const { t } = useLanguage();
   return (
-    <section id="about" className="about section-pad"><div className="container"><div className="about-top"><p className="eyebrow"><span />{t.about.eyebrow}</p><span className="about-side">{t.about.sideTop}<br />{t.about.sideBottom}</span></div><Reveal><p className="about-statement">{t.about.intro} <em>{t.about.accent}</em> {t.about.tail}</p></Reveal><div className="metrics">{metrics.map((metric, index) => <Reveal key={metric.label} delay={index * 0.07}><div><strong>{metric.value}</strong><span>{t.about.metrics[index]}</span></div></Reveal>)}</div></div></section>
+    <section id="about" className="about section-pad"><div className="container"><div className="about-top"><p className="eyebrow"><span />{t.about.eyebrow}</p><span className="about-side">{t.about.sideTop}<br />{t.about.sideBottom}</span></div><Reveal><p className="about-statement">{t.about.intro} <em>{t.about.accent}</em> {t.about.tail}</p></Reveal><div className="metrics">{metrics.map((metric, index) => <Reveal key={metric.value} delay={index * 0.07}><div><strong>{metric.value}</strong><span>{t.about.metrics[index]}</span></div></Reveal>)}</div></div></section>
   );
 }
 

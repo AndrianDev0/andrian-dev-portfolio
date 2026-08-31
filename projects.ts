@@ -27,7 +27,7 @@ export const projects: Project[] = [
     kind: "bot",
     accent: "#6f8cff",
     liveUrl: "https://t.me/NeboBistroBot",
-    previewUrl: process.env.NEXT_PUBLIC_NEBO_PREVIEW_URL ?? "https://t.me/NeboBistroBot",
+    previewUrl: "https://t.me/NeboBistroBot",
     challenge: "Turn a restaurant promotion into a short, intuitive guest journey that feels native to Telegram and reaches a clear reward outcome.",
     solution: "The bot greets each guest and opens a mobile-first Mini App with a branded prize wheel. A protected control panel manages the welcome and team access.",
     result: "A deployed end-to-end experience: Telegram onboarding, wheel interaction, prize result, and a clear in-venue handoff to the waiter.",

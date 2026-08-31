@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { useEffect } from "react";
-import { MagneticButton } from "../../../components";
+import { MagneticButton } from "../../../magnetic-button";
 import { projectRussian, useLanguage } from "../../../i18n";
 import type { Project } from "../../../projects";
 import { siteConfig } from "../../../site";

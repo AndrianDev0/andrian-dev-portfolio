@@ -17,11 +17,11 @@ export function HeroVisual() {
         </div>
         <div className="nebo-proof-media">
           <figure className="nebo-proof-bot">
-            <img src="/nebo/case/bot-welcome.webp" alt={ru ? "Сообщение Telegram-бота Nebo Bistro" : "Nebo Bistro Telegram bot welcome message"} width="900" height="2048" fetchPriority="high" />
+            <img src="/nebo/case/bot-welcome-hd.webp" alt={ru ? "Сообщение Telegram-бота Nebo Bistro" : "Nebo Bistro Telegram bot welcome message"} width="1178" height="2560" fetchPriority="high" />
             <figcaption>01 / TELEGRAM BOT</figcaption>
           </figure>
           <figure className="nebo-proof-app">
-            <img src="/nebo/case/prize-wheel.webp" alt={ru ? "Колесо призов в мини-приложении Nebo Bistro" : "Prize wheel in the Nebo Bistro mini app"} width="900" height="2048" fetchPriority="high" />
+            <img src="/nebo/case/prize-wheel-hd.webp" alt={ru ? "Колесо призов в мини-приложении Nebo Bistro" : "Prize wheel in the Nebo Bistro mini app"} width="1178" height="2560" fetchPriority="high" />
             <figcaption>02 / MINI APP</figcaption>
           </figure>
           <span className="nebo-proof-direction" aria-hidden="true"><ArrowRight size={15} /></span>

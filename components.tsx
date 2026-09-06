@@ -6,6 +6,7 @@ import { useLanguage } from "./i18n";
 import { siteConfig } from "./site";
 import { submitProjectRequest } from "./submit";
 import { ThemeToggle } from "./theme";
+import { HeroVisual } from "./hero-visual";
 
 export function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -102,60 +103,7 @@ export function Header() {
   );
 }
 
-export function HeroVisual() {
-  const { language } = useLanguage();
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 900px)");
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
-    let nextX = 0;
-    let nextY = 0;
-    let rect: DOMRect | null = null;
-    const paint = () => { node.style.setProperty("--mx", nextX.toFixed(2)); node.style.setProperty("--my", nextY.toFixed(2)); frame = 0; };
-    const onEnter = () => { rect = node.getBoundingClientRect(); };
-    const onMove = (event: PointerEvent) => {
-      if (!finePointer.matches || reducedMotion.matches) return;
-      rect ??= node.getBoundingClientRect();
-      nextX = (event.clientX - rect.left) / rect.width - 0.5;
-      nextY = (event.clientY - rect.top) / rect.height - 0.5;
-      if (!frame) frame = requestAnimationFrame(paint);
-    };
-    const reset = () => { rect = null; nextX = 0; nextY = 0; if (!frame) frame = requestAnimationFrame(paint); };
-    node.addEventListener("pointerenter", onEnter);
-    node.addEventListener("pointermove", onMove);
-    node.addEventListener("pointerleave", reset);
-    return () => { node.removeEventListener("pointerenter", onEnter); node.removeEventListener("pointermove", onMove); node.removeEventListener("pointerleave", reset); if (frame) cancelAnimationFrame(frame); };
-  }, []);
-
-  return (
-    <div className="hero-visual" ref={ref} role="img" aria-label={language === "ru" ? "Система цифровых продуктов: сайт, Telegram-бот и автоматизация" : "A connected system of a website, Telegram bot, and automation"}>
-      <div className="visual-aura" /><div className="visual-grid" />
-      <div className="depth-scene">
-        <div className="machine-shadow" />
-        <div className="core-machine">
-          <div className="core-topline"><span>PRODUCT SYSTEM</span><span className="signal">LIVE</span></div>
-          <div className="core-screen"><span className="core-kicker">DIGITAL CORE / 01</span><strong>IDEA<br />TO&nbsp;IMPACT</strong><div className="core-meter"><i /><i /><i /><i /><i /></div></div>
-          <div className="core-footer"><span>DESIGN</span><span>BUILD</span><span>CONNECT</span></div>
-        </div>
-        <div className="float-card website-card" aria-hidden="true">
-          <div className="mini-window-bar"><i /><i /><i /><span>andrian.dev / web</span></div>
-          <div className="mini-web"><span className="mini-logo">WEB / INTERFACE</span><strong>{language === "ru" ? <>Сложное —<br />понятно.</> : <>Make complexity<br />feel clear.</>}</strong><div className="mini-web-lines"><i /><i /></div><b>{language === "ru" ? "ОТКРЫТЬ" : "EXPLORE"} →</b></div>
-        </div>
-        <div className="float-card bot-card" aria-hidden="true">
-          <div className="bot-head"><span className="avatar"><ArrowUpRight aria-hidden="true" /></span><span><b>Telegram Flow</b><small>TELEGRAM BOT · {language === "ru" ? "В СЕТИ" : "ONLINE"}</small></span><i /></div>
-          <div className="bot-message user">{language === "ru" ? "Хочу заказать сайт" : "I want to order a website"}</div><div className="bot-message bot">{language === "ru" ? "Отлично. Какой формат нужен?" : "Great. What type do you need?"}</div>
-          <div className="bot-options"><span>{language === "ru" ? "Лендинг" : "Landing"}</span><span>{language === "ru" ? "Бизнес" : "Business"}</span><span>{language === "ru" ? "Веб-сервис" : "Web App"}</span></div>
-        </div>
-        <div className="float-card automation-card" aria-hidden="true"><div className="card-label"><span>AUTOMATION</span><b>RUNNING</b></div><div className="flow-row"><span>LEAD</span><i /><span>BOT</span><i /><span>CRM</span><i /><span>SALE</span></div><div className="flow-status"><span>Workflow 04</span><strong>0.8s</strong></div></div>
-        <div className="float-card code-card" aria-hidden="true"><div className="code-top"><i /><i /><i /><span>project.ts</span></div><pre><em>const</em> project = {`{`}<br />&nbsp;&nbsp;design: <b>true</b>,<br />&nbsp;&nbsp;development: <b>true</b>,<br />&nbsp;&nbsp;automation: <b>true</b><br />{`}`}</pre></div>
-        <div className="datum datum-one" aria-hidden="true"><span>01</span><i />{language === "ru" ? "СИСТЕМА ГОТОВА" : "SYSTEM READY"}</div><div className="datum datum-two" aria-hidden="true"><span>99</span><i />{language === "ru" ? "СКОРОСТЬ" : "PERFORMANCE"}</div>
-      </div>
-    </div>
-  );
-}
+export { HeroVisual } from "./hero-visual";
 
 export function Hero() {
   const { language, t } = useLanguage();
@@ -177,7 +125,7 @@ export function Hero() {
       const progress = Math.min(1, Math.max(0, -bounds.top / travel));
       if (window.innerWidth > 900 && !reducedMotion.matches) {
         const opacity = progress <= 0.15 ? 1 : Math.max(0, 1 - (progress - 0.15) / 0.7);
-        visual.style.transform = `translate3d(0, ${progress * 110}px, 0) scale(${1 - progress * 0.06})`;
+        visual.style.transform = `translate3d(0, ${progress * 24}px, 0)`;
         visual.style.opacity = String(opacity);
         cue.style.opacity = String(Math.max(0, 1 - progress / 0.25));
       } else {

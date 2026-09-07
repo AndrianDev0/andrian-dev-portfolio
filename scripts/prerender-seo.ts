@@ -141,9 +141,9 @@ function homeFallback(language: "ru" | "en") {
       <section class="seo-static-case" id="work"><h2>${ru ? "Реальный кейс: Telegram-бот и Mini App для Nebo Bistro" : "Real case: Telegram bot and Mini App for Nebo Bistro"}</h2><p>${ru ? "Рабочая кампания для привлечения новых гостей, рекламы партнёров и понятной выдачи их подарков в заведении." : "A live acquisition campaign connecting Telegram onboarding, restaurant and sponsor rewards, and a clear in-venue handoff."}</p><a href="${prefix}/projects/nebo-bistro">${ru ? "Разобрать кейс" : "Explore the case"} →</a></section>
       <section class="seo-static-section" id="services"><h2>${ru ? "Услуги разработки для бизнеса" : "Development services for business"}</h2><div class="seo-static-grid">${ru ? serviceCards : `<article><h3>Web development</h3><p>Landing pages, corporate websites and custom builds.</p><a href="#contact">Discuss a website →</a></article><article><h3>Telegram bots</h3><p>Lead capture, sales, support, catalogs and integrations.</p><a href="#contact">Discuss a bot →</a></article><article><h3>Web apps</h3><p>Dashboards, accounts and internal tools.</p><a href="#contact">Discuss a web app →</a></article><article><h3>Automation</h3><p>API, CRM, Telegram and notification workflows.</p><a href="#contact">Discuss automation →</a></article>`}</div></section>
       <section class="seo-static-case" id="process"><h2>${ru ? "От идеи до запуска" : "From idea to launch"}</h2><p>${ru ? "Знакомство, анализ, дизайн, разработка, тестирование и запуск остаются частью одного понятного процесса." : "Discovery, analysis, design, development, testing and launch stay connected in one clear process."}</p></section>
-      <section class="seo-static-section" id="contact"><h2>${ru ? "Обсудить проект" : "Start a project"}</h2><p>${ru ? "Расскажите, что вам нужно — предложу подходящий способ реализации." : "Tell me what you need and I will suggest the right way to build it."}</p><div class="seo-static-actions"><a href="https://t.me/g1reshnik">Telegram</a><a href="mailto:maa190186@gmail.com">maa190186@gmail.com</a></div></section>
+      <section class="seo-static-section" id="contact"><h2>${ru ? "Обсудить проект" : "Start a project"}</h2><p>${ru ? "Расскажите, что вам нужно — предложу подходящий способ реализации." : "Tell me what you need and I will suggest the right way to build it."}</p><div class="seo-static-actions"><a href="https://t.me/qweJSq">Telegram</a><a href="mailto:maa190186@gmail.com">maa190186@gmail.com</a></div></section>
     </main>
-    <footer class="seo-static-footer"><span>© ${new Date().getFullYear()} Andrian.Dev</span><a href="https://t.me/g1reshnik">Telegram</a></footer>
+    <footer class="seo-static-footer"><span>© ${new Date().getFullYear()} Andrian.Dev</span><a href="https://t.me/qweJSq">Telegram</a></footer>
   </div>`;
 }
 
@@ -156,7 +156,7 @@ function serviceFallback(service: Service) {
   return `<div class="seo-page">
     <header class="seo-header"><nav class="seo-nav container"><a class="brand" href="/"><span class="brand-mark"><i></i></span><span class="brand-word">Andrian.Dev</span></a><div class="seo-nav-links"><a href="/#work">Кейс</a><a href="/#services">Услуги</a><a href="/#process">Процесс</a><a href="/#contact">Контакты</a></div><div class="seo-nav-actions"><a class="nav-cta" href="/#contact">Обсудить проект</a></div></nav></header>
     <main>
-      <section class="seo-hero"><div class="container seo-hero-layout"><div class="seo-hero-copy"><nav class="seo-breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a><span>/</span><span>Услуги</span></nav><p class="eyebrow">${escapeHtml(service.eyebrow)}</p><h1>${escapeHtml(service.h1)}</h1><p class="seo-lead">${escapeHtml(service.lead)}</p><div class="seo-hero-actions"><a class="button button-primary" href="/#contact">Обсудить задачу →</a><a class="button button-ghost" href="https://t.me/g1reshnik">Написать в Telegram</a></div></div><aside class="seo-hero-panel"><span>ANDRIAN.DEV / SERVICE</span><strong>ЗАДАЧА<br>→ ПРОДУКТ</strong><div><span>01 Анализ</span><span>02 Интерфейс</span><span>03 Разработка</span><span>04 Запуск</span></div></aside></div></section>
+      <section class="seo-hero"><div class="container seo-hero-layout"><div class="seo-hero-copy"><nav class="seo-breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a><span>/</span><span>Услуги</span></nav><p class="eyebrow">${escapeHtml(service.eyebrow)}</p><h1>${escapeHtml(service.h1)}</h1><p class="seo-lead">${escapeHtml(service.lead)}</p><div class="seo-hero-actions"><a class="button button-primary" href="/#contact">Обсудить задачу →</a><a class="button button-ghost" href="https://t.me/qweJSq">Написать в Telegram</a></div></div><aside class="seo-hero-panel"><span>ANDRIAN.DEV / SERVICE</span><strong>ЗАДАЧА<br>→ ПРОДУКТ</strong><div><span>01 Анализ</span><span>02 Интерфейс</span><span>03 Разработка</span><span>04 Запуск</span></div></aside></div></section>
       <section class="seo-section seo-overview"><div class="container"><div class="seo-section-heading"><p class="eyebrow">ВОЗМОЖНОСТИ</p><h2>${escapeHtml(service.overviewTitle)}</h2></div><div class="seo-feature-grid">${features}</div></div></section>
       <section class="seo-section seo-includes"><div class="container seo-includes-layout"><div><p class="eyebrow">СОСТАВ РАБОТ</p><h2>${escapeHtml(service.includesTitle)}</h2></div><ul>${includes}</ul></div></section>
       <section class="seo-section seo-process"><div class="container"><div class="seo-section-heading"><p class="eyebrow">ПРОЦЕСС</p><h2>${escapeHtml(service.processTitle)}</h2></div><ol class="seo-process-grid">${process}</ol></div></section>
@@ -166,7 +166,7 @@ function serviceFallback(service: Service) {
       <section class="seo-related"><div class="container"><span>СЛЕДУЮЩАЯ УСЛУГА</span><a href="/${service.relatedSlug}"><h2>${escapeHtml(service.relatedLabel)}</h2><span>↗</span></a></div></section>
       <section class="seo-cta"><div class="container"><p class="eyebrow">ОБСУДИТЬ ПРОЕКТ</p><h2>Расскажите, что нужно сделать.</h2><p>Предложу подходящий формат реализации и понятный следующий шаг.</p><a class="button button-primary" href="/#contact">Перейти к заявке →</a></div></section>
     </main>
-    <footer class="seo-footer"><div class="container"><a class="footer-brand" href="/">Andrian.Dev</a><div class="seo-footer-links">${seoServices.map((item) => `<a href="/${item.slug}">${escapeHtml(item.h1)}</a>`).join("")}</div><div><a href="https://t.me/g1reshnik">Telegram</a><a href="mailto:maa190186@gmail.com">maa190186@gmail.com</a></div></div></footer>
+    <footer class="seo-footer"><div class="container"><a class="footer-brand" href="/">Andrian.Dev</a><div class="seo-footer-links">${seoServices.map((item) => `<a href="/${item.slug}">${escapeHtml(item.h1)}</a>`).join("")}</div><div><a href="https://t.me/qweJSq">Telegram</a><a href="mailto:maa190186@gmail.com">maa190186@gmail.com</a></div></div></footer>
   </div>`;
 }
 
@@ -191,7 +191,7 @@ function homeSchema(language: "ru" | "en") {
     "@context": "https://schema.org",
     "@graph": [
       { "@type": "WebSite", "@id": `${ORIGIN}/#website`, url: `${ORIGIN}/`, name: "Andrian.Dev", inLanguage: ["ru", "en"] },
-      { "@type": "Person", "@id": `${ORIGIN}/#person`, name: "Andrian", alternateName: "Andrian.Dev", url: `${ORIGIN}/`, email: "mailto:maa190186@gmail.com", jobTitle: language === "ru" ? "Веб-разработчик" : "Web developer", sameAs: ["https://t.me/g1reshnik"], knowsAbout: ["Web development", "Telegram bots", "Web applications", "Business automation"] },
+      { "@type": "Person", "@id": `${ORIGIN}/#person`, name: "Andrian", alternateName: "Andrian.Dev", url: `${ORIGIN}/`, email: "mailto:maa190186@gmail.com", jobTitle: language === "ru" ? "Веб-разработчик" : "Web developer", sameAs: ["https://t.me/qweJSq"], knowsAbout: ["Web development", "Telegram bots", "Web applications", "Business automation"] },
       { "@type": "Service", "@id": `${ORIGIN}/#services`, name: language === "ru" ? "Разработка сайтов, Telegram-ботов и веб-приложений" : "Websites, Telegram bots and web application development", provider: { "@id": `${ORIGIN}/#person` }, areaServed: "Worldwide", url: `${ORIGIN}/#services` },
     ],
   };
@@ -202,7 +202,7 @@ function serviceSchema(service: Service) {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "Service", "@id": `${url}#service`, name: service.h1, description: service.description, url, provider: { "@type": "Person", "@id": `${ORIGIN}/#person`, name: "Andrian", alternateName: "Andrian.Dev", url: `${ORIGIN}/`, sameAs: ["https://t.me/g1reshnik"] }, areaServed: "Worldwide", inLanguage: "ru" },
+      { "@type": "Service", "@id": `${url}#service`, name: service.h1, description: service.description, url, provider: { "@type": "Person", "@id": `${ORIGIN}/#person`, name: "Andrian", alternateName: "Andrian.Dev", url: `${ORIGIN}/`, sameAs: ["https://t.me/qweJSq"] }, areaServed: "Worldwide", inLanguage: "ru" },
       { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Главная", item: `${ORIGIN}/` }, { "@type": "ListItem", position: 2, name: service.h1, item: url }] },
       { "@type": "FAQPage", mainEntity: service.faq.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })) },
     ],

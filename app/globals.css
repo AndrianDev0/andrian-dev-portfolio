@@ -881,11 +881,11 @@ section[id] { scroll-margin-top: 88px; }
 
 /* Mobile header — prevent hero controls from showing through the fixed glass bar */
 @media(max-width:900px){
-  .site-header{padding-top:max(12px,env(safe-area-inset-top))}
+  .site-header{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:12px;background:linear-gradient(180deg,var(--bg) 0%,var(--bg) calc(100% - 13px),transparent 100%)}
   .nav-shell{background:rgba(8,10,15,.96);border-color:rgba(255,255,255,.11);box-shadow:0 14px 38px rgba(0,0,0,.46);backdrop-filter:blur(20px) saturate(135%);-webkit-backdrop-filter:blur(20px) saturate(135%)}
 }
 @media(max-width:600px){
-  .hero{padding-top:132px}
+  .hero{padding-top:132px;padding-bottom:44px}
 }
 
 /* Case gallery — real Nebo Bistro product screens */

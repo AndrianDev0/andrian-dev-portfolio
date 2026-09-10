@@ -29,10 +29,10 @@ function ProjectMedia({ id, ru }: { id: (typeof heroProjects)[number]["id"]; ru:
   }
 
   if (id === "drop") {
-    return <div className="hero-project-media hero-project-image"><img src="/projects/drop-air-force-1.webp" alt={ru ? "Интерактивный 3D-концепт магазина DROP" : "DROP interactive 3D store concept"} width="1280" height="720" /></div>;
+    return <div className="hero-project-media hero-project-image"><img src="/projects/drop-air-force-1.webp" alt={ru ? "Интерактивный 3D-концепт магазина DROP" : "DROP interactive 3D store concept"} width="1280" height="720" decoding="async" /></div>;
   }
 
-  return <div className="hero-project-media hero-project-image hero-project-image-tehnotek"><img src="/projects/tehnotek-prototype.webp" alt={ru ? "Прототип продуктовой страницы ТЕХНОТЭК" : "TEHNOTEK product page prototype"} width="1280" height="720" /></div>;
+  return <div className="hero-project-media hero-project-image hero-project-image-tehnotek"><img src="/projects/tehnotek-prototype.webp" alt={ru ? "Прототип продуктовой страницы ТЕХНОТЭК" : "TEHNOTEK product page prototype"} width="1280" height="720" decoding="async" /></div>;
 }
 
 export function HeroVisual() {

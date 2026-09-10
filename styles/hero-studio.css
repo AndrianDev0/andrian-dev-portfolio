@@ -28,5 +28,40 @@
 @media(min-width:901px){.hero .hero-visual-wrap{height:auto;min-width:0}.hero .hero-layout{column-gap:54px}}
 @media(min-width:1600px){.hero-project-carousel{height:640px;max-width:760px}.hero-project-viewport{height:570px}.hero-project-frame{width:680px;height:540px}}
 @media(max-width:900px){.hero .hero-visual-wrap{height:auto;margin-top:30px}.hero-project-carousel{height:580px;max-width:650px}.hero-project-viewport{height:515px}.hero-project-frame{width:94%;height:505px}}
-@media(max-width:600px){.hero-project-carousel{height:528px;width:100%}.hero-project-viewport{height:462px}.hero-project-frame{inset:2% auto auto 0;grid-template-rows:34px 1fr 63px;width:100%;height:455px}.hero-project-top{padding:0 10px;font-size:5px}.hero-project-media-nebo{display:block}.hero-project-media-nebo .nebo-proof-bot{display:none}.hero-project-media-nebo .nebo-proof-app{display:block;width:100%;height:100%}.hero-project-media img{object-position:50% 14%;filter:none}.hero-project-image img{object-position:center top}.hero-project-image-tehnotek img{object-position:61% top}.nebo-proof-direction{display:none}.hero-project-media figcaption{left:8px;bottom:8px;padding:5px 6px;font-size:5px}.hero-project-footer{padding:0 11px;gap:10px}.hero-project-footer strong{font-size:13px}.hero-project-footer>div span{font-size:5px;max-width:150px}.hero-project-open{font-size:7px;gap:5px}.hero-project-controls{left:0;right:0;min-height:54px;padding-top:8px}.hero-project-dots{gap:6px}.hero-project-dots button{width:18px}.hero-project-arrows{gap:6px}.hero-project-arrows button{width:44px;height:44px}}
+@media(max-width:600px){
+  .hero-project-carousel{width:100%;height:448px}
+  .hero-project-viewport{height:382px}
+  .hero-project-slide{transform:translateX(18px);transition:opacity .28s var(--ease),transform .4s var(--ease)}
+  .hero-project-frame{inset:0;grid-template-rows:34px 238px 108px;width:100%;height:380px;border-color:rgba(129,133,147,.42);border-radius:13px;box-shadow:0 24px 55px -38px rgba(7,8,12,.8)}
+  .hero-project-top{padding:0 12px;font-size:6px;letter-spacing:.13em}
+  .hero-project-top i{width:7px;height:7px}
+  .hero-project-media-nebo{display:block}
+  .hero-project-media-nebo .nebo-proof-bot{display:none}
+  .hero-project-media-nebo .nebo-proof-app{display:block;width:100%;height:100%}
+  .hero-project-media img{filter:none}
+  .hero-project-media-nebo img{object-position:50% 63%}
+  .hero-project-image img{object-position:center;transform:scale(3);transform-origin:62% 86%}
+  .hero-project-image-tehnotek img{object-position:center;transform:scale(2.8);transform-origin:77% 56%}
+  .hero-project-media::after{content:"";position:absolute;inset:auto 0 0;height:34%;pointer-events:none;background:linear-gradient(transparent,rgba(5,6,8,.38))}
+  .nebo-proof-direction,.hero-project-media figcaption{display:none}
+  .hero-project-footer{padding:0 12px 0 14px;gap:10px}
+  .hero-project-footer strong{font-size:18px;line-height:1.05}
+  .hero-project-footer>div span{max-width:215px;margin-top:7px;font-size:11px;line-height:1.35;letter-spacing:0;color:#9a99a2}
+  .hero-project-open{display:grid;place-items:center;width:44px;height:44px;gap:0;border:1px solid #ffffff24;border-radius:50%;font-size:0;color:#d8d5df}
+  .hero-project-open svg{width:18px;height:18px}
+  .hero-project-controls{left:0;right:0;min-height:58px;padding-top:8px;font-size:9px}
+  .hero-project-dots{gap:6px}
+  .hero-project-dots button{width:22px}
+  .hero-project-arrows{gap:7px}
+  .hero-project-arrows button{width:46px;height:46px}
+}
+@media(max-width:340px){
+  .hero-project-carousel{height:432px}
+  .hero-project-viewport{height:366px}
+  .hero-project-frame{grid-template-rows:32px 224px 108px;height:364px}
+  .hero-project-top{padding-inline:10px;font-size:5.5px}
+  .hero-project-footer{padding-inline:11px 9px}
+  .hero-project-footer strong{font-size:16px}
+  .hero-project-footer>div span{max-width:185px;font-size:10px}
+}
 @media(prefers-reduced-motion:reduce){.hero-project-slide,.hero-project-dots button::before,.hero-project-arrows button,.hero-project-open{transition:none}}

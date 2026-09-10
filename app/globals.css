@@ -961,3 +961,7 @@ section[id] { scroll-margin-top: 88px; }
   .magnetic-button,.service-more,.case-project-actions a{transition:none}
   .magnetic-button:hover,.service-more:hover,.case-project-actions a:hover{transform:none}
 }
+[data-theme="light"] .project-highlights{color:#69727f}
+.project-highlights{display:grid;gap:8px;margin:0 0 20px;padding:0;list-style:none;color:#7f8996;font-size:11px;line-height:1.45}
+.project-highlights li{display:flex;align-items:flex-start;gap:8px}
+.project-highlights li i{flex:none;width:4px;height:4px;margin-top:6px;border-radius:50%;background:var(--project-accent);box-shadow:0 0 8px color-mix(in srgb,var(--project-accent) 45%,transparent)}

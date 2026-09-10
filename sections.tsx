@@ -29,6 +29,7 @@ export function ProjectsSection() {
         title: selectedHighlight.title,
         category: selectedHighlight.category[language],
         description: selectedHighlight.description[language],
+        highlights: selectedHighlight.highlights[language],
         status: selectedHighlight.status[language],
         technologies: selectedHighlight.technologies,
         accent: selectedHighlight.accent,
@@ -40,6 +41,7 @@ export function ProjectsSection() {
         title: project.title,
         category: language === "ru" ? localized.category : project.category,
         description: language === "ru" ? localized.description : project.description,
+        highlights: [],
         status: t.projects.real,
         technologies: project.technologies,
         accent: project.accent,
@@ -69,6 +71,7 @@ export function ProjectsSection() {
                   <h3>{detail.title}</h3>
                   <span className={`demo-label ${selectedHighlight ? "project-status-label" : "live-label"}`}><i />{detail.status}</span>
                   <p className="project-description">{detail.description}</p>
+                  {detail.highlights.length > 0 && <ul className="project-highlights" aria-label={language === "ru" ? "Ключевые элементы проекта" : "Project highlights"}>{detail.highlights.map((highlight) => <li key={highlight}><i />{highlight}</li>)}</ul>}
                   <div className="tech-list">{detail.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div>
                   <div className="project-actions">
                     {selectedHighlight ? (

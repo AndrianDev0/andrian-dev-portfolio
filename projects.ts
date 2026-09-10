@@ -22,6 +22,7 @@ export type PortfolioHighlight = {
   title: string;
   category: { en: string; ru: string };
   description: { en: string; ru: string };
+  highlights: { en: string[]; ru: string[] };
   status: { en: string; ru: string };
   technologies: string[];
   accent: string;
@@ -60,6 +61,10 @@ export const portfolioHighlights: PortfolioHighlight[] = [
       en: "An art-directed sneaker storefront with a real-time 3D product, scroll choreography, three editions, and a responsive purchase flow.",
       ru: "Иммерсивная витрина кроссовок с 3D-моделью в реальном времени, сценарной прокруткой, тремя версиями товара и адаптивным выбором покупки.",
     },
+    highlights: {
+      en: ["Real-time Air Force 1 presentation", "Three editions with visual switching", "Scroll-led route from discovery to purchase"],
+      ru: ["3D-презентация Air Force 1 в реальном времени", "Три версии товара с переключением образа", "Сценарий от знакомства до выбора покупки"],
+    },
     status: { en: "LIVE CONCEPT", ru: "РАБОЧИЙ КОНЦЕПТ" },
     technologies: ["React", "Three.js", "WebGL"],
     accent: "#7445ed",
@@ -77,6 +82,10 @@ export const portfolioHighlights: PortfolioHighlight[] = [
     description: {
       en: "A working industrial product-page prototype: technical positioning, a manufacturing case, a clear request path, and a specification upload flow.",
       ru: "Рабочий прототип продуктовой страницы для инженерного производства: техническое позиционирование, производственный кейс, понятный путь к заявке и передача ТЗ или чертежа.",
+    },
+    highlights: {
+      en: ["Technical offer explained without jargon", "Manufacturing proof placed near the decision", "Specification upload and request flow"],
+      ru: ["Техническое предложение без перегруза терминами", "Производственный кейс рядом с точкой решения", "Передача ТЗ или чертежа вместе с заявкой"],
     },
     status: { en: "PROTOTYPE", ru: "ПРОТОТИП" },
     technologies: ["React", "Product UX", "Responsive"],
@@ -96,6 +105,7 @@ export const portfolioHighlights: PortfolioHighlight[] = [
       en: "An MVP structure for a guided 30-day program: interactive diagnosis, paid access, daily scenarios, progress tracking, and an instant-support mode.",
       ru: "Архитектура MVP для 30-дневной программы: интерактивная диагностика, оплата и доступ, ежедневные сценарии, сохранение прогресса и режим быстрой поддержки.",
     },
+    highlights: { en: [], ru: [] },
     status: { en: "MVP IN DESIGN", ru: "MVP В ПРОЕКТИРОВАНИИ" },
     technologies: ["Telegram Bot", "AI", "Product Flow"],
     accent: "#61d6b3",

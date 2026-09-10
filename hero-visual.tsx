@@ -1,8 +1,9 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useLanguage } from "./i18n";
+import { selectFeaturedProject } from "./featured-project";
 import "./styles/hero-studio.css";
 
 const heroProjects = [
@@ -42,6 +43,10 @@ export function HeroVisual() {
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
   const total = heroProjects.length;
   const move = (direction: number) => setActive((current) => (current + direction + total) % total);
+
+  useEffect(() => {
+    selectFeaturedProject(heroProjects[active].id);
+  }, [active]);
 
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     pointerStart.current = { x: event.clientX, y: event.clientY };

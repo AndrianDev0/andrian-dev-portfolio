@@ -86,6 +86,8 @@
   filter: saturate(.9) contrast(1.02);
   transition: transform .8s var(--ease), filter .5s var(--ease);
 }
+.drop-project-visual picture,
+.tehnotek-project-visual picture { display: block; width: 100%; height: 100%; }
 .selected-work-anchor:hover .drop-project-visual img,
 .selected-work-anchor:hover .tehnotek-project-visual img { transform: scale(1.025); filter: saturate(1) contrast(1.02); }
 .drop-project-visual figcaption,

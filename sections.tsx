@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight, CircleDot, Code2, Layers3, MoveUpRight, Send, Sparkles } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { benefits, processSteps, services, technologies } from "./content";
 import { metrics, siteConfig } from "./site";
 import { portfolioHighlights, projectFacets, projects } from "./projects";
@@ -11,6 +11,7 @@ import { projectRussian, useLanguage } from "./i18n";
 import { NeboBotFlowVisual, NeboMiniAppVisual, PortfolioHighlightVisual, ProjectVisual } from "./visuals";
 import { ServiceVisual } from "./service-visual";
 import { ShinyText } from "./react-bits";
+import { featuredProjectEvent, type FeaturedProjectId } from "./featured-project";
 import "./styles/services.css";
 import "./styles/selected-work.css";
 
@@ -19,6 +20,40 @@ export function ProjectsSection() {
   const project = projects[0];
   const localized = projectRussian[project.slug];
   const facetVisuals = [<NeboMiniAppVisual key="mini-app" />, <NeboBotFlowVisual key="bot-flow" />];
+  const [selectedProject, setSelectedProject] = useState<FeaturedProjectId>("nebo");
+  const selectedHighlight = selectedProject === "nebo" ? undefined : portfolioHighlights.find((item) => item.visual === selectedProject);
+  const detail = selectedHighlight
+    ? {
+        id: selectedHighlight.id,
+        slug: selectedHighlight.slug,
+        title: selectedHighlight.title,
+        category: selectedHighlight.category[language],
+        description: selectedHighlight.description[language],
+        status: selectedHighlight.status[language],
+        technologies: selectedHighlight.technologies,
+        accent: selectedHighlight.accent,
+        liveUrl: selectedHighlight.liveUrl,
+      }
+    : {
+        id: project.id,
+        slug: project.slug,
+        title: project.title,
+        category: language === "ru" ? localized.category : project.category,
+        description: language === "ru" ? localized.description : project.description,
+        status: t.projects.real,
+        technologies: project.technologies,
+        accent: project.accent,
+        liveUrl: project.liveUrl,
+      };
+
+  useEffect(() => {
+    const onProjectChange = (event: Event) => {
+      const projectId = (event as CustomEvent<FeaturedProjectId>).detail;
+      if (projectId === "nebo" || projectId === "drop" || projectId === "tehnotek") setSelectedProject(projectId);
+    };
+    window.addEventListener(featuredProjectEvent, onProjectChange);
+    return () => window.removeEventListener(featuredProjectEvent, onProjectChange);
+  }, []);
 
   return (
     <section id="work" className="projects section-pad">
@@ -26,25 +61,33 @@ export function ProjectsSection() {
         <SectionHeading eyebrow={t.projects.eyebrow} title={<>{t.projects.titleTop}<br /><span className="soft">{t.projects.titleBottom}</span></>} copy={t.projects.copy} />
         <div className="project-list project-list-single">
           <Reveal className="project-reveal">
-            <article className={`project-card project-${project.kind} project-flagship`} style={{ "--project-accent": project.accent } as React.CSSProperties}>
+            <article className={`project-card project-${selectedHighlight ? "website" : project.kind} project-flagship project-detail-${selectedProject}`} style={{ "--project-accent": detail.accent } as React.CSSProperties} aria-live="polite">
               <div className="project-meta">
-                <div className="project-index"><span>{project.id}</span><i /></div>
+                <div className="project-index"><span>{detail.id}</span><i /></div>
                 <div>
-                  <p>{(language === "ru" ? localized.category : project.category).toUpperCase()}</p>
-                  <h3>{project.title}</h3>
-                  <span className="demo-label live-label"><i />{t.projects.real}</span>
-                  <p className="project-description">{language === "ru" ? localized.description : project.description}</p>
-                  <div className="tech-list">{project.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div>
+                  <p>{detail.category.toUpperCase()}</p>
+                  <h3>{detail.title}</h3>
+                  <span className={`demo-label ${selectedHighlight ? "project-status-label" : "live-label"}`}><i />{detail.status}</span>
+                  <p className="project-description">{detail.description}</p>
+                  <div className="tech-list">{detail.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div>
                   <div className="project-actions">
-                    <a className="case-link" href={`${language === "en" ? "/en" : ""}/projects/${project.slug}`}>{t.projects.view} <ArrowUpRight size={17} /></a>
-                    <a className="case-link case-link-live" href={project.liveUrl} target="_blank" rel="noreferrer">{t.projects.openTelegram} <ArrowUpRight size={17} /></a>
+                    {selectedHighlight ? (
+                      <a className="case-link" href={detail.liveUrl} target="_blank" rel="noreferrer">{language === "ru" ? "Открыть проект" : "Open project"} <ArrowUpRight size={17} /></a>
+                    ) : (
+                      <>
+                        <a className="case-link" href={`${language === "en" ? "/en" : ""}/projects/${detail.slug}`}>{t.projects.view} <ArrowUpRight size={17} /></a>
+                        <a className="case-link case-link-live" href={detail.liveUrl} target="_blank" rel="noreferrer">{t.projects.openTelegram} <ArrowUpRight size={17} /></a>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
-              <Reveal className="project-visual-shell project-visual-reveal"><ProjectVisual project={project} /></Reveal>
+              <Reveal className={`project-visual-shell project-visual-reveal${selectedHighlight ? " project-highlight-shell" : ""}`}>
+                {selectedHighlight ? <PortfolioHighlightVisual project={selectedHighlight} /> : <ProjectVisual project={project} />}
+              </Reveal>
             </article>
           </Reveal>
-          <div className="project-layers">
+          {selectedProject === "nebo" && <div className="project-layers">
             {projectFacets.map((facet, index) => (
               <Reveal key={facet.key} delay={index * 0.06} className="project-layer-reveal">
                 <article className="project-layer-card" id={facet.key}>
@@ -54,7 +97,7 @@ export function ProjectsSection() {
                 </article>
               </Reveal>
             ))}
-          </div>
+          </div>}
           <div className="selected-work-head" id="more-work">
             <p className="eyebrow"><span />{language === "ru" ? "ДРУГИЕ РАБОТЫ" : "OTHER SELECTED WORK"}</p>
             <p>{language === "ru" ? "Два рабочих прототипа и клиентский продукт на этапе проектирования — статусы указаны честно." : "Two working prototypes and a client product currently in design, with every status shown clearly."}</p>

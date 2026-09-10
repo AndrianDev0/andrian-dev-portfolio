@@ -670,9 +670,13 @@ section[id] { scroll-margin-top: 88px; }
 .project-flagship::after{width:69%;background:radial-gradient(circle at 62% 45%,rgba(167,129,71,.045),transparent 38%),linear-gradient(145deg,rgba(255,255,255,.025),transparent 55%)}
 .live-label{align-items:center;gap:7px;border-color:rgba(104,201,168,.2);color:#8da99e}
 .live-label>i{width:5px;height:5px;border-radius:50%;background:#68c9a8;box-shadow:0 0 8px rgba(104,201,168,.7)}
+.project-status-label{align-items:center;gap:7px;border-color:color-mix(in srgb,var(--project-accent) 26%,transparent);color:var(--project-accent)}
+.project-status-label>i{width:5px;height:5px;border-radius:50%;background:var(--project-accent);box-shadow:0 0 8px color-mix(in srgb,var(--project-accent) 58%,transparent)}
 .project-actions{display:flex;align-items:center;flex-wrap:wrap;gap:0 22px}
 .case-link-live{color:#c5aa78}
 .project-layers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.project-highlight-shell .selected-work-visual{height:520px;margin:0;border-radius:18px;box-shadow:0 35px 90px rgba(0,0,0,.35)}
+.project-detail-drop .project-highlight-shell img,.project-detail-tehnotek .project-highlight-shell img{object-position:center top}
 .project-layer-reveal{min-width:0}
 .project-layer-card{height:100%;padding-top:24px;border-top:1px solid var(--line);position:relative}
 .project-layer-heading{display:flex;align-items:center;justify-content:space-between;color:#69717e;font:8px var(--font-geist-mono),monospace;letter-spacing:.14em}
@@ -701,6 +705,7 @@ section[id] { scroll-margin-top: 88px; }
   .project-flagship{grid-template-columns:1fr}
   .project-flagship::after{width:100%;background:transparent}
   .project-layers{grid-template-columns:1fr;gap:54px}
+  .project-highlight-shell .selected-work-visual{height:440px}
   .project-layer-copy{min-height:132px;grid-template-columns:.8fr 1.2fr;gap:30px}
   .case-project-actions{margin-top:-46px}
 }
@@ -710,6 +715,8 @@ section[id] { scroll-margin-top: 88px; }
   .project-actions{align-items:flex-start;flex-direction:column;gap:0}
   .project-actions .case-link{margin-top:22px}
   .project-layers{gap:44px}
+  .project-highlight-shell .selected-work-visual{height:min(132vw,560px);margin:0;border-radius:12px;background:#0c0f14}
+  .project-highlight-shell .selected-work-visual img{object-fit:contain;object-position:center top}
   .project-layer-card{padding-top:18px}
   .project-layer-heading{font-size:6px}
   .project-layer-copy{min-height:132px;padding:23px 0 20px;grid-template-columns:1fr;gap:12px}

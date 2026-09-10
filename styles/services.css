@@ -1,24 +1,72 @@
-/* Services — one alignment system across desktop, tablet and mobile */
-.services-grid{
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  grid-template-rows:repeat(2,420px);
+.services .services-grid{
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  grid-template-rows:repeat(2,360px);
+  gap:0;
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line);
 }
-.service-item article{padding:28px;border-radius:18px!important}
-.service-number{position:relative;z-index:3}
-.service-visual{top:28px;right:28px;width:52%;height:215px}
-.service-text{left:28px;right:28px;bottom:25px;max-width:none;height:128px;display:flex;flex-direction:column;align-items:flex-start}
-.service-text h3{line-height:1.05}
-.service-text p{width:100%;margin:11px 0 12px}
-.service-text .service-more{margin-top:auto}
+.services .service-item:nth-child(1),.services .service-item:nth-child(4){grid-column:span 7}
+.services .service-item:nth-child(2),.services .service-item:nth-child(3){grid-column:span 5}
+.services .service-item{height:360px}
+.services .service-item article{
+  position:relative;
+  height:100%;
+  overflow:hidden;
+  padding:28px 30px;
+  border:0;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  border-radius:0!important;
+  background:transparent;
+  transition:background .3s var(--ease);
+}
+.services .service-item article:hover{transform:none;border-color:var(--line);background:rgba(255,255,255,.022)}
+.services .service-number{position:relative;z-index:3;display:flex;align-items:center;gap:13px;width:44%;color:#68717e;font:8px var(--font-geist-mono);letter-spacing:.12em}
+.services .service-number i{display:block;flex:1;height:1px;background:var(--line)}
+.services .service-text{position:absolute;z-index:3;left:30px;right:44%;bottom:28px;height:auto;max-width:340px;display:flex;flex-direction:column;align-items:flex-start}
+.services .service-text h3{margin:0;font-size:clamp(28px,2.35vw,40px);line-height:.98;letter-spacing:-.055em;font-weight:530}
+.services .service-text p{width:100%;margin:17px 0 19px;color:#89919d;font-size:11px;line-height:1.62}
+.services .service-more{min-height:44px;display:inline-flex;align-items:center;gap:10px;color:#8497fb;font:700 7px var(--font-geist-mono);letter-spacing:.14em}
+.services .service-more svg{transition:transform .25s var(--ease)}.services .service-more:hover svg{transform:translateX(4px)}
+.services .service-more:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+.services .service-visual{position:absolute;z-index:2;top:28px;right:28px;bottom:28px;width:43%;height:auto;color:#dce1e9}
+.service-schematic{position:relative;height:100%;overflow:hidden;border-left:1px solid var(--line);padding-left:22px}
+.service-schematic::before{content:"";position:absolute;inset:auto 0 62px 22px;height:1px;background:linear-gradient(90deg,var(--project-accent,#7186f4),transparent)}
+.service-schematic-label{display:block;color:#68717e;font:6px var(--font-geist-mono);letter-spacing:.16em}
+.service-schematic>strong{position:absolute;right:-.04em;top:22%;color:var(--text);font-size:clamp(55px,6vw,92px);font-weight:480;line-height:.8;letter-spacing:-.085em;opacity:.92}
+.service-schematic-path{position:absolute;left:22px;right:0;bottom:27px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.service-schematic-path span{position:relative;padding-top:12px;border-top:1px solid var(--line);color:#8d96a3;font:6px var(--font-geist-mono);letter-spacing:.1em}
+.service-schematic-path span::before{content:"";position:absolute;top:-2px;left:0;width:4px;height:4px;border-radius:50%;background:#8292f2}
+.service-schematic-path b{display:block;margin-bottom:7px;color:#525b68;font-weight:500}
+.service-schematic-mark{position:absolute;right:1px;top:12px;width:10px;height:10px;border-top:1px solid #8394f4;border-right:1px solid #8394f4}
+[data-theme="light"] .services .service-item article{background:transparent;box-shadow:none}
+[data-theme="light"] .services .service-item article:hover{border-color:var(--line);background:rgba(255,255,255,.48);box-shadow:none}
 .form-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
-.skip-link{position:fixed;z-index:1001;top:10px;left:12px;padding:11px 14px;border-radius:9px;color:#fff;background:#171a21;font-size:11px;transform:translateY(-160%);transition:transform .2s var(--ease);pointer-events:auto}
-.skip-link:focus{transform:translateY(0)}
-
+.skip-link{position:fixed;z-index:1001;top:10px;left:12px;padding:11px 14px;border-radius:9px;color:#fff;background:#171a21;font-size:11px;transform:translateY(-160%);transition:transform .2s var(--ease);pointer-events:auto}.skip-link:focus{transform:translateY(0)}
 @media(max-width:900px){
-  .services-grid{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(4,390px)}
-  .service-item article{padding:20px}
-  .service-visual{left:20px;right:20px;top:42px;width:auto;height:162px}
-  .service-text{left:20px;right:20px;bottom:21px;height:142px}
-  .service-text h3{font-size:24px}
-  .service-text p{margin:10px 0 12px;font-size:11px;line-height:1.5}
+  .services .services-grid{grid-template-columns:1fr;grid-template-rows:repeat(4,320px)}
+  .services .service-item:nth-child(n){grid-column:auto}
+  .services .service-item{height:320px}
+  .services .service-item article{padding:24px}
+  .services .service-number{width:42%}
+  .services .service-text{left:24px;right:45%;bottom:22px}
+  .services .service-text h3{font-size:30px}
+  .services .service-text p{margin:13px 0 11px;font-size:10px;line-height:1.55}
+  .services .service-visual{top:24px;right:24px;bottom:24px;width:42%}
+  .service-schematic>strong{font-size:clamp(54px,11vw,82px)}
 }
+@media(max-width:600px){
+  .services .services-grid{grid-template-rows:repeat(4,370px)}
+  .services .service-item{height:370px}
+  .services .service-item article{padding:20px}
+  .services .service-number{width:100%}
+  .services .service-visual{left:20px;right:20px;top:52px;bottom:auto;width:auto;height:145px}
+  .service-schematic{padding-left:15px}
+  .service-schematic::before{inset:auto 0 47px 15px}
+  .service-schematic>strong{top:23%;font-size:60px}
+  .service-schematic-path{left:15px;bottom:14px}
+  .services .service-text{left:20px;right:20px;bottom:18px;max-width:none}
+  .services .service-text h3{font-size:28px}
+  .services .service-text p{max-width:100%;margin:10px 0 7px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.services .service-item article,.services .service-more svg{transition:none}}

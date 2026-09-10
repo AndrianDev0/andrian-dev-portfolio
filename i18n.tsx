@@ -20,9 +20,9 @@ const copy = {
     },
     projects: {
       eyebrow: "FEATURED CASE",
-      titleTop: "One product.",
-      titleBottom: "Multiple layers.",
-      copy: "Nebo Bistro is my real Telegram case: a bot and Mini App designed as one connected system.",
+      titleTop: "Selected work.",
+      titleBottom: "Built with intent.",
+      copy: "Live products, interactive prototypes, and new client work — shown honestly at their current stage.",
       real: "REAL PROJECT",
       view: "Explore the case",
       openTelegram: "Open @NeboBistroBot",
@@ -81,7 +81,7 @@ const copy = {
       intro: "I build digital products for businesses. My goal is not just to write code, but to create",
       accent: "clear, fast, visually strong products",
       tail: "that solve real problems.",
-      metrics: ["real project", "connected product layers", "responsive interface"],
+      metrics: ["selected works", "product formats", "responsive interface"],
     },
     contact: {
       eyebrow: "START A PROJECT",
@@ -150,9 +150,9 @@ const copy = {
     },
     projects: {
       eyebrow: "РЕАЛЬНЫЙ КЕЙС",
-      titleTop: "Один продукт.",
-      titleBottom: "Несколько уровней.",
-      copy: "Nebo Bistro — мой реальный Telegram-кейс. Бот и Mini App показаны как части одной цельной системы.",
+      titleTop: "Избранные работы.",
+      titleBottom: "Без выдуманных цифр.",
+      copy: "Запущенные продукты, интерактивные прототипы и новые клиентские задачи — с честным обозначением текущего этапа.",
       real: "РЕАЛЬНЫЙ ПРОЕКТ",
       view: "Разобрать кейс",
       openTelegram: "Открыть @NeboBistroBot",
@@ -211,7 +211,7 @@ const copy = {
       intro: "Создаю цифровые продукты для бизнеса. Моя цель — не просто написать код, а сделать",
       accent: "понятный, быстрый и визуально сильный продукт",
       tail: "который решает реальную задачу.",
-      metrics: ["реальный проект", "связанных слоя продукта", "адаптивный интерфейс"],
+      metrics: ["избранные работы", "формата продукта", "адаптивный интерфейс"],
     },
     contact: {
       eyebrow: "ОБСУДИТЬ ПРОЕКТ",

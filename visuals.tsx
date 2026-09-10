@@ -1,10 +1,34 @@
-import { ArrowRight, Gift, Send, Sparkles } from "lucide-react";
-import type { Project, ProjectKind } from "./projects";
+import { ArrowRight, Gift, Send, ShieldCheck, Sparkles } from "lucide-react";
+import type { PortfolioHighlight, Project, ProjectKind } from "./projects";
 
 export function ProjectVisual({ project }: { project: Project }) {
   if (project.kind === "bot") return <NeboProjectVisual />;
   if (project.kind === "app") return <NeboMiniAppVisual />;
   return <NeboBotFlowVisual />;
+}
+
+export function PortfolioHighlightVisual({ project }: { project: PortfolioHighlight }) {
+  if (project.visual === "drop") {
+    return (
+      <figure className="selected-work-visual drop-project-visual">
+        <img src="/projects/drop-air-force-1.webp" alt="Главный экран интерактивного 3D-концепта DROP с моделью Air Force 1" loading="lazy" decoding="async" />
+        <figcaption><span>REAL-TIME 3D</span><b>SCROLL / INTERACTION</b></figcaption>
+      </figure>
+    );
+  }
+
+  return (
+    <div className="selected-work-visual trainer-project-visual" role="img" aria-label="Схема Telegram MVP: диагностика, 30-дневная программа, прогресс и быстрая поддержка">
+      <div className="trainer-rail"><span>DIAGNOSIS</span><i /><span>ACCESS</span><i /><span>DAY 01—30</span></div>
+      <div className="trainer-phone">
+        <div className="trainer-phone-head"><span>07 / 30</span><i /><b>AI SUPPORT</b></div>
+        <div className="trainer-progress"><i /></div>
+        <div className="trainer-message"><small>ВЕЧЕРНЯЯ РЕФЛЕКСИЯ</small><strong>Что сегодня помогло<br />вернуть опору?</strong></div>
+        <div className="trainer-actions"><span>Записать ответ</span><span><ShieldCheck size={14} /> ОПОРА СЕЙЧАС</span></div>
+      </div>
+      <span className="trainer-note">PERSONAL FLOW / SAVED PROGRESS</span>
+    </div>
+  );
 }
 
 function WindowBar({ address = "preview.dev" }: { address?: string }) {

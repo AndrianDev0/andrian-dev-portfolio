@@ -4,14 +4,15 @@ import { ArrowRight, ArrowUpRight, CircleDot, Code2, Layers3, MoveUpRight, Send,
 import { useEffect, useRef } from "react";
 import { benefits, processSteps, services, technologies } from "./content";
 import { metrics, siteConfig } from "./site";
-import { projectFacets, projects } from "./projects";
+import { portfolioHighlights, projectFacets, projects } from "./projects";
 import { ContactForm, Reveal, SectionHeading } from "./components";
 import { MagneticButton } from "./magnetic-button";
 import { projectRussian, useLanguage } from "./i18n";
-import { NeboBotFlowVisual, NeboMiniAppVisual, ProjectVisual } from "./visuals";
+import { NeboBotFlowVisual, NeboMiniAppVisual, PortfolioHighlightVisual, ProjectVisual } from "./visuals";
 import { ServiceVisual } from "./service-visual";
 import { ShinyText, SpotlightCard } from "./react-bits";
 import "./styles/services.css";
+import "./styles/selected-work.css";
 
 export function ProjectsSection() {
   const { language, t } = useLanguage();
@@ -53,6 +54,31 @@ export function ProjectsSection() {
                 </article>
               </Reveal>
             ))}
+          </div>
+          <div className="selected-work-head" id="more-work">
+            <p className="eyebrow"><span />{language === "ru" ? "ЕЩЁ ДВЕ РАБОТЫ" : "MORE SELECTED WORK"}</p>
+            <p>{language === "ru" ? "Реальный интерактивный прототип и клиентский продукт на этапе проектирования." : "A live interactive prototype and a client product currently being designed."}</p>
+          </div>
+          <div className="selected-work-grid">
+            {portfolioHighlights.map((item, index) => {
+              const content = (
+                <article className={`selected-work-card selected-work-${item.visual}`} style={{ "--project-accent": item.accent } as React.CSSProperties}>
+                  <div className="selected-work-topline"><span>{item.id}</span><i /><span>{item.status[language]}</span></div>
+                  <PortfolioHighlightVisual project={item} />
+                  <div className="selected-work-copy">
+                    <p>{item.category[language].toUpperCase()}</p>
+                    <h3>{item.title}</h3>
+                    <p>{item.description[language]}</p>
+                    <div className="tech-list">{item.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div>
+                    <span className="selected-work-link">
+                      {item.liveUrl ? (language === "ru" ? "Открыть проект" : "Open project") : (language === "ru" ? "Проектируется" : "In design")}
+                      {item.liveUrl && <ArrowUpRight aria-hidden="true" size={17} />}
+                    </span>
+                  </div>
+                </article>
+              );
+              return <Reveal key={item.slug} delay={index * 0.08} className="selected-work-reveal">{item.liveUrl ? <a className="selected-work-anchor" href={item.liveUrl} target="_blank" rel="noreferrer" aria-label={`${language === "ru" ? "Открыть проект" : "Open project"}: ${item.title}`}>{content}</a> : content}</Reveal>;
+            })}
           </div>
         </div>
       </div>

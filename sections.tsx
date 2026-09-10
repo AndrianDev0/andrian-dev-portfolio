@@ -56,8 +56,8 @@ export function ProjectsSection() {
             ))}
           </div>
           <div className="selected-work-head" id="more-work">
-            <p className="eyebrow"><span />{language === "ru" ? "ЕЩЁ ДВЕ РАБОТЫ" : "MORE SELECTED WORK"}</p>
-            <p>{language === "ru" ? "Реальный интерактивный прототип и клиентский продукт на этапе проектирования." : "A live interactive prototype and a client product currently being designed."}</p>
+            <p className="eyebrow"><span />{language === "ru" ? "ДРУГИЕ РАБОТЫ" : "OTHER SELECTED WORK"}</p>
+            <p>{language === "ru" ? "Два рабочих прототипа и клиентский продукт на этапе проектирования — статусы указаны честно." : "Two working prototypes and a client product currently in design, with every status shown clearly."}</p>
           </div>
           <div className="selected-work-grid">
             {portfolioHighlights.map((item, index) => {

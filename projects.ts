@@ -25,7 +25,7 @@ export type PortfolioHighlight = {
   status: { en: string; ru: string };
   technologies: string[];
   accent: string;
-  visual: "drop" | "trainer";
+  visual: "drop" | "tehnotek" | "trainer";
   liveUrl?: string;
 };
 
@@ -68,6 +68,24 @@ export const portfolioHighlights: PortfolioHighlight[] = [
   },
   {
     id: "03",
+    slug: "tehnotek-prototype",
+    title: "ТЕХНОТЭК",
+    category: {
+      en: "B2B product page prototype",
+      ru: "Прототип продуктовой B2B-страницы",
+    },
+    description: {
+      en: "A working industrial product-page prototype: technical positioning, a manufacturing case, a clear request path, and a specification upload flow.",
+      ru: "Рабочий прототип продуктовой страницы для инженерного производства: техническое позиционирование, производственный кейс, понятный путь к заявке и передача ТЗ или чертежа.",
+    },
+    status: { en: "PROTOTYPE", ru: "ПРОТОТИП" },
+    technologies: ["React", "Product UX", "Responsive"],
+    accent: "#49b7ff",
+    visual: "tehnotek",
+    liveUrl: "https://tehnotek-prototype.vercel.app/",
+  },
+  {
+    id: "04",
     slug: "ai-support-trainer",
     title: "AI SUPPORT / 30",
     category: {

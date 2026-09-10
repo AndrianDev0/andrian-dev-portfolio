@@ -17,7 +17,7 @@ export const siteConfig = {
 } as const;
 
 export const metrics = [
-  { value: "03" },
+  { value: "04" },
   { value: "02" },
   { value: "100%" },
 ];

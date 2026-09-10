@@ -17,6 +17,15 @@ export function PortfolioHighlightVisual({ project }: { project: PortfolioHighli
     );
   }
 
+  if (project.visual === "tehnotek") {
+    return (
+      <figure className="selected-work-visual tehnotek-project-visual">
+        <img src="/projects/tehnotek-prototype.webp" alt="Прототип продуктовой страницы ТЕХНОТЭК для инженерного производства" loading="lazy" decoding="async" />
+        <figcaption><span>INDUSTRIAL B2B</span><b>WORKING PROTOTYPE</b></figcaption>
+      </figure>
+    );
+  }
+
   return (
     <div className="selected-work-visual trainer-project-visual" role="img" aria-label="Схема Telegram MVP: диагностика, 30-дневная программа, прогресс и быстрая поддержка">
       <div className="trainer-rail"><span>DIAGNOSIS</span><i /><span>ACCESS</span><i /><span>DAY 01—30</span></div>

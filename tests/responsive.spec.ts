@@ -44,6 +44,22 @@ for (const viewport of viewports) {
   });
 }
 
+test("hero project carousel supports buttons and keyboard navigation", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const carousel = page.getByRole("region", { name: "Избранные проекты" });
+  await expect(carousel.getByText("NEBO BISTRO", { exact: true })).toBeVisible();
+
+  await carousel.getByRole("button", { name: "Следующий проект" }).click();
+  await expect(carousel.getByText("DROP / AIR FORCE 1", { exact: true })).toBeVisible();
+
+  await carousel.focus();
+  await carousel.press("ArrowRight");
+  await expect(carousel.getByText("ТЕХНОТЭК", { exact: true })).toBeVisible();
+  await expect(carousel.getByText("ПРОТОТИП", { exact: true })).toBeVisible();
+});
+
 test("project case is reachable and has its own content", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/projects/nebo-bistro", { waitUntil: "networkidle" });

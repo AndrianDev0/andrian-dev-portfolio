@@ -5,6 +5,7 @@
   border-top:1px solid var(--line);
   border-left:1px solid var(--line);
 }
+.services{scroll-margin-top:92px}
 .services .service-item:nth-child(1),.services .service-item:nth-child(4){grid-column:span 7}
 .services .service-item:nth-child(2),.services .service-item:nth-child(3){grid-column:span 5}
 .services .service-item{height:360px}
@@ -56,17 +57,21 @@
   .service-schematic>strong{font-size:clamp(54px,11vw,82px)}
 }
 @media(max-width:600px){
-  .services .services-grid{grid-template-rows:repeat(4,370px)}
-  .services .service-item{height:370px}
+  .services{scroll-margin-top:76px}
+  .services .services-grid{grid-template-rows:repeat(4,390px)}
+  .services .service-item{height:390px}
   .services .service-item article{padding:20px}
   .services .service-number{width:100%}
-  .services .service-visual{left:20px;right:20px;top:52px;bottom:auto;width:auto;height:145px}
+  .services .service-visual{left:20px;right:20px;top:54px;bottom:auto;width:auto;height:148px}
   .service-schematic{padding-left:15px}
   .service-schematic::before{inset:auto 0 47px 15px}
   .service-schematic>strong{top:23%;font-size:60px}
   .service-schematic-path{left:15px;bottom:14px}
-  .services .service-text{left:20px;right:20px;bottom:18px;max-width:none}
+  .services .service-text{left:20px;right:20px;bottom:17px;max-width:none}
   .services .service-text h3{font-size:28px}
-  .services .service-text p{max-width:100%;margin:10px 0 7px;font-size:11px}
+  .services .service-text p{max-width:100%;margin:11px 0 6px;color:var(--muted);font-size:13px;line-height:1.5}
+  .services .service-more{font-size:9px}
+  .service-schematic-label,.service-schematic-path span{font-size:7px}
 }
+@media(hover:none){.services .service-item article:active{background:rgba(126,142,230,.045)}}
 @media(prefers-reduced-motion:reduce){.services .service-item article,.services .service-more svg{transition:none}}

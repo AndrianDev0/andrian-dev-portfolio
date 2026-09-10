@@ -54,14 +54,32 @@ test("hero project carousel supports buttons and keyboard navigation", async ({ 
 
   const carousel = page.getByRole("region", { name: "Избранные проекты" });
   await expect(carousel.getByText("NEBO BISTRO", { exact: true })).toBeVisible();
+  const neboImage = await carousel.locator(".hero-project-slide.is-active .nebo-proof-app img").evaluate((image) => ({
+    src: (image as HTMLImageElement).currentSrc,
+    fit: getComputedStyle(image).objectFit,
+  }));
+  expect(neboImage.src).toContain("prize-wheel-hd.webp");
+  expect(neboImage.fit).toBe("contain");
 
   await carousel.getByRole("button", { name: "Следующий проект" }).click();
   await expect(carousel.getByText("DROP / AIR FORCE 1", { exact: true })).toBeVisible();
+  const dropImage = await carousel.locator(".hero-project-slide.is-active img").evaluate((image) => ({
+    src: (image as HTMLImageElement).currentSrc,
+    fit: getComputedStyle(image).objectFit,
+  }));
+  expect(dropImage.src).toContain("drop-mobile-first-screen.png");
+  expect(dropImage.fit).toBe("contain");
 
   await carousel.focus();
   await carousel.press("ArrowRight");
   await expect(carousel.getByText("ТЕХНОТЭК", { exact: true })).toBeVisible();
   await expect(carousel.getByText("ПРОТОТИП", { exact: true })).toBeVisible();
+  const tehnotekImage = await carousel.locator(".hero-project-slide.is-active img").evaluate((image) => ({
+    src: (image as HTMLImageElement).currentSrc,
+    fit: getComputedStyle(image).objectFit,
+  }));
+  expect(tehnotekImage.src).toContain("tehnotek-mobile-first-screen.png");
+  expect(tehnotekImage.fit).toBe("contain");
 });
 
 test("project case is reachable and has its own content", async ({ page }) => {

@@ -21,6 +21,20 @@ export const siteConfig = {
   ],
 } as const;
 
+export function estimateTelegramUrl(projectType: string) {
+  const message = [
+    "Здравствуйте!",
+    "",
+    "Хочу получить оценку проекта.",
+    `Что нужно: ${projectType}`,
+    "Кратко о задаче: [опишите идею или цель]",
+    "Примерный бюджет: [укажите сумму]",
+    "Желаемый срок: [укажите срок]",
+  ].join("\n");
+
+  return `https://t.me/${siteConfig.telegram}?text=${encodeURIComponent(message)}`;
+}
+
 export const metrics = [
   { value: "04" },
   { value: "02" },

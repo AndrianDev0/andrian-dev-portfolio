@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getProject, type Project } from "../projects";
 import { projectRussian } from "../i18n";
+import { estimateTelegramUrl } from "../site";
 import {
   absoluteAlternates,
   absoluteSiteUrl,
@@ -154,6 +155,7 @@ function serviceFallback(service: Service) {
   const includes = service.includes.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   const faq = service.faq.map((item) => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join("");
   const caseSection = service.slug === "telegram-boty" ? `<section class="seo-section seo-case-callout"><div class="container seo-case-card"><div><p class="eyebrow">РЕАЛЬНЫЙ КЕЙС</p><h2>Telegram-бот и Mini App для Nebo Bistro</h2></div><p>Рабочая промокампания для привлечения гостей и рекламы партнёров ресторана.</p><a href="/projects/nebo-bistro">Посмотреть кейс →</a></div></section>` : "";
+  const estimateUrl = escapeHtml(estimateTelegramUrl(service.h1));
   return `<div class="seo-page">
     <header class="seo-header"><nav class="seo-nav container"><a class="brand" href="/"><span class="brand-mark"><i></i></span><span class="brand-word">Andrian.Dev</span></a><div class="seo-nav-links"><a href="/#work">Кейс</a><a href="/#services">Услуги</a><a href="/#process">Процесс</a><a href="/#contact">Контакты</a></div><div class="seo-nav-actions"><a class="nav-cta" href="/#contact">Обсудить проект</a></div></nav></header>
     <main>
@@ -161,7 +163,7 @@ function serviceFallback(service: Service) {
       <section class="seo-section seo-overview"><div class="container"><div class="seo-section-heading"><p class="eyebrow">ВОЗМОЖНОСТИ</p><h2>${escapeHtml(service.overviewTitle)}</h2></div><div class="seo-feature-grid">${features}</div></div></section>
       <section class="seo-section seo-includes"><div class="container seo-includes-layout"><div><p class="eyebrow">СОСТАВ РАБОТ</p><h2>${escapeHtml(service.includesTitle)}</h2></div><ul>${includes}</ul></div></section>
       <section class="seo-section seo-process"><div class="container"><div class="seo-section-heading"><p class="eyebrow">ПРОЦЕСС</p><h2>${escapeHtml(service.processTitle)}</h2></div><ol class="seo-process-grid">${process}</ol></div></section>
-      <section class="seo-section seo-pricing"><div class="container seo-pricing-card"><div><p class="eyebrow">ОЦЕНКА ПРОЕКТА</p><h2>${escapeHtml(service.pricingTitle)}</h2></div><p>${escapeHtml(service.pricingText)}</p><a href="/#contact">Получить оценку →</a></div></section>
+      <section class="seo-section seo-pricing"><div class="container seo-pricing-card"><div><p class="eyebrow">ОЦЕНКА ПРОЕКТА</p><h2>${escapeHtml(service.pricingTitle)}</h2></div><p>${escapeHtml(service.pricingText)}</p><a href="${estimateUrl}" target="_blank" rel="noreferrer">Получить оценку →</a></div></section>
       ${caseSection}
       <section class="seo-section seo-faq"><div class="container seo-faq-layout"><div><p class="eyebrow">FAQ</p><h2>Частые вопросы</h2><p>Короткие ответы о составе, оценке и запуске проекта.</p></div><div class="seo-faq-list">${faq}</div></div></section>
       <section class="seo-related"><div class="container"><span>СЛЕДУЮЩАЯ УСЛУГА</span><a href="/${service.relatedSlug}"><h2>${escapeHtml(service.relatedLabel)}</h2><span>↗</span></a></div></section>

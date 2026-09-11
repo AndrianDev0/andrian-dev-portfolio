@@ -1,6 +1,6 @@
 import { ArrowRight, ArrowUpRight, Check, ExternalLink } from "lucide-react";
 import { useEffect } from "react";
-import { siteConfig } from "./site";
+import { estimateTelegramUrl, siteConfig } from "./site";
 import { absoluteSiteUrl, getServiceBySlug, seoServices, serviceRoutePath } from "./site-registry";
 import { ThemeToggle } from "./theme";
 
@@ -27,6 +27,7 @@ export default function ServicePageApp({ slug }: { slug: string }) {
   }
 
   const telegramUrl = `https://t.me/${siteConfig.telegram}`;
+  const estimateUrl = estimateTelegramUrl(service.h1);
 
   return (
     <div className="seo-page">
@@ -126,7 +127,7 @@ export default function ServicePageApp({ slug }: { slug: string }) {
           <div className="container seo-pricing-card">
             <div><p className="eyebrow"><span />ОЦЕНКА ПРОЕКТА</p><h2 id="seo-pricing-title">{service.pricingTitle}</h2></div>
             <p>{service.pricingText}</p>
-            <a href="/#contact">Получить оценку <ArrowUpRight aria-hidden="true" size={17} /></a>
+            <a href={estimateUrl} target="_blank" rel="noreferrer">Получить оценку <ArrowUpRight aria-hidden="true" size={17} /></a>
           </div>
         </section>
 

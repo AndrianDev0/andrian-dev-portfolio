@@ -183,6 +183,13 @@ for (const viewport of [
     await expect(page.getByRole("heading", { level: 1, name: /Разработка сайтов под ключ/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /Обсудить задачу/ }).first()).toBeVisible();
     await expect(page.locator(".seo-feature-grid article")).toHaveCount(4);
+    const estimateLink = page.getByRole("link", { name: /Получить оценку/ });
+    await expect(estimateLink).toHaveAttribute("target", "_blank");
+    const estimateHref = await estimateLink.getAttribute("href");
+    const estimateUrl = new URL(estimateHref!);
+    expect(estimateUrl.origin + estimateUrl.pathname).toBe("https://t.me/qweJSq");
+    expect(estimateUrl.searchParams.get("text")).toContain("Что нужно: Разработка сайтов под ключ для бизнеса");
+    expect(estimateUrl.searchParams.get("text")).toContain("Примерный бюджет: [укажите сумму]");
 
     const layout = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,

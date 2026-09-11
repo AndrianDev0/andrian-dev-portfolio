@@ -68,7 +68,18 @@ test("hero project carousel supports buttons and keyboard navigation", async ({ 
     fit: getComputedStyle(image).objectFit,
   }));
   expect(dropImage.src).toContain("drop-mobile-first-screen.png");
-  expect(dropImage.fit).toBe("contain");
+  expect(dropImage.fit).toBe("cover");
+  const openControl = await carousel.locator(".hero-project-slide.is-active .hero-project-open").evaluate((control) => {
+    const icon = control.querySelector("svg") as SVGElement;
+    const controlRect = control.getBoundingClientRect();
+    const iconRect = icon.getBoundingClientRect();
+    return {
+      x: Math.abs(controlRect.x + controlRect.width / 2 - (iconRect.x + iconRect.width / 2)),
+      y: Math.abs(controlRect.y + controlRect.height / 2 - (iconRect.y + iconRect.height / 2)),
+    };
+  });
+  expect(openControl.x).toBeLessThan(1);
+  expect(openControl.y).toBeLessThan(1);
   await expect(page.locator(".project-flagship").getByRole("heading", { name: "DROP / AIR FORCE 1" })).toBeVisible();
   await expect(page.locator(".project-flagship").getByText("РАБОЧИЙ КОНЦЕПТ", { exact: true })).toBeVisible();
   await expect(page.locator(".project-layers")).toHaveCount(0);
@@ -82,7 +93,7 @@ test("hero project carousel supports buttons and keyboard navigation", async ({ 
     fit: getComputedStyle(image).objectFit,
   }));
   expect(tehnotekImage.src).toContain("tehnotek-mobile-first-screen.png");
-  expect(tehnotekImage.fit).toBe("contain");
+  expect(tehnotekImage.fit).toBe("cover");
   await expect(page.locator(".project-flagship").getByRole("heading", { name: "ТЕХНОТЭК" })).toBeVisible();
   await expect(page.locator(".project-flagship").getByText("ПРОТОТИП", { exact: true })).toBeVisible();
 

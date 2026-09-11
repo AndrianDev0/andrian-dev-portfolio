@@ -30,24 +30,24 @@
 @media(min-width:1600px){.hero-project-carousel{height:640px;max-width:760px}.hero-project-viewport{height:570px}.hero-project-frame{width:680px;height:540px}}
 @media(max-width:900px){.hero .hero-visual-wrap{height:auto;margin-top:30px}.hero-project-carousel{height:580px;max-width:650px}.hero-project-viewport{height:515px}.hero-project-frame{width:94%;height:505px}}
 @media(max-width:600px){
-  .hero-project-carousel{width:100%;height:clamp(831px,calc((100vw - 32px) * 2.1641 + 208px),987px)}
-  .hero-project-viewport{height:clamp(767px,calc((100vw - 32px) * 2.1641 + 144px),923px)}
+  .hero-project-carousel{width:100%;height:clamp(798px,calc((100vw - 32px) * 2.05 + 208px),946px)}
+  .hero-project-viewport{height:clamp(734px,calc((100vw - 32px) * 2.05 + 144px),882px)}
   .hero-project-slide{transform:translateX(18px);transition:opacity .28s var(--ease),transform .4s var(--ease)}
-  .hero-project-frame{inset:0;grid-template-rows:34px clamp(623px,calc((100vw - 32px) * 2.1641),779px) 108px;width:100%;height:clamp(765px,calc((100vw - 32px) * 2.1641 + 142px),921px);border-color:rgba(129,133,147,.42);border-radius:13px;box-shadow:0 24px 55px -38px rgba(7,8,12,.8)}
+  .hero-project-frame{inset:0;grid-template-rows:34px clamp(590px,calc((100vw - 32px) * 2.05),738px) 108px;width:100%;height:clamp(732px,calc((100vw - 32px) * 2.05 + 142px),880px);border-color:rgba(129,133,147,.42);border-radius:13px;box-shadow:0 24px 55px -38px rgba(7,8,12,.8)}
   .hero-project-top{padding:0 12px;font-size:6px;letter-spacing:.13em}
   .hero-project-top i{width:7px;height:7px}
   .hero-project-media-nebo{display:block}
   .hero-project-media-nebo .nebo-proof-bot{display:none}
   .hero-project-media-nebo .nebo-proof-app{display:block;width:100%;height:100%}
   .hero-project-media{width:min(100%,360px);justify-self:center;overflow:hidden;background:#050506}
-  .hero-project-media img,.hero-project-image img,.hero-project-image-tehnotek img{width:100%;height:100%;object-fit:contain;object-position:center top;filter:none;transform:none}
+  .hero-project-media img{width:100%;height:100%;object-position:center top;filter:none;transform:none}
+  .hero-project-media-nebo img{object-fit:contain}
   .nebo-proof-direction,.hero-project-media figcaption{display:none}
   .hero-project-footer{padding:0 12px 0 14px;gap:10px}
   .hero-project-footer strong{font-size:18px;line-height:1.05}
   .hero-project-footer>div span{max-width:215px;margin-top:7px;font-size:11px;line-height:1.35;letter-spacing:0;color:#9a99a2}
-  .hero-project-open{display:grid;place-items:center;width:44px;height:44px;gap:0;border:1px solid #ffffff24;border-radius:50%;font-size:0;color:#d8d5df}
-  /* Lucide's diagonal arrow has more visual weight in the upper-right; this optical nudge centers it in the circle. */
-  .hero-project-open svg{width:18px;height:18px;transform:translate(1px,-1px)}
+  .hero-project-open{display:flex;align-items:center;justify-content:center;width:44px;height:44px;gap:0;border:1px solid #ffffff24;border-radius:50%;font-size:0;color:#d8d5df}
+  .hero-project-open svg{display:block;width:18px;height:18px}
   .hero-project-controls{left:0;right:0;min-height:58px;padding-top:8px;font-size:9px}
   .hero-project-dots{gap:6px}
   .hero-project-dots button{width:22px}

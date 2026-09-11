@@ -173,25 +173,29 @@ export function Hero() {
 }
 
 export function ContactForm() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [hasCustomBudget, setHasCustomBudget] = useState(false);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formElement = event.currentTarget;
     setStatus("loading");
     setMessage("");
     const form = new FormData(formElement);
+    const selectedBudget = String(form.get("budget") ?? "");
+    const customBudget = String(form.get("customBudget") ?? "").trim();
     try {
       const result = await submitProjectRequest({
         name: String(form.get("name") ?? ""),
         contact: String(form.get("contact") ?? ""),
         projectDescription: String(form.get("projectDescription") ?? ""),
-        budget: String(form.get("budget") ?? ""),
+        budget: selectedBudget === "custom" ? customBudget : selectedBudget,
         website: String(form.get("website") ?? ""),
       });
       if (!result.ok) throw new Error("SUBMISSION_FAILED");
       formElement.reset();
+      setHasCustomBudget(false);
       setStatus("success");
     } catch (error) {
       setMessage(error instanceof Error && error.message === "MISSING_FIELDS" ? t.form.incomplete : t.form.error);
@@ -203,7 +207,24 @@ export function ContactForm() {
       <label className="form-honeypot" aria-hidden="true">Website<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
       <div className="field-row"><label><span>{t.form.name} *</span><input name="name" autoComplete="name" required maxLength={100} placeholder={t.form.namePlaceholder} /></label><label><span>{t.form.contact} *</span><input name="contact" autoComplete="email" required maxLength={150} placeholder={t.form.contactPlaceholder} /></label></div>
       <label><span>{t.form.need} *</span><textarea name="projectDescription" required maxLength={3000} rows={5} placeholder={t.form.needPlaceholder} /></label>
-      <label><span>{t.form.budget}</span><select name="budget" defaultValue=""><option value="">{t.form.budgetPlaceholder}</option>{siteConfig.budgets.map((budget) => <option key={budget} value={budget}>{budget}</option>)}</select></label>
+      <label>
+        <span>{t.form.budget}</span>
+        <select
+          name="budget"
+          defaultValue=""
+          onChange={(event) => setHasCustomBudget(event.currentTarget.value === "custom")}
+          aria-controls={hasCustomBudget ? "custom-budget" : undefined}
+        >
+          <option value="">{t.form.budgetPlaceholder}</option>
+          {siteConfig.budgets.map((budget) => <option key={budget.value} value={budget.value}>{budget[language]}</option>)}
+        </select>
+      </label>
+      {hasCustomBudget ? (
+        <label id="custom-budget">
+          <span>{t.form.customBudget} *</span>
+          <input name="customBudget" inputMode="text" required maxLength={80} placeholder={t.form.customBudgetPlaceholder} />
+        </label>
+      ) : null}
       <button className="submit-button" type="submit" disabled={status === "loading"}>
         {status === "loading" ? <><span className="spinner" /> {t.form.sending}</> : <>{t.form.send} <ArrowUpRight size={19} /></>}
       </button>

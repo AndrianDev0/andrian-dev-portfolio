@@ -93,6 +93,46 @@ test("language and theme choices survive real navigation", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
+test("budget ranges are localized and a custom amount is sent", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  let submittedBudget = "";
+  await page.route("https://formsubmit.co/**", async (route) => {
+    submittedBudget = (route.request().postDataJSON() as Record<string, string>)["Примерный бюджет"];
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ success: true }) });
+  });
+  await page.goto("/#contact", { waitUntil: "networkidle" });
+
+  const budget = page.locator('select[name="budget"]');
+  await expect(budget.locator("option")).toHaveText([
+    "Выберите диапазон (необязательно)",
+    "5 000–10 000 ₽",
+    "10 000–20 000 ₽",
+    "20 000–50 000 ₽",
+    "Свой вариант",
+  ]);
+  await budget.selectOption("custom");
+  const customBudget = page.locator('input[name="customBudget"]');
+  await expect(customBudget).toBeVisible();
+  await expect(customBudget).toHaveAttribute("required", "");
+
+  await page.locator('input[name="name"]').fill("Тест");
+  await page.locator('input[name="contact"]').fill("@test");
+  await page.locator('textarea[name="projectDescription"]').fill("Тестовая заявка");
+  await customBudget.fill("35 000 ₽");
+  await page.getByRole("button", { name: "Отправить заявку" }).click();
+  await expect(page.getByText("Заявка отправлена")).toBeVisible();
+  expect(submittedBudget).toBe("35 000 ₽");
+
+  await page.goto("/en#contact", { waitUntil: "networkidle" });
+  await expect(page.locator('select[name="budget"] option')).toHaveText([
+    "Select a range (optional)",
+    "₽5,000–10,000",
+    "₽10,000–20,000",
+    "₽20,000–50,000",
+    "Custom amount",
+  ]);
+});
+
 const cases = [
   { slug: "nebo-bistro", title: "NEBO BISTRO" },
   { slug: "drop-3d-store", title: "DROP / AIR FORCE 1" },

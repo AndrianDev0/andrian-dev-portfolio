@@ -1,4 +1,5 @@
 .services .services-grid{
+  display:grid;
   grid-template-columns:repeat(12,minmax(0,1fr));
   grid-template-rows:repeat(2,360px);
   gap:0;
@@ -31,17 +32,16 @@
 .services .service-more svg{transition:transform .25s var(--ease)}.services .service-more:hover svg{transform:translateX(4px)}
 .services .service-more:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
 .services .service-visual{position:absolute;z-index:2;top:28px;right:28px;bottom:28px;width:43%;height:auto;color:#dce1e9}
-.service-schematic{position:relative;height:100%;overflow:hidden;border-left:1px solid var(--line);padding-left:22px}
-.service-schematic::before{content:"";position:absolute;inset:auto 0 62px 22px;height:1px;background:linear-gradient(90deg,var(--project-accent,#7186f4),transparent)}
-.service-schematic-label{display:block;color:#68717e;font:6px var(--font-geist-mono);letter-spacing:.16em}
-.service-schematic>strong{position:absolute;right:-.04em;top:22%;color:var(--text);font-size:clamp(55px,6vw,92px);font-weight:480;line-height:.8;letter-spacing:-.085em;opacity:.92}
-.service-schematic-path{position:absolute;left:22px;right:0;bottom:27px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.service-schematic-path span{position:relative;padding-top:12px;border-top:1px solid var(--line);color:#8d96a3;font:6px var(--font-geist-mono);letter-spacing:.1em}
-.service-schematic-path span::before{content:"";position:absolute;top:-2px;left:0;width:4px;height:4px;border-radius:50%;background:#8292f2}
-.service-schematic-path b{display:block;margin-bottom:7px;color:#525b68;font-weight:500}
-.service-schematic-mark{position:absolute;right:1px;top:12px;width:10px;height:10px;border-top:1px solid #8394f4;border-right:1px solid #8394f4}
+.service-photo{position:relative;height:100%;overflow:hidden;border:1px solid var(--line);background:#0b0d12;isolation:isolate}
+.service-photo::after{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(180deg,rgba(5,7,11,.04) 32%,rgba(5,7,11,.78) 100%)}
+.service-photo img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.72) contrast(1.06);opacity:.9;transition:transform .7s var(--ease),filter .35s var(--ease)}
+.service-item article:hover .service-photo img{transform:scale(1.025);filter:saturate(.95) contrast(1.05)}
+.service-photo-label,.service-photo-index{position:absolute;z-index:2;color:#edf0f7;font:600 7px var(--font-geist-mono);letter-spacing:.14em}
+.service-photo-label{left:14px;bottom:13px}.service-photo-index{right:13px;top:12px;color:rgba(237,240,247,.68)}
+.service-photo-chat img{object-position:center 56%}.service-photo-dashboard img{object-position:center}.service-photo-nodes img{object-position:43% center}
 [data-theme="light"] .services .service-item article{background:transparent;box-shadow:none}
 [data-theme="light"] .services .service-item article:hover{border-color:var(--line);background:rgba(255,255,255,.48);box-shadow:none}
+[data-theme="light"] .service-photo{border-color:rgba(16,20,29,.14);box-shadow:0 18px 38px rgba(30,39,62,.12)}
 .form-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
 .skip-link{position:fixed;z-index:1001;top:10px;left:12px;padding:11px 14px;border-radius:9px;color:#fff;background:#171a21;font-size:11px;transform:translateY(-160%);transition:transform .2s var(--ease);pointer-events:auto}.skip-link:focus{transform:translateY(0)}
 @media(max-width:900px){
@@ -54,7 +54,6 @@
   .services .service-text h3{font-size:30px}
   .services .service-text p{margin:13px 0 11px;font-size:10px;line-height:1.55}
   .services .service-visual{top:24px;right:24px;bottom:24px;width:42%}
-  .service-schematic>strong{font-size:clamp(54px,11vw,82px)}
 }
 @media(max-width:600px){
   .services{scroll-margin-top:76px}
@@ -63,15 +62,11 @@
   .services .service-item article{padding:20px}
   .services .service-number{width:100%}
   .services .service-visual{left:20px;right:20px;top:54px;bottom:auto;width:auto;height:148px}
-  .service-schematic{padding-left:15px}
-  .service-schematic::before{inset:auto 0 47px 15px}
-  .service-schematic>strong{top:23%;font-size:60px}
-  .service-schematic-path{left:15px;bottom:14px}
+  .service-photo-label,.service-photo-index{font-size:8px}
   .services .service-text{left:20px;right:20px;bottom:17px;max-width:none}
   .services .service-text h3{font-size:28px}
   .services .service-text p{max-width:100%;margin:11px 0 6px;color:var(--muted);font-size:13px;line-height:1.5}
   .services .service-more{font-size:9px}
-  .service-schematic-label,.service-schematic-path span{font-size:7px}
 }
 @media(hover:none){.services .service-item article:active{background:rgba(126,142,230,.045)}}
-@media(prefers-reduced-motion:reduce){.services .service-item article,.services .service-more svg{transition:none}}
+@media(prefers-reduced-motion:reduce){.services .service-item article,.services .service-more svg,.service-photo img{transition:none}}

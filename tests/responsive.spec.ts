@@ -22,17 +22,26 @@ for (const viewport of viewports) {
     const layout = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       document: document.documentElement.scrollWidth,
+      gridDisplay: getComputedStyle(document.querySelector<HTMLElement>(".services-grid")!).display,
       cards: [...document.querySelectorAll<HTMLElement>(".service-item")].map((card) => {
         const rect = card.getBoundingClientRect();
-        return { left: rect.left, right: rect.right, height: rect.height };
+        return { left: rect.left, right: rect.right, top: rect.top, width: rect.width, height: rect.height };
       }),
     }));
 
     expect(layout.document).toBeLessThanOrEqual(layout.viewport + 1);
+    expect(layout.gridDisplay).toBe("grid");
     for (const card of layout.cards) {
       expect(card.left).toBeGreaterThanOrEqual(-1);
       expect(card.right).toBeLessThanOrEqual(layout.viewport + 1);
       expect(card.height).toBeGreaterThan(300);
+    }
+    if (viewport.width > 900) {
+      expect(Math.abs(layout.cards[0].top - layout.cards[1].top)).toBeLessThan(1);
+      expect(Math.abs(layout.cards[2].top - layout.cards[3].top)).toBeLessThan(1);
+      expect(layout.cards[0].width).toBeGreaterThan(layout.cards[1].width);
+    } else {
+      expect(layout.cards[1].top).toBeGreaterThan(layout.cards[0].top);
     }
 
     await page.getByRole("button", { name: "RU" }).click();
@@ -47,6 +56,17 @@ for (const viewport of viewports) {
     }
   });
 }
+
+test("service photography loads responsively on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.locator("#services").scrollIntoViewIfNeeded();
+  const images = page.locator(".service-photo img");
+  await expect(images).toHaveCount(4);
+  await expect.poll(async () => images.evaluateAll((elements) => elements.every((element) => (element as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  const sources = await images.evaluateAll((elements) => elements.map((element) => (element as HTMLImageElement).currentSrc));
+  for (const source of sources) expect(source).toContain("-sm.webp");
+});
 
 test("hero project carousel supports buttons and keyboard navigation", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });

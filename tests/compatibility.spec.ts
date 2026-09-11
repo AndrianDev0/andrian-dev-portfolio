@@ -54,6 +54,11 @@ for (const language of languages) {
         await expectNoHorizontalOverflow(page);
 
         if (viewport.name === "mobile") {
+          const heroLines = await page.locator(".hero-line").evaluateAll((elements) =>
+            elements.map((element) => ({ visible: element.clientWidth, content: element.scrollWidth })),
+          );
+          for (const line of heroLines) expect(line.content).toBeLessThanOrEqual(line.visible + 1);
+          await expect(page.locator(".hero-copy")).toHaveCSS("opacity", "1");
           await page.getByRole("button", { name: language.menu }).click();
           const menu = page.locator("#mobile-navigation");
           await expect(menu).toBeVisible();
@@ -73,14 +78,16 @@ test("language and theme choices survive real navigation", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
 
   await page.locator(".theme-toggle").first().click();
+  await page.evaluate(() => window.scrollTo(0, 700));
   await page.getByRole("button", { name: "EN" }).click();
-  await page.waitForURL("**/en");
+  await page.waitForURL("**/en#top");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  expect(await page.evaluate(() => window.scrollY)).toBeLessThan(2);
 
   await page.goto("/en/projects/drop-3d-store", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "RU" }).click();
-  await page.waitForURL("**/projects/drop-3d-store");
+  await page.waitForURL("**/projects/drop-3d-store#top");
   await expect(page.locator("html")).toHaveAttribute("lang", "ru");
   await expect(page.getByRole("heading", { level: 1, name: "DROP / AIR FORCE 1" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");

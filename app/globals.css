@@ -203,6 +203,11 @@ section[id] { scroll-margin-top: 88px; }
 
 @media(max-width:900px){.nav-shell{grid-template-columns:1fr auto auto}.nav-actions{gap:6px}.nav-actions .nav-cta{display:none}}
 @media(max-width:600px){[data-language="ru"] .hero h1{font-size:clamp(38px,10.6vw,47px)}.language-switcher{height:32px}.language-switcher button{width:29px;height:24px}}
+@media(max-width:600px){
+  [data-language="en"] .hero h1{font-size:clamp(37px,10.2vw,46px);letter-spacing:-.062em}
+  .hero-line,.hero-enter{animation:none}
+  .hero-enter{opacity:1;transform:none}
+}
 @media(max-width:340px){.nav-shell{padding-left:10px;padding-right:6px}.brand-word{font-size:14px}.brand-mark{width:28px;height:28px}.nav-actions{gap:4px}.language-switcher{padding:2px}.language-switcher button{width:27px}.theme-toggle{width:30px;height:30px}.menu-button{width:40px}}
 .case-nav-actions{display:flex;align-items:center;gap:18px}.case-nav-actions>a{display:flex;align-items:center;gap:9px;color:#8e96a2;font-size:11px}
 @media(max-width:600px){.case-nav-actions{gap:9px}.case-nav-actions>a{font-size:0}.case-nav-actions>a svg{width:18px;height:18px}}

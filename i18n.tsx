@@ -297,7 +297,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const target = next === "en"
       ? (isProject ? `/en${path.replace(/^\/en/, "")}` : "/en")
       : (isProject ? path.replace(/^\/en/, "") : "/");
-    if (target !== path) window.location.assign(`${target}${hash}`);
+    if (target !== path) window.location.assign(`${target}${hash || "#top"}`);
   };
 
   const value = useMemo(() => ({ language, setLanguage, t: copy[language] }), [language]);

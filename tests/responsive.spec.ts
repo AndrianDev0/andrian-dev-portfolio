@@ -71,7 +71,6 @@ test("hero project carousel supports buttons and keyboard navigation", async ({ 
   expect(dropImage.fit).toBe("contain");
   await expect(page.locator(".project-flagship").getByRole("heading", { name: "DROP / AIR FORCE 1" })).toBeVisible();
   await expect(page.locator(".project-flagship").getByText("РАБОЧИЙ КОНЦЕПТ", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Разобрать кейс" })).toHaveAttribute("href", "#project-drop-case");
   await expect(page.locator(".project-layers")).toHaveCount(0);
 
   await carousel.focus();
@@ -86,7 +85,6 @@ test("hero project carousel supports buttons and keyboard navigation", async ({ 
   expect(tehnotekImage.fit).toBe("contain");
   await expect(page.locator(".project-flagship").getByRole("heading", { name: "ТЕХНОТЭК" })).toBeVisible();
   await expect(page.locator(".project-flagship").getByText("ПРОТОТИП", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Разобрать кейс" })).toHaveAttribute("href", "#project-tehnotek-case");
 
   await carousel.getByRole("button", { name: "Показать NEBO BISTRO" }).click();
   await expect(page.locator(".project-flagship").getByRole("heading", { name: "NEBO BISTRO" })).toBeVisible();

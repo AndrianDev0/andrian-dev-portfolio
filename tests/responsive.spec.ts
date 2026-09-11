@@ -112,8 +112,8 @@ test("project case is reachable and has its own content", async ({ page }) => {
 });
 
 for (const projectCase of [
-  { slug: "drop-3d-store", title: "DROP / AIR FORCE 1", liveLabel: /Открыть рабочий концепт/, image: "drop-mobile-first-screen.png" },
-  { slug: "tehnotek-prototype", title: "ТЕХНОТЭК", liveLabel: /Открыть прототип/, image: "tehnotek-mobile-first-screen.png" },
+  { slug: "drop-3d-store", title: "DROP / AIR FORCE 1", liveLabel: /Открыть рабочий концепт/, image: "drop-air-force-1.webp" },
+  { slug: "tehnotek-prototype", title: "ТЕХНОТЭК", liveLabel: /Открыть прототип/, image: "tehnotek-prototype.webp" },
 ] as const) {
   test(`mobile: ${projectCase.slug} has a complete case study`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -122,8 +122,14 @@ for (const projectCase of [
     await expect(page.getByRole("heading", { name: projectCase.title })).toBeVisible();
     await expect(page.locator(".case-story article")).toHaveCount(3);
     await expect(page.getByRole("link", { name: projectCase.liveLabel })).toBeVisible();
-    const caseImage = await page.locator(".case-highlight-visual img").evaluate((image) => (image as HTMLImageElement).currentSrc);
-    expect(caseImage).toContain(projectCase.image);
+    const caseVisual = await page.locator(".case-highlight-visual .selected-work-visual").evaluate((visual) => {
+      const image = visual.querySelector("img") as HTMLImageElement;
+      const rect = visual.getBoundingClientRect();
+      return { image: image.currentSrc, width: rect.width, height: rect.height };
+    });
+    expect(caseVisual.image).toContain(projectCase.image);
+    expect(caseVisual.width).toBeGreaterThan(330);
+    expect(caseVisual.height / caseVisual.width).toBeLessThan(0.65);
     await expect(page).toHaveTitle(new RegExp(projectCase.slug === "drop-3d-store" ? "DROP" : "ТЕХНОТЭК", "i"));
   });
 }

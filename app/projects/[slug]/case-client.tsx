@@ -108,7 +108,7 @@ export function ProjectCaseClient({ project }: { project: Project }) {
         <h1>{project.title}</h1>
         <div className="case-summary"><p>{description}</p><div>{project.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div></div>
         <div className="case-project-actions"><a href={project.liveUrl} target="_blank" rel="noreferrer">{customDetails?.openLabel ?? t.case.openTelegram} <ArrowUpRight size={16} /></a>{project.slug === "nebo-bistro" && <a href={project.previewUrl} target="_blank" rel="noreferrer">{t.case.openMiniApp} <ArrowUpRight size={16} /></a>}</div>
-        <div className={`case-visual${portfolioProject ? " case-highlight-visual" : ""}`}>{portfolioProject ? <PortfolioHighlightVisual project={portfolioProject} /> : <CaseStudyVisual kind={project.kind} />}</div>
+        <div className={`case-visual${portfolioProject ? " case-highlight-visual" : ""}`}>{portfolioProject ? <PortfolioHighlightVisual project={portfolioProject} context="case" /> : <CaseStudyVisual kind={project.kind} />}</div>
       </section>
       <section className="case-body container">
         <aside><span>{t.case.label}</span><p>{note}</p></aside>

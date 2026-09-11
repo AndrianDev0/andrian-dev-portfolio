@@ -7,11 +7,11 @@ export function ProjectVisual({ project }: { project: Project }) {
   return <NeboBotFlowVisual />;
 }
 
-export function PortfolioHighlightVisual({ project }: { project: PortfolioHighlight }) {
+export function PortfolioHighlightVisual({ project, context = "card" }: { project: PortfolioHighlight; context?: "card" | "case" }) {
   if (project.visual === "drop") {
     return (
       <figure className="selected-work-visual drop-project-visual">
-        <picture><source media="(max-width: 600px)" srcSet="/projects/drop-mobile-first-screen.png" /><img src="/projects/drop-air-force-1.webp" alt="Главный экран интерактивного 3D-концепта DROP с моделью Air Force 1" loading="lazy" decoding="async" /></picture>
+        <picture>{context === "card" && <source media="(max-width: 600px)" srcSet="/projects/drop-mobile-first-screen.png" />}<img src="/projects/drop-air-force-1.webp" alt="Главный экран интерактивного 3D-концепта DROP с моделью Air Force 1" loading="lazy" decoding="async" /></picture>
         <figcaption><span>REAL-TIME 3D</span><b>SCROLL / INTERACTION</b></figcaption>
       </figure>
     );
@@ -20,7 +20,7 @@ export function PortfolioHighlightVisual({ project }: { project: PortfolioHighli
   if (project.visual === "tehnotek") {
     return (
       <figure className="selected-work-visual tehnotek-project-visual">
-        <picture><source media="(max-width: 600px)" srcSet="/projects/tehnotek-mobile-first-screen.png" /><img src="/projects/tehnotek-prototype.webp" alt="Прототип продуктовой страницы ТЕХНОТЭК для инженерного производства" loading="lazy" decoding="async" /></picture>
+        <picture>{context === "card" && <source media="(max-width: 600px)" srcSet="/projects/tehnotek-mobile-first-screen.png" />}<img src="/projects/tehnotek-prototype.webp" alt="Прототип продуктовой страницы ТЕХНОТЭК для инженерного производства" loading="lazy" decoding="async" /></picture>
         <figcaption><span>INDUSTRIAL B2B</span><b>WORKING PROTOTYPE</b></figcaption>
       </figure>
     );

@@ -8,8 +8,8 @@ import "./styles/hero-studio.css";
 
 const heroProjects = [
   { id: "nebo", title: "NEBO BISTRO", href: "/projects/nebo-bistro", external: false },
-  { id: "drop", title: "DROP / AIR FORCE 1", href: "https://drop-air-force-1.quad-thatch-5fteamfa.chatgpt.site", external: true },
-  { id: "tehnotek", title: "ТЕХНОТЭК", href: "https://tehnotek-prototype.vercel.app/", external: true },
+  { id: "drop", title: "DROP / AIR FORCE 1", href: "/projects/drop-3d-store", external: false },
+  { id: "tehnotek", title: "ТЕХНОТЭК", href: "/projects/tehnotek-prototype", external: false },
 ] as const;
 
 function ProjectMedia({ id, ru, active }: { id: (typeof heroProjects)[number]["id"]; ru: boolean; active: boolean }) {
@@ -77,7 +77,7 @@ export function HeroVisual() {
       <div className="hero-project-viewport" aria-live="polite">
         {heroProjects.map((project, index) => {
           const isActive = index === active;
-          const projectHref = project.id === "nebo" && language === "en" ? `/en${project.href}` : project.href;
+          const projectHref = !project.external && language === "en" ? `/en${project.href}` : project.href;
           const isPrototype = project.id === "tehnotek";
           return (
             <article className={`hero-project-slide hero-project-slide-${project.id}${isActive ? " is-active" : ""}`} aria-hidden={!isActive} key={project.id}>
@@ -89,7 +89,7 @@ export function HeroVisual() {
                 <ProjectMedia id={project.id} ru={ru} active={isActive} />
                 <div className="hero-project-footer">
                   <div><strong>{project.title}</strong><span>{project.id === "nebo" ? (ru ? "Привлечение гостей · реклама партнёров" : "Customer acquisition · partner promotion") : project.id === "drop" ? (ru ? "3D-витрина продукта" : "3D product storefront") : (ru ? "Инженерная продуктовая страница" : "Industrial product page")}</span></div>
-                  <span className="hero-project-open">{project.id === "nebo" ? (ru ? "Смотреть кейс" : "View case") : (ru ? "Открыть проект" : "Open project")}<ArrowUpRight aria-hidden="true" size={16} /></span>
+                  <span className="hero-project-open">{ru ? "Смотреть кейс" : "View case"}<ArrowUpRight aria-hidden="true" size={16} /></span>
                 </div>
               </a>
             </article>

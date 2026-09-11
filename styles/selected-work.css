@@ -29,7 +29,6 @@
 
 .selected-work-card {
   position: relative;
-  scroll-margin-top: 108px;
   display: grid;
   grid-template-rows: auto 310px 1fr;
   min-height: 690px;

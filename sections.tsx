@@ -76,7 +76,7 @@ export function ProjectsSection() {
                   <div className="project-actions">
                     {selectedHighlight ? (
                       <>
-                        <a className="case-link" href={`#project-${selectedHighlight.visual}-case`}>{language === "ru" ? "Разобрать кейс" : "View case"} <ArrowUpRight size={17} /></a>
+                        <a className="case-link" href={`${language === "en" ? "/en" : ""}/projects/${detail.slug}`}>{language === "ru" ? "Разобрать кейс" : "View case"} <ArrowUpRight size={17} /></a>
                         <a className="case-link case-link-live" href={detail.liveUrl} target="_blank" rel="noreferrer">{language === "ru" ? "Открыть проект" : "Open project"} <ArrowUpRight size={17} /></a>
                       </>
                     ) : (

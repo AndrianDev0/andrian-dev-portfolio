@@ -111,6 +111,23 @@ test("project case is reachable and has its own content", async ({ page }) => {
   await expect(page).toHaveTitle(/Nebo Bistro/i);
 });
 
+for (const projectCase of [
+  { slug: "drop-3d-store", title: "DROP / AIR FORCE 1", liveLabel: /Открыть рабочий концепт/, image: "drop-mobile-first-screen.png" },
+  { slug: "tehnotek-prototype", title: "ТЕХНОТЭК", liveLabel: /Открыть прототип/, image: "tehnotek-mobile-first-screen.png" },
+] as const) {
+  test(`mobile: ${projectCase.slug} has a complete case study`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/projects/${projectCase.slug}`, { waitUntil: "networkidle" });
+
+    await expect(page.getByRole("heading", { name: projectCase.title })).toBeVisible();
+    await expect(page.locator(".case-story article")).toHaveCount(3);
+    await expect(page.getByRole("link", { name: projectCase.liveLabel })).toBeVisible();
+    const caseImage = await page.locator(".case-highlight-visual img").evaluate((image) => (image as HTMLImageElement).currentSrc);
+    expect(caseImage).toContain(projectCase.image);
+    await expect(page).toHaveTitle(new RegExp(projectCase.slug === "drop-3d-store" ? "DROP" : "ТЕХНОТЭК", "i"));
+  });
+}
+
 for (const viewport of [
   { name: "mobile", width: 390, height: 844 },
   { name: "desktop", width: 1440, height: 900 },

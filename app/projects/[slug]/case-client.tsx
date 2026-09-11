@@ -3,9 +3,9 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { MagneticButton } from "../../../magnetic-button";
 import { projectRussian, useLanguage } from "../../../i18n";
-import type { Project } from "../../../projects";
+import { portfolioHighlights, type Project } from "../../../projects";
 import { siteConfig } from "../../../site";
-import { CaseStudyVisual } from "../../../visuals";
+import { CaseStudyVisual, PortfolioHighlightVisual } from "../../../visuals";
 import { ThemeToggle } from "../../../theme";
 
 const neboScreenshots = [
@@ -39,6 +39,49 @@ const neboScreenshots = [
   },
 ] as const;
 
+const projectCaseDetails = {
+  "drop-3d-store": {
+    en: {
+      status: "LIVE CONCEPT",
+      note: "A working 3D commerce concept focused on product presence, controlled interaction, and a clear route to selection.",
+      challengeTitle: "Make the product memorable without hiding the purchase path.",
+      solutionTitle: "A real-time 3D scene directed by the interface.",
+      resultTitle: "A complete, responsive commerce concept.",
+      points: ["Real-time Three.js product scene", "Three visual product editions", "Responsive interaction and purchase path"],
+      openLabel: "Open live concept",
+    },
+    ru: {
+      status: "РАБОЧИЙ КОНЦЕПТ",
+      note: "Рабочий 3D-концепт магазина, где выразительная подача товара связана с понятным выбором и переходом к покупке.",
+      challengeTitle: "Запомниться подачей и не спрятать путь к покупке.",
+      solutionTitle: "3D-сцена в реальном времени под управлением интерфейса.",
+      resultTitle: "Цельный адаптивный e-commerce-концепт.",
+      points: ["3D-сцена товара на Three.js", "Три визуальные версии продукта", "Адаптивное взаимодействие и путь к покупке"],
+      openLabel: "Открыть рабочий концепт",
+    },
+  },
+  "tehnotek-prototype": {
+    en: {
+      status: "PROTOTYPE",
+      note: "A working B2B page prototype that translates an industrial offer into a clear path from expertise to a qualified request.",
+      challengeTitle: "Explain engineering value without a wall of specifications.",
+      solutionTitle: "Positioning, proof, and enquiry in one reading sequence.",
+      resultTitle: "A working prototype ready for validation.",
+      points: ["Clear technical positioning", "Manufacturing case placed near the decision", "Brief or drawing upload with the enquiry"],
+      openLabel: "Open prototype",
+    },
+    ru: {
+      status: "ПРОТОТИП",
+      note: "Рабочий прототип B2B-страницы, который переводит сложное производственное предложение в понятный путь от компетенций к заявке.",
+      challengeTitle: "Объяснить инженерную ценность без стены характеристик.",
+      solutionTitle: "Позиционирование, доказательства и заявка в одном сценарии.",
+      resultTitle: "Рабочий прототип, готовый к проверке на аудитории.",
+      points: ["Понятное техническое позиционирование", "Производственный кейс рядом с точкой решения", "Передача ТЗ или чертежа вместе с заявкой"],
+      openLabel: "Открыть прототип",
+    },
+  },
+} as const;
+
 export function ProjectCaseClient({ project }: { project: Project }) {
   const { language, setLanguage, t } = useLanguage();
   const homePath = language === "en" ? "/en" : "/";
@@ -48,23 +91,31 @@ export function ProjectCaseClient({ project }: { project: Project }) {
   const challenge = language === "ru" ? localized.challenge : project.challenge;
   const solution = language === "ru" ? localized.solution : project.solution;
   const result = language === "ru" ? localized.result : project.result;
+  const portfolioProject = portfolioHighlights.find((item) => item.slug === project.slug);
+  const customDetails = projectCaseDetails[project.slug as keyof typeof projectCaseDetails]?.[language];
+  const status = customDetails?.status ?? t.case.real;
+  const note = customDetails?.note ?? t.case.note;
+  const challengeTitle = customDetails?.challengeTitle ?? t.case.challengeTitle;
+  const solutionTitle = customDetails?.solutionTitle ?? t.case.solutionTitle;
+  const resultTitle = customDetails?.resultTitle ?? t.case.resultTitle;
+  const points = customDetails?.points ?? t.case.points;
 
   return (
-    <main className="case-page" style={{ "--project-accent": project.accent } as React.CSSProperties}>
+    <main className={`case-page case-${project.slug}`} style={{ "--project-accent": project.accent } as React.CSSProperties}>
       <nav className="case-nav"><a className="brand" href={homePath}><span className="brand-mark"><i /></span><span className="brand-word">{siteConfig.name}</span></a><div className="case-nav-actions"><div className="language-switcher" role="group" aria-label="Language / Язык"><button type="button" className={language === "en" ? "is-active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button><button type="button" className={language === "ru" ? "is-active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button></div><ThemeToggle className="theme-toggle-case" /><a href={`${homePath}#work`}><ArrowLeft size={16} /> {t.case.allWork}</a></div></nav>
       <section className="case-hero container">
-        <div className="case-head-meta"><span>{project.id} / {t.case.featured}</span><span>{category.toUpperCase()}</span><span className="demo-label live-label"><i />{t.case.real}</span></div>
+        <div className="case-head-meta"><span>{project.id} / {t.case.featured}</span><span>{category.toUpperCase()}</span><span className={`demo-label ${portfolioProject ? "project-status-label" : "live-label"}`}><i />{status}</span></div>
         <h1>{project.title}</h1>
         <div className="case-summary"><p>{description}</p><div>{project.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div></div>
-        <div className="case-project-actions"><a href={project.liveUrl} target="_blank" rel="noreferrer">{t.case.openTelegram} <ArrowUpRight size={16} /></a><a href={project.previewUrl} target="_blank" rel="noreferrer">{t.case.openMiniApp} <ArrowUpRight size={16} /></a></div>
-        <div className="case-visual"><CaseStudyVisual kind={project.kind} /></div>
+        <div className="case-project-actions"><a href={project.liveUrl} target="_blank" rel="noreferrer">{customDetails?.openLabel ?? t.case.openTelegram} <ArrowUpRight size={16} /></a>{project.slug === "nebo-bistro" && <a href={project.previewUrl} target="_blank" rel="noreferrer">{t.case.openMiniApp} <ArrowUpRight size={16} /></a>}</div>
+        <div className={`case-visual${portfolioProject ? " case-highlight-visual" : ""}`}>{portfolioProject ? <PortfolioHighlightVisual project={portfolioProject} /> : <CaseStudyVisual kind={project.kind} />}</div>
       </section>
       <section className="case-body container">
-        <aside><span>{t.case.label}</span><p>{t.case.note}</p></aside>
+        <aside><span>{t.case.label}</span><p>{note}</p></aside>
         <div className="case-story">
-          <article><span>01 / {t.case.challengeLabel}</span><h2>{t.case.challengeTitle}</h2><p>{challenge}</p></article>
-          <article><span>02 / {t.case.solutionLabel}</span><h2>{t.case.solutionTitle}</h2><p>{solution}</p><ul>{t.case.points.map((point) => <li key={point}><Check size={15} /> {point}</li>)}</ul></article>
-          <article><span>03 / {t.case.resultLabel}</span><h2>{t.case.resultTitle}</h2><p>{result}</p></article>
+          <article><span>01 / {t.case.challengeLabel}</span><h2>{challengeTitle}</h2><p>{challenge}</p></article>
+          <article><span>02 / {t.case.solutionLabel}</span><h2>{solutionTitle}</h2><p>{solution}</p><ul>{points.map((point) => <li key={point}><Check size={15} /> {point}</li>)}</ul></article>
+          <article><span>03 / {t.case.resultLabel}</span><h2>{resultTitle}</h2><p>{result}</p></article>
         </div>
       </section>
       {project.slug === "nebo-bistro" ? (

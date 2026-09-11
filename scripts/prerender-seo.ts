@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getProject, type Project } from "../projects";
+import { projectRussian } from "../i18n";
 import {
   absoluteAlternates,
   absoluteSiteUrl,
@@ -174,16 +175,14 @@ function caseFallback(project: Project, language: SiteLanguage, metadata: RouteM
   const ru = language === "ru";
   const home = ru ? "/" : "/en";
   const titleLines = project.title.split(/\s+/).map(escapeHtml).join("<br>");
-  const challenge = ru
-    ? "Привлечь новых гостей, дать рекламным партнёрам заметное место в сценарии и выдержать нагрузку кампании после ограничений первоначального размещения на Vercel."
-    : project.challenge;
-  const solution = ru
-    ? "Объединить персональный Telegram-бот, Mini App с призами ресторана и партнёров, Cloudflare D1 и защищённое управление."
-    : project.solution;
-  const result = ru
-    ? "Запущенный путь от первого контакта до подарка партнёра и понятной выдачи приза в заведении."
-    : project.result;
-  return `<div class="seo-page"><header class="seo-header"><nav class="seo-nav container"><a class="brand" href="${home}"><span class="brand-mark"><i></i></span><span class="brand-word">Andrian.Dev</span></a><div class="seo-nav-actions"><a class="nav-cta" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a></div></nav></header><main><section class="seo-hero"><div class="container seo-hero-layout"><div class="seo-hero-copy"><nav class="seo-breadcrumbs"><a href="${home}">${ru ? "Главная" : "Home"}</a><span>/</span><span>${ru ? "Кейс" : "Case study"}</span></nav><p class="eyebrow">${escapeHtml(project.title)} / TELEGRAM</p><h1>${escapeHtml(metadata.h1)}</h1><p class="seo-lead">${escapeHtml(metadata.description)}</p><div class="seo-hero-actions"><a class="button button-primary" href="${escapeHtml(project.liveUrl)}">${ru ? "Открыть бота" : "Open the bot"}</a><a class="button button-ghost" href="${home}#contact">${ru ? "Обсудить похожий проект" : "Discuss a similar project"}</a></div></div><aside class="seo-hero-panel"><span>LIVE PRODUCT / ${escapeHtml(project.id)}</span><strong>${titleLines}</strong><div><span>BOT</span><span>MINI APP</span><span>PRIZE FLOW</span><span>ADMIN</span></div></aside></div></section><section class="seo-section seo-overview"><div class="container"><div class="seo-section-heading"><p class="eyebrow">01 / ${ru ? "ЗАДАЧА" : "CHALLENGE"}</p><h2>${ru ? "Привлечение гостей и реклама партнёров в Telegram" : "Guest acquisition and sponsor promotion in Telegram"}</h2></div><div class="seo-feature-grid"><article><h3>${ru ? "Задача" : "Challenge"}</h3><p>${escapeHtml(challenge)}</p></article><article><h3>${ru ? "Решение" : "Solution"}</h3><p>${escapeHtml(solution)}</p></article><article><h3>${ru ? "Результат" : "Result"}</h3><p>${escapeHtml(result)}</p></article><article><h3>${ru ? "Технологии" : "Technology"}</h3><p>TypeScript, Telegram WebApp, Cloudflare D1.</p></article></div></div></section><section class="seo-cta"><div class="container"><h2>${ru ? "Нужен похожий продукт?" : "Need something similar?"}</h2><a class="button button-primary" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a><a class="button button-ghost" href="${ru ? "/telegram-boty" : `${home}#services`}">${ru ? "Разработка Telegram-ботов" : "Telegram bot development"}</a></div></section></main></div>`;
+  const localized = projectRussian[project.slug];
+  const category = ru ? localized.category : project.category;
+  const description = ru ? localized.description : project.description;
+  const challenge = ru ? localized.challenge : project.challenge;
+  const solution = ru ? localized.solution : project.solution;
+  const result = ru ? localized.result : project.result;
+  const technologies = project.technologies.map((technology) => `<span>${escapeHtml(technology)}</span>`).join("");
+  return `<div class="seo-page"><header class="seo-header"><nav class="seo-nav container"><a class="brand" href="${home}"><span class="brand-mark"><i></i></span><span class="brand-word">Andrian.Dev</span></a><div class="seo-nav-actions"><a class="nav-cta" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a></div></nav></header><main><section class="seo-hero"><div class="container seo-hero-layout"><div class="seo-hero-copy"><nav class="seo-breadcrumbs"><a href="${home}">${ru ? "Главная" : "Home"}</a><span>/</span><span>${ru ? "Кейс" : "Case study"}</span></nav><p class="eyebrow">${escapeHtml(category.toUpperCase())}</p><h1>${escapeHtml(metadata.h1)}</h1><p class="seo-lead">${escapeHtml(description)}</p><div class="seo-hero-actions"><a class="button button-primary" href="${escapeHtml(project.liveUrl)}">${ru ? "Открыть проект" : "Open project"}</a><a class="button button-ghost" href="${home}#contact">${ru ? "Обсудить похожий проект" : "Discuss a similar project"}</a></div></div><aside class="seo-hero-panel"><span>CASE STUDY / ${escapeHtml(project.id)}</span><strong>${titleLines}</strong><div>${technologies}</div></aside></div></section><section class="seo-section seo-overview"><div class="container"><div class="seo-section-heading"><p class="eyebrow">01 / ${ru ? "РАЗБОР" : "BREAKDOWN"}</p><h2>${ru ? "Задача, решение и результат" : "Challenge, solution, and result"}</h2></div><div class="seo-feature-grid"><article><h3>${ru ? "Задача" : "Challenge"}</h3><p>${escapeHtml(challenge)}</p></article><article><h3>${ru ? "Решение" : "Solution"}</h3><p>${escapeHtml(solution)}</p></article><article><h3>${ru ? "Результат" : "Result"}</h3><p>${escapeHtml(result)}</p></article><article><h3>${ru ? "Технологии" : "Technology"}</h3><p>${escapeHtml(project.technologies.join(", "))}.</p></article></div></div></section><section class="seo-cta"><div class="container"><h2>${ru ? "Нужен похожий продукт?" : "Need something similar?"}</h2><a class="button button-primary" href="${home}#contact">${ru ? "Обсудить проект" : "Start a project"}</a><a class="button button-ghost" href="${home}#work">${ru ? "Все работы" : "All work"}</a></div></section></main></div>`;
 }
 
 function homeSchema(language: "ru" | "en") {

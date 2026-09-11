@@ -117,6 +117,38 @@ const projectMetadata: Record<string, LocalizedProjectMetadata> = {
       useSocialImage: false,
     },
   },
+  "drop-3d-store": {
+    ru: {
+      title: "DROP: интерактивный 3D-магазин — кейс | Andrian.Dev",
+      description: "Разбор рабочего 3D-концепта магазина DROP: сцена Air Force 1 на Three.js, сценарная прокрутка, версии товара и адаптивный путь к покупке.",
+      h1: "Интерактивный 3D-магазин DROP",
+      locale: "ru_RU",
+      useSocialImage: false,
+    },
+    en: {
+      title: "DROP Interactive 3D Store Case — Andrian.Dev",
+      description: "A working DROP commerce concept built around a real-time Air Force 1 scene, scroll choreography, product editions, and a responsive purchase path.",
+      h1: "DROP interactive 3D store",
+      locale: "en_US",
+      useSocialImage: false,
+    },
+  },
+  "tehnotek-prototype": {
+    ru: {
+      title: "ТЕХНОТЭК: прототип B2B-страницы — кейс | Andrian.Dev",
+      description: "Разбор прототипа ТЕХНОТЭК: техническое позиционирование, производственный кейс, понятная заявка и передача ТЗ или чертежа.",
+      h1: "Продуктовая B2B-страница ТЕХНОТЭК",
+      locale: "ru_RU",
+      useSocialImage: false,
+    },
+    en: {
+      title: "TEHNOTEK B2B Product Page Case — Andrian.Dev",
+      description: "A working industrial product-page prototype with technical positioning, manufacturing proof, and a request flow with specification upload.",
+      h1: "TEHNOTEK B2B product page",
+      locale: "en_US",
+      useSocialImage: false,
+    },
+  },
 };
 
 const projectRoutes: IndexableRoute[] = projects.flatMap((project) => {

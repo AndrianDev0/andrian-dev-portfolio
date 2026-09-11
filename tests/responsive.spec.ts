@@ -83,6 +83,13 @@ test("hero project carousel supports buttons and keyboard navigation", async ({ 
   await expect(page.locator(".project-flagship").getByRole("heading", { name: "DROP / AIR FORCE 1" })).toBeVisible();
   await expect(page.locator(".project-flagship").getByText("РАБОЧИЙ КОНЦЕПТ", { exact: true })).toBeVisible();
   await expect(page.locator(".project-layers")).toHaveCount(0);
+  const dropFeature = await page.locator(".project-highlight-shell .selected-work-visual").evaluate((visual) => {
+    const image = visual.querySelector("img") as HTMLImageElement;
+    const rect = visual.getBoundingClientRect();
+    return { src: image.currentSrc, ratio: rect.height / rect.width };
+  });
+  expect(dropFeature.src).toContain("drop-air-force-1.webp");
+  expect(dropFeature.ratio).toBeLessThan(0.65);
 
   await carousel.focus();
   await carousel.press("ArrowRight");

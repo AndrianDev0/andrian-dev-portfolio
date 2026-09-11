@@ -89,7 +89,7 @@ export function ProjectsSection() {
                 </div>
               </div>
               <Reveal className={`project-visual-shell project-visual-reveal${selectedHighlight ? " project-highlight-shell" : ""}`}>
-                {selectedHighlight ? <PortfolioHighlightVisual project={selectedHighlight} /> : <ProjectVisual project={project} />}
+                {selectedHighlight ? <PortfolioHighlightVisual project={selectedHighlight} context="case" /> : <ProjectVisual project={project} />}
               </Reveal>
             </article>
           </Reveal>

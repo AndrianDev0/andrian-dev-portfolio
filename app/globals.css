@@ -716,8 +716,8 @@ section[id] { scroll-margin-top: 88px; }
   .project-actions{align-items:flex-start;flex-direction:column;gap:0}
   .project-actions .case-link{margin-top:22px}
   .project-layers{gap:44px}
-  .project-highlight-shell .selected-work-visual{height:min(132vw,560px);margin:0;border-radius:12px;background:#0c0f14}
-  .project-highlight-shell .selected-work-visual img{object-fit:contain;object-position:center top}
+  .project-highlight-shell .selected-work-visual{height:auto;aspect-ratio:16/9;margin:0;border-radius:12px;background:#0c0f14}
+  .project-highlight-shell .selected-work-visual img{object-position:center top}
   .project-layer-card{padding-top:18px}
   .project-layer-heading{font-size:6px}
   .project-layer-copy{min-height:132px;padding:23px 0 20px;grid-template-columns:1fr;gap:12px}

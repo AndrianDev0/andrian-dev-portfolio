@@ -75,7 +75,10 @@ export function ProjectsSection() {
                   <div className="tech-list">{detail.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div>
                   <div className="project-actions">
                     {selectedHighlight ? (
-                      <a className="case-link" href={detail.liveUrl} target="_blank" rel="noreferrer">{language === "ru" ? "Открыть проект" : "Open project"} <ArrowUpRight size={17} /></a>
+                      <>
+                        <a className="case-link" href={`#project-${selectedHighlight.visual}-case`}>{language === "ru" ? "Разобрать кейс" : "View case"} <ArrowUpRight size={17} /></a>
+                        <a className="case-link case-link-live" href={detail.liveUrl} target="_blank" rel="noreferrer">{language === "ru" ? "Открыть проект" : "Open project"} <ArrowUpRight size={17} /></a>
+                      </>
                     ) : (
                       <>
                         <a className="case-link" href={`${language === "en" ? "/en" : ""}/projects/${detail.slug}`}>{t.projects.view} <ArrowUpRight size={17} /></a>
@@ -108,7 +111,7 @@ export function ProjectsSection() {
           <div className="selected-work-grid">
             {portfolioHighlights.map((item, index) => {
               const content = (
-                <article className={`selected-work-card selected-work-${item.visual}`} style={{ "--project-accent": item.accent } as React.CSSProperties}>
+                <article id={`project-${item.visual}-case`} className={`selected-work-card selected-work-${item.visual}`} style={{ "--project-accent": item.accent } as React.CSSProperties}>
                   <div className="selected-work-topline"><span>{item.id}</span><i /><span>{item.status[language]}</span></div>
                   <PortfolioHighlightVisual project={item} />
                   <div className="selected-work-copy">

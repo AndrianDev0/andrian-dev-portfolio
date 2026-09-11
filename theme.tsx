@@ -25,18 +25,24 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return <ThemeContext.Provider value={{ theme, toggleTheme: () => setTheme((current) => current === "light" ? "dark" : "light") }}>{children}</ThemeContext.Provider>;
 }
 
-export function ThemeToggle({ className = "" }: { className?: string }) {
+export function ThemeToggle({ className = "", language = "ru" }: { className?: string; language?: "ru" | "en" }) {
   const context = useContext(ThemeContext);
   if (!context) throw new Error("ThemeToggle must be used inside ThemeProvider");
   const isLight = context.theme === "light";
+  const label = language === "ru"
+    ? (isLight ? "Включить тёмную тему" : "Включить светлую тему")
+    : (isLight ? "Switch to dark theme" : "Switch to light theme");
+  const title = language === "ru"
+    ? (isLight ? "Тёмная тема" : "Светлая тема")
+    : (isLight ? "Dark theme" : "Light theme");
 
   return (
     <button
       type="button"
       className={`theme-toggle ${className}`.trim()}
       onClick={context.toggleTheme}
-      aria-label={isLight ? "Включить тёмную тему" : "Включить светлую тему"}
-      title={isLight ? "Тёмная тема" : "Светлая тема"}
+      aria-label={label}
+      title={title}
     >
       <span>{isLight ? <Moon aria-hidden="true" /> : <Sun aria-hidden="true" />}</span>
     </button>

@@ -58,7 +58,7 @@ test("hero project carousel supports buttons and keyboard navigation", async ({ 
     src: (image as HTMLImageElement).currentSrc,
     fit: getComputedStyle(image).objectFit,
   }));
-  expect(neboImage.src).toContain("prize-wheel-hd.webp");
+  expect(neboImage.src).toContain("prize-wheel.webp");
   expect(neboImage.fit).toBe("contain");
 
   await carousel.getByRole("button", { name: "Следующий проект" }).click();

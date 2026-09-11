@@ -17,11 +17,11 @@ function ProjectMedia({ id, ru, active }: { id: (typeof heroProjects)[number]["i
     return (
       <div className="hero-project-media hero-project-media-nebo">
         <figure className="nebo-proof-bot">
-          <img src="/nebo/case/bot-welcome-hd.webp" alt={ru ? "Сообщение Telegram-бота Nebo Bistro" : "Nebo Bistro Telegram bot welcome message"} width="1178" height="2560" loading={active ? "eager" : "lazy"} fetchPriority={active ? "high" : "auto"} />
+          <img src="/nebo/case/bot-welcome.webp" srcSet="/nebo/case/bot-welcome.webp 900w, /nebo/case/bot-welcome-hd.webp 1178w" sizes="(max-width: 600px) 1px, (max-width: 900px) 234px, 230px" alt={ru ? "Сообщение Telegram-бота Nebo Bistro" : "Nebo Bistro Telegram bot welcome message"} width="1178" height="2560" loading="lazy" decoding="async" />
           <figcaption>01 / TELEGRAM BOT</figcaption>
         </figure>
         <figure className="nebo-proof-app">
-          <img src="/nebo/case/prize-wheel-hd.webp" alt={ru ? "Колесо призов в мини-приложении Nebo Bistro" : "Prize wheel in the Nebo Bistro mini app"} width="1178" height="2560" loading={active ? "eager" : "lazy"} fetchPriority={active ? "high" : "auto"} />
+          <img src="/nebo/case/prize-wheel.webp" srcSet="/nebo/case/prize-wheel.webp 900w, /nebo/case/prize-wheel-hd.webp 1178w" sizes="(max-width: 600px) calc(100vw - 32px), (max-width: 900px) 416px, 410px" alt={ru ? "Колесо призов в мини-приложении Nebo Bistro" : "Prize wheel in the Nebo Bistro mini app"} width="1178" height="2560" loading={active ? "eager" : "lazy"} fetchPriority={active ? "high" : "auto"} decoding={active ? "sync" : "async"} />
           <figcaption>02 / MINI APP</figcaption>
         </figure>
         <span className="nebo-proof-direction" aria-hidden="true"><ArrowRight size={15} /></span>

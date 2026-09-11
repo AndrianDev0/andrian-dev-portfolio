@@ -11,10 +11,11 @@
     "vercel-build": "vite build --config vite.vercel.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test:responsive": "playwright test tests/responsive.spec.ts",
+    "test:compatibility": "playwright test tests/compatibility.spec.ts",
     "test:seo": "playwright test tests/seo.spec.ts",
     "test:lighthouse": "lhci autorun",
     "check:bundle": "node scripts/check-bundle-size.mjs",
-    "quality": "pnpm typecheck && pnpm vercel-build && pnpm check:bundle && pnpm test:responsive && pnpm test:seo && pnpm test:lighthouse"
+    "quality": "pnpm typecheck && pnpm vercel-build && pnpm check:bundle && pnpm test:responsive && pnpm test:compatibility && pnpm test:seo && pnpm test:lighthouse"
   },
   "dependencies": {
     "@vercel/analytics": "2.0.1",
